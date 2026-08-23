@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>UtilityScan — Calendar, Alarm & Schedule Niche Opportunity Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:    #0a0a0a;
+      --card:  #111111;
+      --card2: #161616;
+      --bd:    rgba(246,242,233,.08);
+      --bd2:   rgba(246,242,233,.15);
+      --cr:    #f6f2e9;
+      --cr7:   rgba(246,242,233,.7);
+      --cr5:   rgba(246,242,233,.5);
+      --cr3:   rgba(246,242,233,.3);
+      --cr1:   rgba(246,242,233,.06);
+      --g:     #4ade80;
+      --gb:    rgba(74,222,128,.12);
+      --b:     #60a5fa;
+      --bb:    rgba(96,165,250,.12);
+      --o:     #fb923c;
+      --ob:    rgba(251,146,60,.12);
+      --p:     #c084fc;
+      --pb:    rgba(192,132,252,.12);
+      --pk:    #f472b6;
+      --pkb:   rgba(244,114,182,.12);
+      --y:     #facc15;
+      --yb:    rgba(250,204,21,.12);
+      --r:     #f87171;
+      --rb:    rgba(248,113,113,.12);
+      --t:     #2dd4bf;
+      --tb:    rgba(45,212,191,.12);
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans:  'Inter', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--cr); font-family: var(--sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+    .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(120px); }
+    .orb-1 { width: 700px; height: 700px; top: -200px; left: -200px; background: radial-gradient(circle, rgba(244,114,182,.06), transparent 70%); }
+    .orb-2 { width: 500px; height: 500px; top: 40%; right: -200px; background: radial-gradient(circle, rgba(74,222,128,.06), transparent 70%); }
+    .orb-3 { width: 400px; height: 400px; bottom: 0; left: 25%; background: radial-gradient(circle, rgba(96,165,250,.05), transparent 70%); }
+
+    .wrap { position: relative; z-index: 1; max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+    .topbar { height: 58px; display: flex; align-items: center; border-bottom: 1px solid var(--bd); position: sticky; top: 0; background: rgba(10,10,10,.9); backdrop-filter: blur(16px); z-index: 200; }
+    .topbar .wrap { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .brand { font-family: var(--serif); font-size: 19px; letter-spacing: -.3px; color: var(--cr); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--pk); box-shadow: 0 0 10px var(--pk); }
+    .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; letter-spacing: .3px; white-space: nowrap; }
+    .badge-pink  { background: var(--pkb); color: var(--pk); border: 1px solid rgba(244,114,182,.2); }
+    .badge-green { background: var(--gb); color: var(--g); border: 1px solid rgba(74,222,128,.2); }
+
+    .hero { padding: 68px 0 40px; text-align: center; }
+    .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; color: var(--cr3); margin-bottom: 16px; }
+    .hero-h1 { font-family: var(--serif); font-size: clamp(2rem, 5.5vw, 3.5rem); font-weight: 400; line-height: 1.15; margin-bottom: 16px; }
+    .hero-h1 em { font-style: italic; color: var(--cr5); }
+    .hero-sub { font-size: 15px; color: var(--cr5); max-width: 640px; margin: 0 auto; line-height: 1.75; }
+
+    .summary-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--bd); border: 1px solid var(--bd); border-radius: 16px; overflow: hidden; margin: 32px 0; }
+    @media(max-width:680px){ .summary-bar { grid-template-columns: repeat(2, 1fr); } }
+    .sum-cell { background: var(--card); padding: 18px 22px; }
+    .sum-label { font-size: 11px; color: var(--cr3); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 4px; }
+    .sum-val { font-size: 1.5rem; font-family: var(--serif); font-weight: 400; }
+    .sum-sub { font-size: 11px; color: var(--cr3); margin-top: 2px; }
+
+    .callout { background: rgba(250,204,21,.05); border: 1px solid rgba(250,204,21,.2); border-radius: 14px; padding: 18px 22px; margin: 8px 0 40px; font-size: 13px; color: var(--cr7); line-height: 1.7; }
+    .callout strong { color: var(--y); }
+
+    hr.dv { border: none; border-top: 1px solid var(--bd); margin: 56px 0 32px; }
+    .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+    .sec-title { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; }
+    .sec-count { font-size: 12px; color: var(--cr3); }
+    .sec-lead { font-size: 13.5px; color: var(--cr5); max-width: 720px; line-height: 1.75; margin-bottom: 28px; }
+
+    .app-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+    .app-card { background: var(--card); border: 1px solid var(--bd); border-radius: 16px; padding: 18px 20px; }
+    .app-top { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+    .app-icon { width: 40px; height: 40px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; border: 1px solid var(--bd); background: var(--cr1); }
+    .app-name { font-weight: 600; font-size: 14.5px; }
+    .app-pub { font-size: 12px; color: var(--cr3); margin-top: 1px; }
+    .plt-ios { background: rgba(96,165,250,.1); color: var(--b); border: 1px solid rgba(96,165,250,.2); font-size: 10px; padding: 1px 6px; border-radius: 4px; font-weight: 500; }
+    .plt-and { background: rgba(74,222,128,.1); color: var(--g); border: 1px solid rgba(74,222,128,.2); font-size: 10px; padding: 1px 6px; border-radius: 4px; font-weight: 500; }
+    .plt-web { background: rgba(192,132,252,.1); color: var(--p); border: 1px solid rgba(192,132,252,.2); font-size: 10px; padding: 1px 6px; border-radius: 4px; font-weight: 500; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .chip { font-size: 11px; padding: 3px 9px; border-radius: 6px; border: 1px solid var(--bd); color: var(--cr5); background: var(--cr1); }
+    .chip-rev { color: var(--o); border-color: rgba(251,146,60,.25); background: var(--ob); font-weight: 600; }
+    .chip-warn { color: var(--r); border-color: rgba(248,113,113,.25); background: var(--rb); }
+    .pain-list { list-style: none; display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px; }
+    .pain-item { display: flex; align-items: flex-start; gap: 7px; font-size: 12.5px; color: var(--cr7); line-height: 1.55; }
+    .pain-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--r); flex-shrink: 0; margin-top: 6px; }
+    .src-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+    .src-label { font-size: 10.5px; color: var(--cr3); }
+    .src-chip { font-size: 10px; padding: 1px 7px; border-radius: 5px; border: 1px solid var(--bd); color: var(--cr3); }
+
+    .gaps-block { background: var(--card2); border: 1px solid var(--bd); border-radius: 14px; padding: 18px 20px; margin-bottom: 20px; }
+    .gaps-title { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--g); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+    .gaps-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .gap-item { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; color: var(--cr7); line-height: 1.65; }
+    .gap-num { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--gb); color: var(--g); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+
+    .trend-note { font-size: 13px; color: var(--cr5); line-height: 1.75; background: var(--card); border: 1px solid var(--bd); border-radius: 14px; padding: 16px 20px; margin-bottom: 20px; }
+    .trend-note strong { color: var(--cr); }
+
+    .ruled-out { background: rgba(248,113,113,.04); border: 1px solid rgba(248,113,113,.18); border-radius: 14px; padding: 16px 20px; margin-bottom: 20px; }
+    .ruled-out-title { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--r); margin-bottom: 10px; }
+    .ruled-out ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .ruled-out li { font-size: 12.5px; color: var(--cr7); line-height: 1.6; display: flex; gap: 8px; }
+    .ruled-out li::before { content: '✕'; color: var(--r); flex-shrink: 0; }
+
+    .opp-grid { display: flex; flex-direction: column; gap: 12px; }
+    .opp-card { background: var(--card); border: 1px solid var(--bd); border-radius: 16px; padding: 20px 22px; display: grid; grid-template-columns: 40px 1fr; gap: 16px; }
+    .opp-rank { font-family: var(--serif); font-size: 1.6rem; color: var(--cr3); }
+    .opp-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+    .opp-title { font-weight: 600; font-size: 15px; }
+    .opp-desc { font-size: 13px; color: var(--cr7); line-height: 1.7; margin-bottom: 10px; }
+    .opp-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .feas-bar-wrap { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--cr3); margin-left: auto; }
+    .feas-bar { width: 54px; height: 5px; background: var(--cr1); border-radius: 3px; overflow: hidden; }
+    .feas-fill { height: 100%; border-radius: 3px; }
+
+    .sources-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media(max-width:680px){ .sources-grid { grid-template-columns: 1fr; } }
+    .src-cat-title { font-size: 12px; font-weight: 600; color: var(--cr5); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+    .src-link-list { list-style: none; display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
+    .src-link-list li { font-size: 12px; color: var(--cr3); line-height: 1.5; word-break: break-all; }
+    .src-link-list a { color: var(--cr5); text-decoration: none; }
+    .src-link-list a:hover { color: var(--b); text-decoration: underline; }
+
+    .method-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 8px; }
+    @media(max-width:640px){ .method-grid { grid-template-columns: repeat(2,1fr); } }
+    .method-card { background: var(--card); border: 1px solid var(--bd); border-radius: 12px; padding: 16px; }
+    .method-num { font-family: var(--serif); font-size: 1.8rem; color: var(--cr3); margin-bottom: 4px; }
+    .method-label { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
+    .method-sub { font-size: 11px; color: var(--cr3); line-height: 1.5; }
+
+    footer { border-top: 1px solid var(--bd); padding: 36px 0; margin-top: 60px; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-brand { font-family: var(--serif); font-size: 16px; color: var(--cr5); }
+    .footer-meta { font-size: 12px; color: var(--cr3); text-align: right; }
+
+    .text-g { color: var(--g); } .text-b { color: var(--b); } .text-o { color: var(--o); } .text-p { color: var(--p); } .text-y { color: var(--y); } .text-pk { color: var(--pk); }
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity .5s, transform .5s; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media print {
+      body { font-size: 11px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .bg-orbs { display: none; }
+      .reveal { opacity: 1 !important; transform: none !important; }
+      .topbar { position: static; backdrop-filter: none; }
+      .wrap { max-width: 100%; }
+      .summary-bar, .method-grid, .sources-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .app-card, .opp-card, .gaps-block, .trend-note, .callout, .ruled-out { break-inside: avoid; }
+      hr.dv { margin: 28px 0 18px; }
+      a { color: inherit !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-orbs" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="/home.html">
+      <div class="brand-dot"></div>
+      UtilityScan
+    </a>
+    <div>
+      <span class="badge badge-pink">Niche & underserved</span>
+      <span class="badge badge-green" style="margin-left:6px">Real cited data</span>
+    </div>
+  </div>
+</header>
+
+<section class="hero reveal">
+  <div class="wrap">
+    <p class="hero-eyebrow">Market Research Report · Calendar / Alarm / Schedule Niches · Aug 2026</p>
+    <h1 class="hero-h1">Bỏ qua Cleaner, VPN, PDF —<br/><em>đào sâu vào lịch, báo thức, thời khoá biểu</em></h1>
+    <p class="hero-sub">Report trước đã chỉ ra: category cleaner/VPN/PDF quá nổi tiếng, quá cạnh tranh, dính đầy scandal fleeceware. Report này đào sâu vào các ngách "nhàm chán nhưng ai cũng cần" — calendar, alarm, timetable, shift-schedule — cộng thêm các micro-niche liền kề (countdown, subscription tracker, habit tracker, focus timer). Số liệu công khai ở các ngách này khá mỏng — report ghi rõ chỗ nào chưa tìm được số liệu thay vì đoán.</p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="summary-bar reveal">
+    <div class="sum-cell">
+      <div class="sum-label">TimeTree users</div>
+      <div class="sum-val text-pk">67M+</div>
+      <div class="sum-sub">registered, 13B+ events logged (Sept 2025)</div>
+    </div>
+    <div class="sum-cell">
+      <div class="sum-label">Alarmy downloads</div>
+      <div class="sum-val text-g">82M+</div>
+      <div class="sum-sub">#1 category app, 97 quốc gia</div>
+    </div>
+    <div class="sum-cell">
+      <div class="sum-label">Productivity category revenue</div>
+      <div class="sum-val text-o">$9.1B</div>
+      <div class="sum-sub">2025, ~6% tổng app revenue</div>
+    </div>
+    <div class="sum-cell">
+      <div class="sum-label">Cơ hội đã xác định</div>
+      <div class="sum-val text-b">10</div>
+      <div class="sum-sub">+ 5 ngách đã bị loại vì bão hoà</div>
+    </div>
+  </div>
+
+  <div class="callout reveal">
+    <strong>Lưu ý quan trọng về số liệu ở các ngách này:</strong> Khác với report utility tools trước (Sensor Tower/Appfigures có data khá đầy đủ), các ngách calendar/alarm/timetable/micro-niche có RẤT ÍT số liệu doanh thu công khai — phần lớn bị khoá sau paywall của Sensor Tower/Apptopia/MobileAction. Nhiều app trong report này ghi rõ "không tìm được số liệu doanh thu công khai" thay vì ước tính liều lĩnh. Coi các con số như tín hiệu định hướng, không phải số liệu kiểm toán.
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ═══ CATEGORY 1: CALENDAR ═══ -->
+  <hr class="dv" />
+  <div class="sec-head reveal">
+    <span class="sec-title">📅 Calendar & Shared Calendar</span>
+    <span class="sec-count">Category #1 / 4</span>
+  </div>
+  <p class="sec-lead reveal">Google Calendar miễn phí thống trị bằng quy mô (~1.2B lượt truy cập web/quý, ứng dụng calendar được cài nhiều nhất 2024 "gấp 3 lần" app xếp thứ 2) — áp lực "free default" rất thật với mọi app trả phí trong category này. Ước tính market size lệch nhau 3 lần giữa các nguồn ($5.09B–$14.6B cho 2025 tùy cách tính), nên chỉ mang tính tham khảo hướng đi.</p>
+
+  <div class="app-list reveal">
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">📆</div>
+        <div><div class="app-name">Fantastical</div><div class="app-pub">Flexibits Inc.</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS/macOS</span><span class="plt-and">Android (view)</span>
+        <span class="chip">Subscription $4.99/tháng hoặc $39.99/năm</span>
+        <span class="chip chip-warn">Không tìm được số liệu doanh thu công khai đáng tin cậy</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>Backlash 2025 vì chuyển từ one-time purchase sang subscription — review gọi là "far from affordable, misleading and unfair"</li></ul>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">👨‍👩‍👧‍👦</div>
+        <div><div class="app-name">TimeTree</div><div class="app-pub">TimeTree Inc. (Nhật Bản)</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span><span class="plt-web">Web</span>
+        <span class="chip">Freemium + ads, Premium subscription</span>
+        <span class="chip chip-rev">67M+ user đăng ký, 13B+ event · gọi vốn Series F ¥1.6B (~$10-11M, Nov 2025) từ SK Telecom</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>Ads dày đặc ở free tier "không tắt được", sync lag giữa thiết bị</li></ul>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">TheBridge.jp, Nov 2025</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">👪</div>
+        <div><div class="app-name">Cozi Family Organizer</div><div class="app-pub">OurFamilyWizard (mua lại 2022)</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span><span class="plt-web">Web</span>
+        <span class="chip">Freemium, ads, Cozi Gold subscription</span>
+        <span class="chip chip-rev">20M+ users · ước tính ~$2.1M revenue/năm (Growjo, độ tin cậy thấp)</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>Việc bị sáp nhập vào OurFamilyWizard đặt câu hỏi về định hướng sản phẩm dài hạn</li></ul>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">⚖️</div>
+        <div><div class="app-name">OurFamilyWizard</div><div class="app-pub">OurFamilyWizard LLC</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span><span class="plt-web">Web</span>
+        <span class="chip">Subscription trả phí (court-oriented)</span>
+        <span class="chip chip-rev">1M+ co-parent/luật sư gia đình, được toà án chấp nhận ở cả 50 bang Mỹ (company claim)</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>Định vị "premium/legal-grade" khiến giá và độ cứng nhắc là complaint lặp lại so với app nhẹ hơn</li></ul>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">🧩</div>
+        <div><div class="app-name">Widgetsmith</div><div class="app-pub">David Smith (indie, 1 người)</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span>
+        <span class="chip">Freemium IAP</span>
+        <span class="chip chip-rev">131M+ downloads (Sept 2025) · ~1M dl/$200K rev/tháng gần đây (Sensor Tower, Mar 2026)</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot" style="background:var(--g)"></span>Không phải app calendar chuyên biệt, nhưng chứng minh willingness-to-pay cực lớn cho widget "at-a-glance"</li></ul>
+    </div>
+  </div>
+
+  <div class="trend-note reveal">
+    <strong>AI-scheduling đang bị "nuốt" vào suite lớn hơn, không tạo làn sóng app mới:</strong> Motion báo cáo doanh thu tăng mạnh nhưng số liệu lệch nhau lớn giữa nguồn (Sacra ~$50M ARR vs Getlatka $10M/$550M valuation — bản thân sự lệch này đáng chú ý). Reclaim.ai bị Dropbox mua lại (Aug 2024), tính năng AI-calendar bị gộp vào suite lớn hơn thay vì tồn tại độc lập — tín hiệu cho thấy AI-scheduling đang được bundle, không phải mảnh đất cho app mới.
+  </div>
+
+  <div class="gaps-block reveal">
+    <div class="gaps-title">🟢 Opportunity gaps</div>
+    <ul class="gaps-list">
+      <li class="gap-item"><span class="gap-num">1</span>Calendar cho freelancer nhiều khách hàng cùng lúc — mọi "freelancer scheduling tool" tìm được (Moxie, OneCal, Motion) đều là link đặt lịch kiểu Calendly, không phải calendar phân màu theo từng dự án/khách hàng. Gap thật, chưa tìm thấy app nào làm đúng việc này.</li>
+      <li class="gap-item"><span class="gap-num">2</span>Calendar co-parent nhẹ nhàng, không "court-grade" — OurFamilyWizard định vị cho case ly hôn tranh chấp; cặp đôi ly thân hoà bình cần bản đơn giản, rẻ hơn, không mang nặng tính pháp lý.</li>
+      <li class="gap-item"><span class="gap-num">3</span>App widget chuyên về calendar (Live Activities/Dynamic Island) — Widgetsmith chứng minh sức mua cho widget ở quy mô lớn nhưng là app tổng quát (thời tiết, mặt trăng...), chưa ai làm widget-first thuần calendar.</li>
+      <li class="gap-item"><span class="gap-num">4</span>Calendar cho người cao tuổi + người thân chăm sóc từ xa — app "Senior Calendar" hiện có nhỏ, đơn lẻ, không kết hợp chữ to/đơn giản với chia sẻ lịch từ xa (con cái cập nhật lịch cho cha mẹ già).</li>
+      <li class="gap-item"><span class="gap-num">5</span>Calendar chống subscription-fatigue — backlash lặp lại 2025 (Fantastical đổi sang subscription, DigiCal thu phí lịch lễ từng miễn phí, FamCal "phải trả tiền để thêm event") cho thấy nhu cầu thật cho app định giá công bằng, one-time hoặc subscription rõ ràng.</li>
+    </ul>
+  </div>
+
+  <!-- ═══ CATEGORY 2: ALARM/WAKE ═══ -->
+  <hr class="dv" />
+  <div class="sec-head reveal">
+    <span class="sec-title">⏰ Alarm Clock & Wake-up Apps</span>
+    <span class="sec-count">Category #2 / 4</span>
+  </div>
+  <p class="sec-lead reveal">Alarmy chứng minh category này có thể tạo ra app top #1 toàn cầu (82M+ downloads, 97 quốc gia) chỉ bằng một cơ chế đơn giản: bắt buộc chụp ảnh/giải toán/lắc điện thoại để tắt báo thức. iOS 26 vừa ra mắt <strong style="color:var(--cr)">AlarmKit</strong> — cho app bên thứ 3 quyền hệ thống ngang với Clock gốc của Apple (kể cả ở chế độ Im lặng/Focus), gỡ bỏ rào cản kỹ thuật chính nhưng cũng hạ thấp rào cản gia nhập cho đối thủ mới.</p>
+
+  <div class="app-list reveal">
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">📸</div>
+        <div><div class="app-name">Alarmy (Sleep If U Can)</div><div class="app-pub">Delightroom (Hàn Quốc)</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">Freemium; Premium $5/tháng hoặc $59.99/năm</span>
+        <span class="chip chip-rev">82M+ downloads, #1 category ở 97 quốc gia · ~500K dl/$500K rev/tháng gần đây (Sensor Tower)</span>
+      </div>
+      <ul class="pain-list">
+        <li class="pain-item"><span class="pain-dot"></span>Hao pin do chạy nền (tới 14%/8 giờ); "mission" chụp ảnh có thể bị lừa bằng cách chụp bức tường trống</li>
+      </ul>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">Sensor Tower</span><span class="src-chip">Verve case study</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">😴</div>
+        <div><div class="app-name">Sleep Cycle</div><div class="app-pub">Sleep Cycle AB — công ty niêm yết Nasdaq Stockholm</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">Freemium subscription + AI sleep coach</span>
+        <span class="chip chip-rev">10M+ downloads từ 2009 · ~$900K rev/tháng, ~200K dl/tháng (Mar 2026) · B2B revenue +42% Q1 2026</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot" style="background:var(--g)"></span>Alarm chỉ là tính năng phụ — brand mạnh nhất nhờ định vị "sleep-tracking-first"</li></ul>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">🤖</div>
+        <div><div class="app-name">Sleep as Android</div><div class="app-pub">Urbandroid / Petr Nálevka (indie)</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-and">Android only</span>
+        <span class="chip">Freemium + "Unlock" IAP</span>
+        <span class="chip chip-rev">24M+ downloads · ~50K dl/$30K rev/tháng (US), IAP ~$10K/tháng (Sensor Tower/MobileAction)</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot" style="background:var(--g)"></span>Tích hợp sâu với wearable (Pixel Watch, Garmin, Fitbit) là điểm khác biệt chính</li></ul>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">🕌</div>
+        <div><div class="app-name">Cụm app Fajr/Athan/Muslim Alarm</div><div class="app-pub">Nhiều dev nhỏ/khu vực</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">Freemium, ad-supported</span>
+        <span class="chip chip-warn">Không có số liệu doanh thu hợp nhất, thị trường phân mảnh dài</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>Ngách cảm giác lớn nhưng đa số app chỉ là notification cơ bản, không phải alarm thật sự "khó tắt"</li></ul>
+    </div>
+  </div>
+
+  <div class="trend-note reveal">
+    <strong>Xu hướng văn hoá đang thúc đẩy khám phá app:</strong> Trend TikTok "5am Club" (hồi sinh từ sách Robin Sharma) đạt 80M+ lượt xem, 15B+ views tổng hợp các tag liên quan (2025–2026) — chuyên gia giấc ngủ cảnh báo có thể gây thói quen ngủ không lành mạnh (rủi ro reputational nếu app marketing theo trend này). Pain point lặp lại nhiều nhất trong review: hao pin nền, mission bị "hack", người dùng tắt alarm trong lúc còn ngủ mà không nhớ.
+  </div>
+
+  <div class="gaps-block reveal">
+    <div class="gaps-title">🟢 Opportunity gaps</div>
+    <ul class="gaps-list">
+      <li class="gap-item"><span class="gap-num">1</span>Alarm mission chống gian lận bằng on-device ML — review Alarmy cho thấy user "hack" mission chụp ảnh bằng cách chụp tường trống; xác minh vị trí/vật thể/độ tỉnh táo thật sẽ vá lỗ hổng này.</li>
+      <li class="gap-item"><span class="gap-num">2</span>Alarm im lặng cho người ngủ chung giường — chưa có app thuần software (không cần mua thêm thiết bị) nhắm rõ tới cặp đôi/bố mẹ ngủ chung với cơ chế leo thang (rung → haptic Watch → gọi điện thoại người ngủ chung làm backup).</li>
+      <li class="gap-item"><span class="gap-num">3</span>Phát hiện "vẫn còn ngủ" + tự động leo thang tới người thứ 3 — không tìm thấy app nào kết hợp mission-alarm với fallback tự động (nhắn tin/gọi người được chỉ định nếu không xác minh được trong N phút) — hữu ích cho người hay tắt alarm trong lúc ngủ.</li>
+      <li class="gap-item"><span class="gap-num">4</span>Alarm cá cược tài chính (stake-based) — cơ chế loss-aversion kiểu Beeminder tồn tại cho habit nói chung, nhưng chưa có app alarm nào charge tiền thật khi không hoàn thành xác minh thức dậy — giao điểm rõ ràng của 2 cơ chế đã được kiểm chứng riêng lẻ.</li>
+      <li class="gap-item"><span class="gap-num">5</span>App giờ cầu nguyện (Fajr/Athan) chất lượng cao, hợp nhất — ngách lớn nhưng phân mảnh thành nhiều app gần giống hệt, chất lượng thấp; một app chất lượng Alarmy cho đúng use case này đang thiếu so với quy mô dân số Hồi giáo toàn cầu.</li>
+    </ul>
+  </div>
+
+  <!-- ═══ CATEGORY 3: TIMETABLE & SHIFT ═══ -->
+  <hr class="dv" />
+  <div class="sec-head reveal">
+    <span class="sec-title">🗓️ Timetable (học sinh) & Shift/Roster (người làm ca)</span>
+    <span class="sec-count">Category #3 / 4</span>
+  </div>
+  <p class="sec-lead reveal">Hai thị trường addressable rất thật: giáo dục đại học toàn cầu đạt 269 triệu người học (UNESCO, 2026, gấp đôi 20 năm trước); ~22M+ người lao động Mỹ làm ca không cố định (BLS/EPI), 27% nhân viên Mỹ có lịch làm việc khó đoán và đang tăng. Gig economy: 76.4 triệu freelancer Mỹ (2025), tài xế chạy đa nền tảng kiếm nhiều hơn 31%/giờ so với chạy 1 app (Gridwise, 2024).</p>
+
+  <div class="app-list reveal">
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">📘</div>
+        <div><div class="app-name">iStudiez Pro</div><div class="app-pub">Aimotech</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS/Mac</span>
+        <span class="chip">$2.99 one-time (iOS) + subscription cloud sync</span>
+        <span class="chip chip-rev">~87.7K dl/tháng, ~$35.9K rev/tháng (softwar.io)</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>Định giá premium so với category; không có bản Android (đã ngừng) giới hạn tệp người dùng toàn cầu</li></ul>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">📚</div>
+        <div><div class="app-name">MyStudyLife</div><div class="app-pub">Chủ sở hữu mới (đổi chủ gần đây)</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span><span class="plt-web">Web</span>
+        <span class="chip">Freemium, một số tính năng mới bị paywall</span>
+        <span class="chip chip-warn">Không có số liệu công khai</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>User phàn nàn ít cập nhật, redesign 2025-26 gây tranh cãi, đồn đoán ngừng hoạt động (chưa xác nhận)</li></ul>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">🏥</div>
+        <div><div class="app-name">NurseGrid Mobile</div><div class="app-pub">HealthStream (mua lại 2020, $25M)</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">Miễn phí cho y tá (B2B2C — bệnh viện/HealthStream trả tiền)</span>
+        <span class="chip chip-rev">260,000+ MAU tại thời điểm mua lại (2020) · 4.9★, 40,000+ review</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot" style="background:var(--g)"></span>Điểm dữ liệu mạnh nhất trong category này — xác nhận nhu cầu thật cho app lịch cá nhân + chia sẻ gia đình</li></ul>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">BusinessWire, 2020</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">⚠️</div>
+        <div><div class="app-name">ShiftKey</div><div class="app-pub">ShiftKey LLC</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">Marketplace (cơ sở y tế trả phí, app miễn phí cho worker)</span>
+        <span class="chip chip-warn">61.8% review mang sentiment tiêu cực (phân tích NLP justuseapp)</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>Trễ duyệt hồ sơ (2+ tháng theo ~45 y tá), hệ thống đấu giá ca phạt worker huỷ ca nhưng không phạt cơ sở huỷ ca</li></ul>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">BBB complaints</span><span class="src-chip">justuseapp</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">🚗</div>
+        <div><div class="app-name">Para / ShiftTracker</div><div class="app-pub">Para Works / Indie</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">Freemium, gig-worker earnings/schedule aggregator</span>
+        <span class="chip chip-warn">Không có số liệu công khai</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot" style="background:var(--g)"></span>Xác nhận đúng pain point (hợp nhất lịch/thu nhập Uber+DoorDash+Grubhub) nhưng chưa app nào chiếm market share rõ ràng</li></ul>
+    </div>
+  </div>
+
+  <div class="ruled-out reveal">
+    <div class="ruled-out-title">Đã loại khỏi danh sách cơ hội</div>
+    <ul>
+      <li>App lịch làm ca xoay vòng (DuPont/Pitman/2-2-3 pattern) — agent nghiên cứu xác nhận category này "đã được phục vụ tốt" bởi nhiều app hiện có (Supershift, My Shift Planner, Shifty...), không khuyến nghị làm mới ở đây.</li>
+    </ul>
+  </div>
+
+  <div class="gaps-block reveal">
+    <div class="gaps-title">🟢 Opportunity gaps</div>
+    <ul class="gaps-list">
+      <li class="gap-item"><span class="gap-num">1</span>Máy tính lương/OT theo ca, không ràng buộc marketplace — ShiftKey cho thấy sự bất mãn rất lớn với app kiểu marketplace (đấu giá, phạt huỷ ca); app chỉ đơn thuần track ca + phụ cấp + OT + lương ước tính, định vị "của bạn, không phải của công ty".</li>
+      <li class="gap-item"><span class="gap-num">2</span>Hợp nhất lịch + thu nhập đa nền tảng gig — Para/ShiftTracker xác nhận đúng pain point nhưng chưa ai dẫn đầu rõ ràng, trong khi addressable market (76M+ freelancer Mỹ) đang tăng.</li>
+      <li class="gap-item"><span class="gap-num">3</span>Điều phối gia đình quanh lịch làm ca bất định của 1 người — tính năng chia sẻ lịch/iCal feed của NurseGrid là điểm dữ liệu mạnh nhất (260K MAU, 4.9★); mở rộng ra ngoài ngành y tá sang bán lẻ/khách sạn/logistics là cơ hội có bằng chứng nhưng cần thực thi tốt.</li>
+      <li class="gap-item"><span class="gap-num">4</span>App timetable học sinh ổn định, xử lý tốt ngoại lệ (nghỉ lễ, tuần thi) — backlash sau khi MyStudyLife đổi chủ là tín hiệu cơ hội sống: category đủ phân mảnh (Class Timetable, EasyTable, My Classes...) để không ai thực sự sở hữu vị trí "đơn giản và đáng tin cậy".</li>
+      <li class="gap-item"><span class="gap-num">5</span>App lịch/ca làm việc bản địa hoá ngoài thị trường Mỹ/Anh — hầu hết app tìm được (When I Work, Deputy, Sling) tập trung thị trường Anh ngữ; dân số gig/shift-worker ở Đông Nam Á/Ấn Độ/Mỹ Latinh rất lớn nhưng chưa được phục vụ tốt bởi app bản địa hoá (suy luận từ việc kết quả tìm kiếm nghiêng hẳn về Mỹ/Anh, chưa có bằng chứng trực tiếp).</li>
+    </ul>
+  </div>
+
+  <!-- ═══ CATEGORY 4: ADJACENT MICRO-NICHES ═══ -->
+  <hr class="dv" />
+  <div class="sec-head reveal">
+    <span class="sec-title">🔬 Micro-niche liền kề: Countdown, Subscription Tracker, Habit, Focus Timer</span>
+    <span class="sec-count">Category #4 / 4</span>
+  </div>
+  <p class="sec-lead reveal">Quét 6 micro-niche để tìm chỗ ít bão hoà hơn cleaner/VPN/PDF. Kết quả: độ bão hoà rất khác nhau giữa các ngách — một số có 1 incumbent quá mạnh (Widgetsmith, Forest), một số phân mảnh nhưng chất lượng thấp (countdown), một số có bằng chứng nhu cầu mạnh nhưng thiếu app dẫn đầu (subscription tracker).</p>
+
+  <div class="app-list reveal">
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">🌲</div>
+        <div><div class="app-name">Forest (focus timer)</div><div class="app-pub">Seekrtech</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">Freemium + ads (Android), one-time Pro purchase (iOS)</span>
+        <span class="chip chip-rev">10M+ Android downloads · ~300K dl/$100K rev trong 1 tháng gần đây — vẫn sinh doanh thu thật nhiều năm sau ra mắt</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot" style="background:var(--g)"></span>Điểm dữ liệu được kiểm chứng tốt nhất trong cả 6 micro-niche — chứng minh model one-time+freemium bền vững, KHÔNG cần subscription</li></ul>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">💳</div>
+        <div><div class="app-name">Rocket Money / Bobby (subscription tracker)</div><div class="app-pub">Rocket Companies / Yummygum</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">Rocket Money: $7–14/tháng (finance app rộng); Bobby: freemium</span>
+        <span class="chip chip-rev">Bobby: 500K+ downloads, 4.7★ · doanh thu bị khoá sau paywall Apptopia</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot" style="background:var(--g)"></span>Bằng chứng nhu cầu vĩ mô mạnh nhất trong cả 6 ngách: người Mỹ trung bình có 12+ subscription đang active nhưng nghĩ chỉ có 4-6; 73% thừa nhận "subscription fatigue"; 42% từng quên và vẫn trả tiền cho 1 subscription (West Monroe/C+R Research)</li></ul>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">West Monroe, 2025</span><span class="src-chip">CNBC Select</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">🔁</div>
+        <div><div class="app-name">Streaks / Habitica / Loop Habit Tracker</div><div class="app-pub">Various</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS (Streaks)</span><span class="plt-and">Android (Habitica, Loop)</span>
+        <span class="chip">Subscription/one-time (Streaks); freemium gamified (Habitica); miễn phí mãi mãi, mã nguồn mở (Loop)</span>
+        <span class="chip chip-rev">Streaks ~3M lifetime dl, ~782K MAU (ước tính) · Habitica 10M+ dl, 4.9★, 700K+ rating</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>Loop Habit Tracker miễn phí vĩnh viễn, mã nguồn mở — trần giá cho cả category vì đối thủ miễn phí "không thể bị đánh bại về giá"</li></ul>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">⏳</div>
+        <div><div class="app-name">Countdown Star / Big Day</div><div class="app-pub">Nhiều dev nhỏ</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">Free + banner ads + IAP "remove ads"</span>
+        <span class="chip chip-warn">Không có số liệu doanh thu công khai — một trang so sánh test tới 32 app countdown khác nhau</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot" style="background:var(--g)"></span>Bão hoà về SỐ LƯỢNG app nhưng nông về CHẤT LƯỢNG — hầu hết là app đơn giản, ít đầu tư, chưa ai làm bản polish + subscription</li></ul>
+    </div>
+  </div>
+
+  <div class="ruled-out reveal">
+    <div class="ruled-out-title">Đã loại khỏi danh sách cơ hội</div>
+    <ul>
+      <li><strong>Widget customization</strong> — Widgetsmith đã có 131M downloads, 5 năm lặp lại sản phẩm, lợi thế tích hợp platform quá lớn để một app mới cạnh tranh trực diện. Chỉ nên làm nếu là tính năng gắn kèm trong app khác, không phải sản phẩm độc lập.</li>
+      <li><strong>World clock/multi-timezone cho remote team</strong> — dữ liệu quá mỏng (gần như không tìm được số liệu download/revenue nào), narrative "remote work thúc đẩy nhu cầu" chỉ mang tính suy đoán định tính, không có bằng chứng định lượng. Rủi ro cao, không nên coi là cơ hội có dữ liệu chắc chắn.</li>
+    </ul>
+  </div>
+
+  <!-- ═══ TOP 10 RANKED OPPORTUNITIES ═══ -->
+  <hr class="dv" />
+  <div class="sec-head reveal">
+    <span class="sec-title">🎯 Top 10 cơ hội, xếp hạng theo bằng chứng nhu cầu + độ bão hoà + feasibility</span>
+    <span class="sec-count">Tổng hợp từ cả 4 nhóm</span>
+  </div>
+  <p class="sec-lead reveal">Xếp hạng dựa trên 3 tiêu chí: có bằng chứng nhu cầu thật hay không, ngách hiện tại bão hoà tới mức nào, và feasibility kỹ thuật cho team nhỏ.</p>
+
+  <div class="opp-grid reveal">
+    <div class="opp-card">
+      <div class="opp-rank">01</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Subscription tracker, ưu tiên privacy, không cần link tài khoản ngân hàng</span></div>
+        <p class="opp-desc">Bằng chứng nhu cầu vĩ mô mạnh nhất trong toàn bộ report này (12+ subscription/người, 73% fatigue, lệch nhận thức chi tiêu 2.5 lần). Rocket Money chôn tính năng này trong app finance rộng và bắt buộc link ngân hàng — nhiều user không muốn. Ngách "chỉ track subscription" bị bỏ trống vì các hãng phân tích không track app nhỏ.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">Freemium / one-time</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:80%;background:var(--g)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">02</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Calendar cho freelancer nhiều khách hàng, phân màu theo dự án</span></div>
+        <p class="opp-desc">Mọi "freelancer scheduling tool" tìm được đều là link đặt lịch kiểu Calendly — không phải calendar hiển thị deadline nhiều dự án cùng lúc. Gap xác nhận thật, chưa tìm thấy đối thủ trực tiếp.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">Subscription giá thấp</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:65%;background:var(--g)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">03</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Focus timer/Pomodoro cho nhóm đối tượng cụ thể (ADHD, học sinh, remote-work)</span></div>
+        <p class="opp-desc">Forest là điểm dữ liệu doanh thu được kiểm chứng tốt nhất trong cả report (~$100K/tháng, nhiều năm sau ra mắt, model one-time không cần subscription). Không nên clone trực tiếp Forest — nhắm vào audience cụ thể chưa được phục vụ để né cạnh tranh trực diện.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">One-time + freemium</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:85%;background:var(--g)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">04</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">App giờ cầu nguyện (Fajr/Athan) chất lượng cao, hợp nhất</span></div>
+        <p class="opp-desc">Ngách lớn về quy mô dân số addressable nhưng phân mảnh thành hàng chục app gần giống hệt, chất lượng thấp, chưa app nào đạt chuẩn "khó tắt thật sự" như Alarmy.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">Freemium</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:70%;background:var(--g)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">05</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Calendar co-parent nhẹ nhàng, giá rẻ hơn OurFamilyWizard</span></div>
+        <p class="opp-desc">OurFamilyWizard định vị cho case ly hôn tranh chấp, giá cao, cứng nhắc. Cặp ly thân hoà bình cần bản đơn giản hơn, không mang tính pháp lý nặng nề.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">Subscription</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:60%;background:var(--y)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">06</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Máy tính lương/OT theo ca, không ràng buộc marketplace</span></div>
+        <p class="opp-desc">ShiftKey cho thấy bất mãn rất lớn với model marketplace (đấu giá ca, phạt huỷ ca). App chỉ track ca + lương + OT, không có bên thứ 3 can thiệp, định vị "của bạn, không phải của công ty".</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">Freemium + IAP</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:70%;background:var(--g)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">07</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Alarm mission chống gian lận bằng on-device ML</span></div>
+        <p class="opp-desc">Review Alarmy cho thấy user "hack" mission ảnh dễ dàng. Xác minh vị trí/vật thể thật bằng ML sẽ vá lỗ hổng documented này — kỹ thuật khả thi với API vision có sẵn.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">Freemium</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:55%;background:var(--y)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">08</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Countdown app cao cấp cho 1 ngách sự kiện cụ thể (đám cưới, ngày sinh con)</span></div>
+        <p class="opp-desc">Bão hoà về số lượng nhưng nông về chất lượng — 32 app được test đa số đơn giản, ít đầu tư. App polish + subscription cho 1 vertical cụ thể dễ nổi bật hơn "countdown chung chung".</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">Subscription / one-time</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:80%;background:var(--g)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">09</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Điều phối gia đình quanh lịch làm ca bất định (mở rộng ngoài ngành y tá)</span></div>
+        <p class="opp-desc">NurseGrid chứng minh tính năng chia sẻ lịch gia đình hiệu quả (260K MAU, 4.9★) nhưng chỉ trong ngành y tá. Mở rộng sang bán lẻ/khách sạn/logistics là cơ hội có bằng chứng nhưng cần thực thi tốt.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">Freemium</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:55%;background:var(--y)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">10</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Hợp nhất lịch + thu nhập đa nền tảng gig (Uber+DoorDash+Grubhub...)</span></div>
+        <p class="opp-desc">Para/ShiftTracker xác nhận đúng pain point (tài xế đa app kiếm nhiều hơn 31%/giờ) nhưng chưa ai chiếm market share rõ ràng. Addressable market lớn (76M+ freelancer Mỹ) và đang tăng.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">Freemium</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:50%;background:var(--y)"></div></div></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ METHODOLOGY ═══ -->
+  <hr class="dv" />
+  <div class="sec-head reveal">
+    <span class="sec-title">Methodology</span>
+  </div>
+  <p class="sec-lead reveal">Report được tổng hợp từ 4 lượt research song song bằng web search, mỗi lượt tập trung một nhóm ngách (calendar, alarm/wake, timetable/shift, micro-niche liền kề). So với report utility tools trước, các ngách này có ít số liệu Sensor Tower/Appfigures công khai hơn hẳn — report ưu tiên trung thực về giới hạn dữ liệu hơn là điền số liệu đoán.</p>
+  <div class="method-grid reveal">
+    <div class="method-card">
+      <div class="method-num">4</div>
+      <div class="method-label">Nhóm ngách nghiên cứu</div>
+      <div class="method-sub">Calendar · Alarm/wake · Timetable/shift · Micro-niche liền kề</div>
+    </div>
+    <div class="method-card">
+      <div class="method-num">10</div>
+      <div class="method-label">Cơ hội xếp hạng</div>
+      <div class="method-sub">Theo bằng chứng nhu cầu + độ bão hoà + feasibility</div>
+    </div>
+    <div class="method-card">
+      <div class="method-num">3</div>
+      <div class="method-label">Ngách đã loại</div>
+      <div class="method-sub">Widget customization, world clock remote-team, shift xoay vòng</div>
+    </div>
+    <div class="method-card">
+      <div class="method-num">Aug 2026</div>
+      <div class="method-label">Thời điểm research</div>
+      <div class="method-sub">Số liệu phản ánh giai đoạn 2020–2026, không phải dữ liệu real-time</div>
+    </div>
+  </div>
+
+  <!-- ═══ SOURCES ═══ -->
+  <hr class="dv" />
+  <div class="sec-head reveal">
+    <span class="sec-title">Sources</span>
+  </div>
+  <div class="sources-grid reveal">
+    <div>
+      <div class="src-cat-title">Calendar</div>
+      <ul class="src-link-list">
+        <li><a href="https://thebridge.jp/en/2025/11/timetree-calendar-sharing-app-raises-%C2%A51-6-billion-in-series-f" target="_blank">TheBridge.jp — TimeTree Series F (Nov 2025)</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Cozi" target="_blank">Wikipedia — Cozi</a></li>
+        <li><a href="https://www.david-smith.org/blog/2025/09/18/widgetsmith-at-five/" target="_blank">David Smith — Widgetsmith at Five (Sept 2025)</a></li>
+        <li><a href="https://reclaim.ai/blog/motion-vs-reclaim" target="_blank">Reclaim.ai — Motion vs Reclaim (Dropbox acquisition context)</a></li>
+        <li><a href="https://explodingtopics.com/blog/digital-calendar-market-summary" target="_blank">Exploding Topics — Digital Calendar Market Summary</a></li>
+        <li><a href="https://apps.apple.com/us/app/ourfamilywizard-co-parent-app/id497405393" target="_blank">App Store — OurFamilyWizard</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="src-cat-title">Alarm / Wake</div>
+      <ul class="src-link-list">
+        <li><a href="https://www.indiehackers.com/post/alarmy-the-11-million-alarm-clock-app-c74024c017" target="_blank">Indie Hackers — Alarmy (số liệu chưa kiểm chứng chéo)</a></li>
+        <li><a href="https://verve.com/case-studies/delightroom-alarmy/" target="_blank">Verve — Delightroom/Alarmy case study</a></li>
+        <li><a href="https://investors.sleepcycle.com/" target="_blank">Sleep Cycle Investor Relations</a></li>
+        <li><a href="https://www.macrumors.com/2025/06/11/ios-26-third-party-alarm-apps/" target="_blank">MacRumors — iOS 26 AlarmKit (Jun 2025)</a></li>
+        <li><a href="https://www.nationalworld.com/lifestyle/viral-tiktok-trend-the-5am-club-4387139" target="_blank">National World — TikTok "5am Club" trend</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="src-cat-title">Timetable / Shift</div>
+      <ul class="src-link-list">
+        <li><a href="https://www.unesco.org/en/articles/number-students-higher-education-more-doubled-20-years-inequalities-remain" target="_blank">UNESCO — Higher education enrollment 2026</a></li>
+        <li><a href="https://www.epi.org/press/at-least-17-percent-of-workers-have-unstable-schedules" target="_blank">EPI — Unstable schedules</a></li>
+        <li><a href="https://www.businesswire.com/news/home/20200309005857/en/HealthStream-Acquires-NurseGrid-1-Rated-and-Top-Downloaded-App-for-Nurses" target="_blank">BusinessWire — HealthStream acquires NurseGrid</a></li>
+        <li><a href="https://www.bbb.org/us/tx/dallas/profile/medical-staffing/shiftkey-0875-91062781/complaints" target="_blank">BBB — ShiftKey complaints</a></li>
+        <li><a href="https://www.demandsage.com/gig-economy-statistics/" target="_blank">Demandsage — Gig economy statistics 2026</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="src-cat-title">Micro-niche liền kề</div>
+      <ul class="src-link-list">
+        <li><a href="https://www.westmonroe.com/press-releases/americans-are-spending-more-on-subscriptions-and-are-less-aware-of-spending" target="_blank">West Monroe — Subscription spending survey</a></li>
+        <li><a href="https://www.revenuecat.com/customers/widgetsmith" target="_blank">RevenueCat — Widgetsmith customer story</a></li>
+        <li><a href="https://loophabits.org/" target="_blank">Loop Habit Tracker (open-source)</a></li>
+        <li><a href="https://www.rankred.com/best-countdown-apps/" target="_blank">RankRed — Best countdown apps comparison</a></li>
+        <li><a href="https://www.worldtimebuddy.com/mobile-app" target="_blank">World Time Buddy — mobile app</a></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span class="footer-brand">UtilityScan</span>
+    <span class="footer-meta">Market research report · Calendar/Alarm/Schedule niche category · Compiled Aug 2026<br/>Số liệu third-party estimate, không phải báo cáo tài chính đã kiểm toán</span>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.08 }
+  );
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
