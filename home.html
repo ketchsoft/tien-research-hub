@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>Tien — Research Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:    #0a0a0a;
+      --card:  #111111;
+      --card2: #161616;
+      --bd:    rgba(246,242,233,.08);
+      --bd2:   rgba(246,242,233,.15);
+      --cr:    #f6f2e9;
+      --cr7:   rgba(246,242,233,.7);
+      --cr5:   rgba(246,242,233,.5);
+      --cr3:   rgba(246,242,233,.3);
+      --cr1:   rgba(246,242,233,.06);
+      --g:     #4ade80;
+      --gb:    rgba(74,222,128,.12);
+      --b:     #60a5fa;
+      --bb:    rgba(96,165,250,.12);
+      --o:     #fb923c;
+      --ob:    rgba(251,146,60,.12);
+      --p:     #c084fc;
+      --pb:    rgba(192,132,252,.12);
+      --pk:    #f472b6;
+      --y:     #facc15;
+      --r:     #f87171;
+      --t:     #2dd4bf;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans:  'Inter', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--cr); font-family: var(--sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+    /* ── Orbs ── */
+    .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(120px); }
+    .orb-1 { width: 700px; height: 700px; top: -200px; left: -200px; background: radial-gradient(circle, rgba(74,222,128,.07), transparent 70%); }
+    .orb-2 { width: 500px; height: 500px; top: 40%; right: -200px; background: radial-gradient(circle, rgba(96,165,250,.06), transparent 70%); }
+    .orb-3 { width: 400px; height: 400px; bottom: 0; left: 25%; background: radial-gradient(circle, rgba(192,132,252,.05), transparent 70%); }
+
+    /* ── Layout ── */
+    .wrap { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Header ── */
+    .topbar { height: 56px; display: flex; align-items: center; border-bottom: 1px solid var(--bd); position: sticky; top: 0; background: rgba(10,10,10,.85); backdrop-filter: blur(12px); z-index: 100; }
+    .brand { font-family: var(--serif); font-size: 18px; letter-spacing: -.3px; }
+    .brand em { font-style: italic; color: var(--cr5); }
+    .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 20px; letter-spacing: .3px; text-transform: uppercase; }
+    .badge-green { background: var(--gb); color: var(--g); border: 1px solid rgba(74,222,128,.2); }
+
+    /* ── Hero ── */
+    .hero { padding: 72px 0 52px; text-align: center; }
+    .hero-label { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--cr3); margin-bottom: 20px; }
+    .hero-h1 { font-family: var(--serif); font-size: clamp(2.2rem, 5.5vw, 3.8rem); font-weight: 400; line-height: 1.1; margin-bottom: 18px; }
+    .hero-h1 em { font-style: italic; color: var(--cr5); }
+    .hero-sub { font-size: 16px; color: var(--cr5); max-width: 520px; margin: 0 auto; line-height: 1.75; }
+
+    /* ── Section header ── */
+    .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--bd); }
+    .sec-title { font-family: var(--serif); font-size: 1.25rem; font-weight: 400; }
+    .sec-count { font-size: 12px; color: var(--cr3); }
+
+    /* ── Route grid ── */
+    .route-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 48px; }
+    @media (max-width: 640px) { .route-grid { grid-template-columns: 1fr; } }
+
+    .route-card {
+      display: block;
+      text-decoration: none;
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color .2s, background .2s, transform .15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .route-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .route-card:hover { border-color: var(--bd2); background: var(--card2); transform: translateY(-2px); }
+    .route-card:hover::before { opacity: 1; }
+
+    /* accent glow per card type */
+    .card-research::before { background: radial-gradient(ellipse at top left, rgba(74,222,128,.05), transparent 60%); }
+    .card-persona::before  { background: radial-gradient(ellipse at top left, rgba(244,114,182,.05), transparent 60%); }
+    .card-mvp::before      { background: radial-gradient(ellipse at top left, rgba(251,146,60,.05), transparent 60%); }
+    .card-parent::before   { background: radial-gradient(ellipse at top left, rgba(96,165,250,.05), transparent 60%); }
+    .card-app::before      { background: radial-gradient(ellipse at top left, rgba(192,132,252,.05), transparent 60%); }
+
+    .card-icon { font-size: 28px; margin-bottom: 14px; display: block; }
+    .card-tag-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .card-tag {
+      font-size: 10px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase;
+      padding: 2px 8px; border-radius: 20px;
+    }
+    .tag-green  { background: var(--gb); color: var(--g); }
+    .tag-pink   { background: rgba(244,114,182,.12); color: var(--pk); }
+    .tag-orange { background: var(--ob); color: var(--o); }
+    .tag-blue   { background: var(--bb); color: var(--b); }
+    .tag-purple { background: var(--pb); color: var(--p); }
+    .tag-teal   { background: rgba(45,212,191,.12); color: var(--t); }
+
+    .card-url { font-size: 10px; color: var(--cr3); font-family: 'JetBrains Mono', 'Fira Mono', monospace; }
+    .card-title { font-family: var(--serif); font-size: 1.2rem; font-weight: 400; line-height: 1.25; margin-bottom: 8px; color: var(--cr); }
+    .card-desc { font-size: 13px; color: var(--cr5); line-height: 1.65; }
+    .card-arrow { position: absolute; top: 24px; right: 24px; font-size: 16px; color: var(--cr3); transition: color .2s, transform .2s; }
+    .route-card:hover .card-arrow { color: var(--cr7); transform: translate(2px, -2px); }
+
+    /* ── Featured card (full width) ── */
+    .route-card.card-featured {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0 24px;
+      align-items: start;
+    }
+    .card-featured .card-body { }
+    .card-featured .card-title { font-size: 1.4rem; }
+    .card-featured .card-desc { max-width: 540px; }
+
+    /* ── Firebase info ── */
+    .info-strip {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 64px;
+    }
+    .info-icon { font-size: 22px; flex-shrink: 0; }
+    .info-text { font-size: 13px; color: var(--cr5); line-height: 1.6; }
+    .info-text strong { color: var(--cr7); }
+    .info-text code { font-size: 12px; background: var(--cr1); padding: 1px 6px; border-radius: 4px; font-family: monospace; color: var(--b); }
+
+    /* ── Footer ── */
+    .footer { border-top: 1px solid var(--bd); padding: 32px 0; text-align: center; color: var(--cr3); font-size: 13px; }
+
+    /* ── Reveal animation ── */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .5s, transform .5s; }
+    .reveal.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<header class="topbar">
+  <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;width:100%">
+    <span class="brand">Tien <em>Research</em></span>
+    <span class="badge badge-green">streak-habit-mvp</span>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <!-- Hero -->
+    <div class="hero reveal">
+      <div class="hero-label">Firebase Hosting · streak-habit-mvp</div>
+      <h1 class="hero-h1">Research Hub<br/><em>& App Mockups</em></h1>
+      <p class="hero-sub">Tất cả trang nghiên cứu thị trường, phân tích persona, và mockup ứng dụng trong một chỗ.</p>
+    </div>
+
+    <!-- Firebase info -->
+    <div class="info-strip reveal">
+      <div class="info-icon">🔥</div>
+      <div class="info-text">
+        <strong>Firebase Project:</strong> <code>streak-habit-mvp</code> &nbsp;·&nbsp;
+        <strong>Hosting:</strong> Static site, <code>cleanUrls: true</code> &nbsp;·&nbsp;
+        Tất cả URL bên dưới là relative paths được serve trực tiếp từ root.
+      </div>
+    </div>
+
+    <!-- Market Research section -->
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-title">Market Research</span>
+        <span class="sec-count">4 trang</span>
+      </div>
+      <div class="route-grid">
+
+        <a href="/utility-tools-market.html" class="route-card card-research card-featured" style="border-color:rgba(96,165,250,.2)">
+          <span class="card-icon">🧰</span>
+          <div class="card-body">
+            <div class="card-tag-row">
+              <span class="card-tag tag-blue">Market Research · Global</span>
+              <span class="card-url">/utility-tools-market.html</span>
+            </div>
+            <div class="card-title">UtilityScan — Global Utility Tools Market Opportunity Report</div>
+            <div class="card-desc">Quét 4 nhóm ngách utility tools toàn cầu (cleaner/storage, PDF/scanner/converter, VPN/privacy/password manager, AI-powered trend) với số liệu thật có trích dẫn nguồn. 10 cơ hội xếp hạng theo feasibility cho team nhỏ.</div>
+          </div>
+          <span class="card-arrow">↗</span>
+        </a>
+
+        <a href="/trending-apps.html" class="route-card card-research card-featured" style="border-color:rgba(74,222,128,.2)">
+          <span class="card-icon">📈</span>
+          <div class="card-body">
+            <div class="card-tag-row">
+              <span class="card-tag tag-green">Trending · Weekly</span>
+              <span class="card-url">/trending-apps.html</span>
+            </div>
+            <div class="card-title">AppScan — Weekly Trending Apps Intelligence</div>
+            <div class="card-desc">Top 10 breakout apps tuần này: downloads, MAU, revenue estimates, pain points từ reviews, và opportunity score cho indie devs. Data từ Sensor Tower, data.ai, App Store & Play Store.</div>
+          </div>
+          <span class="card-arrow">↗</span>
+        </a>
+
+        <a href="/index.html" class="route-card card-research card-featured">
+          <span class="card-icon">🔬</span>
+          <div class="card-body">
+            <div class="card-tag-row">
+              <span class="card-tag tag-green">Market Research</span>
+              <span class="card-url">/</span>
+            </div>
+            <div class="card-title">US Market — Who Are We Building For?</div>
+            <div class="card-desc">Phân tích thị trường Mỹ theo từng segment người dùng. Pain journey, gap analysis, product-market fit hypothesis, và competitor landscape.</div>
+          </div>
+          <span class="card-arrow">↗</span>
+        </a>
+
+        <a href="/market-report.html" class="route-card card-research card-featured">
+          <span class="card-icon">📊</span>
+          <div class="card-body">
+            <div class="card-tag-row">
+              <span class="card-tag tag-green">Market Report</span>
+              <span class="card-url">/market-report.html</span>
+            </div>
+            <div class="card-title">Build for Người Thật, Không Phải Product Category</div>
+            <div class="card-desc">Báo cáo thị trường chi tiết. Xuất phát từ người dùng → hiểu pain journey → quyết định build gì. Framework tìm product-market fit.</div>
+          </div>
+          <span class="card-arrow">↗</span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- Persona Deep Dives section -->
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-title">Persona Deep Dives</span>
+        <span class="sec-count">2 trang</span>
+      </div>
+      <div class="route-grid">
+
+        <a href="/emotion-tracker.html" class="route-card card-persona">
+          <span class="card-icon">💭</span>
+          <div class="card-tag-row">
+            <span class="card-tag tag-pink">Persona</span>
+            <span class="card-url">/emotion-tracker.html</span>
+          </div>
+          <div class="card-title">The Emotion Daily Tracker</div>
+          <div class="card-desc">Nhóm muốn hiểu cảm xúc của chính mình. Phân tích tại sao app hiện tại cảm giác như bảng y tế thay vì nhật ký cá nhân. Opportunity sizing & MVP direction.</div>
+          <span class="card-arrow">↗</span>
+        </a>
+
+        <a href="/parent-learning-tracker.html" class="route-card card-parent">
+          <span class="card-icon">👨‍👩‍👧</span>
+          <div class="card-tag-row">
+            <span class="card-tag tag-blue">Persona</span>
+            <span class="card-url">/parent-learning-tracker.html</span>
+          </div>
+          <div class="card-title">Phụ Huynh Đồng Hành</div>
+          <div class="card-desc">Phân tích chuyên sâu phụ huynh quản lý học tập con cái. Pain points, hành vi thực tế, và cơ hội xây dựng sản phẩm hỗ trợ đồng hành học tập.</div>
+          <span class="card-arrow">↗</span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- MVP & App section -->
+    <section class="reveal">
+      <div class="sec-head">
+        <span class="sec-title">MVP & App Mockups</span>
+        <span class="sec-count">2 trang</span>
+      </div>
+      <div class="route-grid">
+
+        <a href="/parentbridge-mvp.html" class="route-card card-mvp">
+          <span class="card-icon">🏗️</span>
+          <div class="card-tag-row">
+            <span class="card-tag tag-orange">MVP Plan</span>
+            <span class="card-url">/parentbridge-mvp.html</span>
+          </div>
+          <div class="card-title">ParentBridge — MVP & Tech Stack</div>
+          <div class="card-desc">Lộ trình build trong 7 tuần: từ Google Classroom sync đến AI conversation starters đến learning roadmap. Tech stack cụ thể và thứ tự ưu tiên feature.</div>
+          <span class="card-arrow">↗</span>
+        </a>
+
+        <a href="/app-eng" class="route-card card-app">
+          <span class="card-icon">⚔️</span>
+          <div class="card-tag-row">
+            <span class="card-tag tag-purple">App Mockup</span>
+            <span class="card-url">/app-eng</span>
+          </div>
+          <div class="card-title">WordJail — English Learning App</div>
+          <div class="card-desc">Interactive mockup của app học tiếng Anh kiểu "giam cầm". Popup bắt buộc, widget màn hình khoá, speech recognition, và streak system. Xem toàn bộ flow màn hình.</div>
+          <span class="card-arrow">↗</span>
+        </a>
+
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    Tien Research Hub · Firebase Hosting · <code style="font-size:12px;background:rgba(246,242,233,.06);padding:2px 6px;border-radius:4px;color:var(--b)">streak-habit-mvp</code>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.08 }
+  );
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

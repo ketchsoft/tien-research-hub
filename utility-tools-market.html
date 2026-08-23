@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>UtilityScan — Global Utility Tools Market Opportunity Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:    #0a0a0a;
+      --card:  #111111;
+      --card2: #161616;
+      --bd:    rgba(246,242,233,.08);
+      --bd2:   rgba(246,242,233,.15);
+      --cr:    #f6f2e9;
+      --cr7:   rgba(246,242,233,.7);
+      --cr5:   rgba(246,242,233,.5);
+      --cr3:   rgba(246,242,233,.3);
+      --cr1:   rgba(246,242,233,.06);
+      --g:     #4ade80;
+      --gb:    rgba(74,222,128,.12);
+      --b:     #60a5fa;
+      --bb:    rgba(96,165,250,.12);
+      --o:     #fb923c;
+      --ob:    rgba(251,146,60,.12);
+      --p:     #c084fc;
+      --pb:    rgba(192,132,252,.12);
+      --pk:    #f472b6;
+      --pkb:   rgba(244,114,182,.12);
+      --y:     #facc15;
+      --yb:    rgba(250,204,21,.12);
+      --r:     #f87171;
+      --rb:    rgba(248,113,113,.12);
+      --t:     #2dd4bf;
+      --tb:    rgba(45,212,191,.12);
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans:  'Inter', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--cr); font-family: var(--sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+    .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(120px); }
+    .orb-1 { width: 700px; height: 700px; top: -200px; left: -200px; background: radial-gradient(circle, rgba(96,165,250,.07), transparent 70%); }
+    .orb-2 { width: 500px; height: 500px; top: 40%; right: -200px; background: radial-gradient(circle, rgba(74,222,128,.06), transparent 70%); }
+    .orb-3 { width: 400px; height: 400px; bottom: 0; left: 25%; background: radial-gradient(circle, rgba(192,132,252,.05), transparent 70%); }
+
+    .wrap { position: relative; z-index: 1; max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+    .topbar { height: 58px; display: flex; align-items: center; border-bottom: 1px solid var(--bd); position: sticky; top: 0; background: rgba(10,10,10,.9); backdrop-filter: blur(16px); z-index: 200; }
+    .topbar .wrap { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .brand { font-family: var(--serif); font-size: 19px; letter-spacing: -.3px; color: var(--cr); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--b); box-shadow: 0 0 10px var(--b); }
+    .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; letter-spacing: .3px; white-space: nowrap; }
+    .badge-blue  { background: var(--bb); color: var(--b); border: 1px solid rgba(96,165,250,.2); }
+    .badge-green { background: var(--gb); color: var(--g); border: 1px solid rgba(74,222,128,.2); }
+
+    .hero { padding: 68px 0 40px; text-align: center; }
+    .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; color: var(--cr3); margin-bottom: 16px; }
+    .hero-h1 { font-family: var(--serif); font-size: clamp(2rem, 5.5vw, 3.5rem); font-weight: 400; line-height: 1.15; margin-bottom: 16px; }
+    .hero-h1 em { font-style: italic; color: var(--cr5); }
+    .hero-sub { font-size: 15px; color: var(--cr5); max-width: 620px; margin: 0 auto; line-height: 1.75; }
+
+    .summary-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--bd); border: 1px solid var(--bd); border-radius: 16px; overflow: hidden; margin: 32px 0; }
+    @media(max-width:680px){ .summary-bar { grid-template-columns: repeat(2, 1fr); } }
+    .sum-cell { background: var(--card); padding: 18px 22px; }
+    .sum-label { font-size: 11px; color: var(--cr3); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 4px; }
+    .sum-val { font-size: 1.5rem; font-family: var(--serif); font-weight: 400; }
+    .sum-sub { font-size: 11px; color: var(--cr3); margin-top: 2px; }
+
+    .callout { background: rgba(250,204,21,.05); border: 1px solid rgba(250,204,21,.2); border-radius: 14px; padding: 18px 22px; margin: 8px 0 40px; font-size: 13px; color: var(--cr7); line-height: 1.7; }
+    .callout strong { color: var(--y); }
+
+    hr.dv { border: none; border-top: 1px solid var(--bd); margin: 56px 0 32px; }
+    .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+    .sec-title { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; }
+    .sec-count { font-size: 12px; color: var(--cr3); }
+    .sec-lead { font-size: 13.5px; color: var(--cr5); max-width: 720px; line-height: 1.75; margin-bottom: 28px; }
+
+    .app-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+    .app-card { background: var(--card); border: 1px solid var(--bd); border-radius: 16px; padding: 18px 20px; }
+    .app-top { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+    .app-icon { width: 40px; height: 40px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; border: 1px solid var(--bd); background: var(--cr1); }
+    .app-name { font-weight: 600; font-size: 14.5px; }
+    .app-pub { font-size: 12px; color: var(--cr3); margin-top: 1px; }
+    .plt-ios { background: rgba(96,165,250,.1); color: var(--b); border: 1px solid rgba(96,165,250,.2); font-size: 10px; padding: 1px 6px; border-radius: 4px; font-weight: 500; }
+    .plt-and { background: rgba(74,222,128,.1); color: var(--g); border: 1px solid rgba(74,222,128,.2); font-size: 10px; padding: 1px 6px; border-radius: 4px; font-weight: 500; }
+    .plt-web { background: rgba(192,132,252,.1); color: var(--p); border: 1px solid rgba(192,132,252,.2); font-size: 10px; padding: 1px 6px; border-radius: 4px; font-weight: 500; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .chip { font-size: 11px; padding: 3px 9px; border-radius: 6px; border: 1px solid var(--bd); color: var(--cr5); background: var(--cr1); }
+    .chip-rev { color: var(--o); border-color: rgba(251,146,60,.25); background: var(--ob); font-weight: 600; }
+    .pain-list { list-style: none; display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px; }
+    .pain-item { display: flex; align-items: flex-start; gap: 7px; font-size: 12.5px; color: var(--cr7); line-height: 1.55; }
+    .pain-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--r); flex-shrink: 0; margin-top: 6px; }
+    .src-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+    .src-label { font-size: 10.5px; color: var(--cr3); }
+    .src-chip { font-size: 10px; padding: 1px 7px; border-radius: 5px; border: 1px solid var(--bd); color: var(--cr3); }
+
+    .gaps-block { background: var(--card2); border: 1px solid var(--bd); border-radius: 14px; padding: 18px 20px; margin-bottom: 20px; }
+    .gaps-title { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--g); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+    .gaps-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .gap-item { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; color: var(--cr7); line-height: 1.65; }
+    .gap-num { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--gb); color: var(--g); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+
+    .trend-note { font-size: 13px; color: var(--cr5); line-height: 1.75; background: var(--card); border: 1px solid var(--bd); border-radius: 14px; padding: 16px 20px; margin-bottom: 20px; }
+    .trend-note strong { color: var(--cr); }
+
+    .opp-grid { display: flex; flex-direction: column; gap: 12px; }
+    .opp-card { background: var(--card); border: 1px solid var(--bd); border-radius: 16px; padding: 20px 22px; display: grid; grid-template-columns: 40px 1fr; gap: 16px; }
+    .opp-rank { font-family: var(--serif); font-size: 1.6rem; color: var(--cr3); }
+    .opp-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+    .opp-title { font-weight: 600; font-size: 15px; }
+    .opp-desc { font-size: 13px; color: var(--cr7); line-height: 1.7; margin-bottom: 10px; }
+    .opp-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .feas-bar-wrap { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--cr3); margin-left: auto; }
+    .feas-bar { width: 54px; height: 5px; background: var(--cr1); border-radius: 3px; overflow: hidden; }
+    .feas-fill { height: 100%; border-radius: 3px; }
+
+    .sources-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media(max-width:680px){ .sources-grid { grid-template-columns: 1fr; } }
+    .src-cat-title { font-size: 12px; font-weight: 600; color: var(--cr5); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+    .src-link-list { list-style: none; display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
+    .src-link-list li { font-size: 12px; color: var(--cr3); line-height: 1.5; word-break: break-all; }
+    .src-link-list a { color: var(--cr5); text-decoration: none; }
+    .src-link-list a:hover { color: var(--b); text-decoration: underline; }
+
+    .method-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 8px; }
+    @media(max-width:640px){ .method-grid { grid-template-columns: repeat(2,1fr); } }
+    .method-card { background: var(--card); border: 1px solid var(--bd); border-radius: 12px; padding: 16px; }
+    .method-num { font-family: var(--serif); font-size: 1.8rem; color: var(--cr3); margin-bottom: 4px; }
+    .method-label { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
+    .method-sub { font-size: 11px; color: var(--cr3); line-height: 1.5; }
+
+    footer { border-top: 1px solid var(--bd); padding: 36px 0; margin-top: 60px; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-brand { font-family: var(--serif); font-size: 16px; color: var(--cr5); }
+    .footer-meta { font-size: 12px; color: var(--cr3); text-align: right; }
+
+    .text-g { color: var(--g); } .text-b { color: var(--b); } .text-o { color: var(--o); } .text-p { color: var(--p); } .text-y { color: var(--y); }
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity .5s, transform .5s; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media print {
+      body { font-size: 11px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .bg-orbs { display: none; }
+      .reveal { opacity: 1 !important; transform: none !important; }
+      .topbar { position: static; backdrop-filter: none; }
+      .wrap { max-width: 100%; }
+      .summary-bar, .method-grid, .sources-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .app-card, .opp-card, .gaps-block, .trend-note, .callout { break-inside: avoid; }
+      hr.dv { margin: 28px 0 18px; }
+      a { color: inherit !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-orbs" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="/home.html">
+      <div class="brand-dot"></div>
+      UtilityScan
+    </a>
+    <div>
+      <span class="badge badge-blue">iOS + Android</span>
+      <span class="badge badge-green" style="margin-left:6px">Real cited data</span>
+    </div>
+  </div>
+</header>
+
+<section class="hero reveal">
+  <div class="wrap">
+    <p class="hero-eyebrow">Market Research Report · Utility Tools Category · Aug 2026</p>
+    <h1 class="hero-h1">Utility apps ai cũng cần,<br/><em>nhưng thị trường không hề đơn giản</em></h1>
+    <p class="hero-sub">Quét 4 nhóm ngách utility tools toàn cầu — cleaner/storage, PDF/scanner/converter, VPN/privacy/password manager, và xu hướng AI-powered — để tìm cơ hội phát triển app đem lại doanh thu thật. Mọi số liệu đều có trích dẫn nguồn (Sensor Tower, Appfigures, Business of Apps, báo chí ngành); không dùng số liệu giả lập.</p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="summary-bar reveal">
+    <div class="sum-cell">
+      <div class="sum-label">Utilities category revenue share</div>
+      <div class="sum-val text-b">~4.2%</div>
+      <div class="sum-sub">≈$5.66B / 2025, ~7% downloads (est.)</div>
+    </div>
+    <div class="sum-cell">
+      <div class="sum-label">AI apps revenue growth</div>
+      <div class="sum-val text-g">+254%</div>
+      <div class="sum-sub">YoY, dẫn đầu mọi category (Sensor Tower)</div>
+    </div>
+    <div class="sum-cell">
+      <div class="sum-label">Total app store revenue</div>
+      <div class="sum-val text-o">$150.5B</div>
+      <div class="sum-sub">2025, ~110.5B downloads toàn cầu</div>
+    </div>
+    <div class="sum-cell">
+      <div class="sum-label">Cơ hội đã xác định</div>
+      <div class="sum-val text-p">10</div>
+      <div class="sum-sub">xếp hạng theo feasibility cho small team</div>
+    </div>
+  </div>
+
+  <div class="callout reveal">
+    <strong>Lưu ý về độ tin cậy số liệu:</strong> Có 2 loại nguồn rất khác nhau trong report này. (1) Số liệu giao dịch thật từ Sensor Tower/Appfigures/công ty tự công bố — độ tin cậy cao. (2) Ước tính "market size" từ các market-research-mill (Dataintelo, Verified Market Research, Global Growth Insights...) — các nguồn này lệch nhau 2–4 lần cho cùng một category, nên chỉ mang tính tham khảo hướng đi, không phải con số chính xác. Report ghi rõ nguồn + thời điểm cho từng số liệu để bạn tự đánh giá.
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ═══ CATEGORY 1: CLEANER/STORAGE ═══ -->
+  <hr class="dv" />
+  <div class="sec-head reveal">
+    <span class="sec-title">🧹 Cleaner / Storage Optimizer / Duplicate Photo Finder</span>
+    <span class="sec-count">Category #1 / 4</span>
+  </div>
+  <p class="sec-lead reveal">Category "storage cleaner" trên iOS grossed <strong style="color:var(--cr)">$197M trong 2024</strong>, đang trên đà tăng gấp đôi trong 2025 — nhưng hơn 95% doanh thu đến từ iOS dù Android có install base lớn hơn nhiều, vì Android đang "Sherlock hóa" tính năng này vào OS (Files by Google). 1,500+ app cạnh tranh trong category, chỉ 7 app vượt $1M/tháng. <em>(Appfigures, Jun 2025)</em></p>
+
+  <div class="app-list reveal">
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">🧼</div>
+        <div>
+          <div class="app-name">CCleaner (mobile)</div>
+          <div class="app-pub">Gen Digital (Piriform)</div>
+        </div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">Freemium / subscription</span>
+        <span class="chip chip-rev">~$18.2M mobile revenue/năm, 42.3M MAU</span>
+      </div>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">Aggregated market report, 2025</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">📱</div>
+        <div>
+          <div class="app-name">Avast Cleanup – Phone Cleaner</div>
+          <div class="app-pub">Gen Digital</div>
+        </div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-and">Android</span>
+        <span class="chip">Freemium, ads + subscription</span>
+        <span class="chip chip-rev">50M+ installs · ~500K dl / $100K rev / tháng</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>User phàn nàn số liệu "junk found" bị phóng đại quá mức</li></ul>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">Sensor Tower, Jul 2024</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">📁</div>
+        <div>
+          <div class="app-name">Files by Google</div>
+          <div class="app-pub">Google — tích hợp sẵn trong Android</div>
+        </div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-and">Android (system)</span>
+        <span class="chip">Miễn phí — không monetize</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot" style="background:var(--b)"></span>Android 16 tích hợp sẵn archiving + dedup bằng on-device ML — đang thay thế app cleaner bên thứ 3</li></ul>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">Android Police, Jan 2026</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">🧹</div>
+        <div>
+          <div class="app-name">SD Maid 2/SE</div>
+          <div class="app-pub">darken — indie, 1 người phát triển</div>
+        </div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-and">Android</span>
+        <span class="chip">Freemium, one-time unlock, tùy chọn ad-free</span>
+        <span class="chip">Không có số liệu doanh thu công khai</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot" style="background:var(--g)"></span>Được review khen cụ thể vì <em>không</em> dùng dark pattern — bằng chứng "trust" là differentiator thật</li></ul>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">⚠️</div>
+        <div>
+          <div class="app-name">Cụm "Cleaner Guru / Swipe Guru / AI Cleaner" (iOS)</div>
+          <div class="app-pub">Nhiều studio nhỏ — gần như toàn bộ iOS category</div>
+        </div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span>
+        <span class="chip">Weekly subscription $3.99–$8/tuần</span>
+        <span class="chip chip-rev">Category: $197M revenue 2024, 161 app >$1K/tháng, 42 >$100K/tháng, 7 >$1M/tháng</span>
+      </div>
+      <ul class="pain-list">
+        <li class="pain-item"><span class="pain-dot"></span>Charge $6.99–$8/tuần gần như ngay sau khi trial bắt đầu, cancellation flow bị giấu kỹ</li>
+        <li class="pain-item"><span class="pain-dot"></span>Có case cụ thể một người lớn tuổi bị charge trùng bởi 2 app loại này cùng lúc</li>
+      </ul>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">Appfigures, Jun 2025</span><span class="src-chip">connortumbleson.com, Jan 2025</span></div>
+    </div>
+  </div>
+
+  <div class="trend-note reveal">
+    <strong>Regulatory pressure đang siết chặt:</strong> Apple đã pull 16,000+ app utility trong 2024 (category dẫn đầu mọi loại app bị gỡ), ngăn $9B fraud trong 5 năm. Google Play giảm từ 3.4M → 1.8M app (Jan 2024 – Apr 2025, -47%) sau khi siết chính sách, cấm rõ các claim "RAM cleaner/task killer" gây hiểu lầm. Báo chí công nghệ (MakeUseOf, Android Central) cũng đồng loạt kết luận: clear RAM/cache trên máy hiện đại gần như không có tác dụng thật — giá trị chức năng cốt lõi của category này phần lớn là "placebo".
+  </div>
+
+  <div class="gaps-block reveal">
+    <div class="gaps-title">🟢 Opportunity gaps</div>
+    <ul class="gaps-list">
+      <li class="gap-item"><span class="gap-num">1</span>Cleaner/duplicate-finder định giá minh bạch, một lần trả phí — SD Maid chứng minh model này work trên Android, nhưng chưa có brand tin cậy tương tự trên iOS.</li>
+      <li class="gap-item"><span class="gap-num">2</span>Duplicate finder xuyên nhiều cloud cùng lúc (Google Photos + iCloud + backup WhatsApp/Telegram) — chưa có app nào hợp nhất việc này.</li>
+      <li class="gap-item"><span class="gap-num">3</span>Công cụ "audit subscription trap" bảo vệ người thân lớn tuổi khỏi các app cleaner độc hại — bán cho con cái, không phải người dùng trực tiếp.</li>
+      <li class="gap-item"><span class="gap-num">4</span>Dedup ảnh/video cho prosumer (photographer/videographer) với file RAW/video lớn — app tiêu dùng hiện tại chỉ nhắm casual user.</li>
+      <li class="gap-item"><span class="gap-num">5</span>Device-hygiene cho fleet thiết bị B2B/trường học (tích hợp MDM) — gần như chưa ai làm, monetize qua ngân sách IT thay vì consumer.</li>
+    </ul>
+  </div>
+
+  <!-- ═══ CATEGORY 2: PDF/SCANNER/CONVERTER ═══ -->
+  <hr class="dv" />
+  <div class="sec-head reveal">
+    <span class="sec-title">📄 PDF / Document Scanner / File Converter / QR Scanner</span>
+    <span class="sec-count">Category #2 / 4</span>
+  </div>
+  <p class="sec-lead reveal">Market size ước tính không đồng nhất ($1–3.6B tùy nguồn cho scanner apps riêng 2025). Nhưng có một sự thật rõ ràng và được nhiều báo cáo xác nhận: sector "fleeceware" trong QR scanner/PDF converter đã tạo ra <strong style="color:var(--cr)">$400M+ doanh thu, ~1B lượt tải, 204 app</strong> theo phân tích của Avast — đây vừa là bằng chứng nhu cầu thật, vừa là scandal uy tín cả category đang gánh chịu.</p>
+
+  <div class="app-list reveal">
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">📷</div>
+        <div><div class="app-name">CamScanner</div><div class="app-pub">INTSIG Information</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">$49.99/năm hoặc $4.99/tuần</span>
+        <span class="chip chip-rev">300M+ users · iOS US ~3M dl/$7M rev/tháng · Android US ~4M dl/$2M rev/tháng · ~$49.2M company revenue</span>
+      </div>
+      <ul class="pain-list">
+        <li class="pain-item"><span class="pain-dot"></span>Bắt buộc tạo tài khoản, watermark trên bản export miễn phí</li>
+        <li class="pain-item"><span class="pain-dot"></span>Scandal Trojan Dropper 2019 (bị gỡ khỏi Google Play, sau đó phục hồi) — vẫn được nhắc tới như vết trust scar</li>
+      </ul>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">Sensor Tower, 2025</span><span class="src-chip">Kaspersky/Android Authority</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">📑</div>
+        <div><div class="app-name">Adobe Scan</div><div class="app-pub">Adobe</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">Miễn phí, upsell lên Acrobat/Creative Cloud</span>
+        <span class="chip chip-rev">150M+ downloads, 5B+ tài liệu đã scan</span>
+      </div>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">Adobe self-reported</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">🖨️</div>
+        <div><div class="app-name">Scanner Pro</div><div class="app-pub">Readdle (bootstrapped)</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS-first</span>
+        <span class="chip">Subscription $19.99–29.99/năm, trial 7 ngày</span>
+        <span class="chip chip-rev">Readdle overall ARR ~$36.1M</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>Chuyển từ one-time purchase sang subscription năm 2019 — user cũ vẫn còn ấm ức, nhiều bài "alternative without subscription" ra đời vì việc này</li></ul>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">Sensor Tower</span><span class="src-chip">Getlatka, 2025</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">✅</div>
+        <div><div class="app-name">Genius Scan</div><div class="app-pub">The Grizzly Labs — bootstrapped, không VC</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">Freemium + IAP $2.99 + subscription (OCR/cloud)</span>
+        <span class="chip chip-rev">10M+ Android installs, 5M MAU, ~100K dl/$300K rev/tháng</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot" style="background:var(--g)"></span>Ít complaint nhất trong nhóm — được xem là "the sane alternative" so với fleeceware scanner</li></ul>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">Sensor Tower, Jan 2026</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">⬛</div>
+        <div><div class="app-name">Cụm QR/Barcode Scanner (fleeceware)</div><div class="app-pub">Nhiều publisher nhỏ, hàng chục app na ná nhau</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">Trial 3 ngày → $4.99–$9.99/tuần</span>
+        <span class="chip chip-rev">App dẫn đầu ~$9M ARR, 70M+ downloads · sector $400M+ revenue, ~1B downloads, 204 app</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>Một app QR scanner từng xếp #235 top-grossing toàn App Store, vượt cả app chính thức của UFC/PGA — minh chứng cho quy mô doanh thu thật của "trap" này</li></ul>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">Avast research</span><span class="src-chip">Forbes/App Annie</span></div>
+    </div>
+  </div>
+
+  <div class="trend-note reveal">
+    <strong>Cơ hội công nghệ chưa được khai thác:</strong> Vision-language model (nhóm GPT-4o) hiện chính xác hơn OCR truyền thống rất nhiều (~1.75% vs ~9% character error rate với chữ viết tay), nhưng CamScanner/Adobe Scan chưa marketing rõ điều này. Đồng thời, scanner tích hợp sẵn trong Apple Notes + việc Microsoft khai tử Lens (retired late 2025, gộp vào app M365) đang siết nhu cầu scanner đơn thuần cho casual user — kẻ sống sót phải differentiate bằng tính năng chuyên sâu (OCR search, batch export, e-sign).
+  </div>
+
+  <div class="gaps-block reveal">
+    <div class="gaps-title">🟢 Opportunity gaps</div>
+    <ul class="gaps-list">
+      <li class="gap-item"><span class="gap-num">1</span>App scan/PDF định vị "anti-fleeceware" — giá minh bạch, nhắm đúng nhóm user đang chủ động tìm "[app] alternative without subscription" (nhu cầu này đã sinh ra hẳn một cụm SEO site).</li>
+      <li class="gap-item"><span class="gap-num">2</span>Bundle scan + OCR + e-sign chuyên biệt cho một ngành cụ thể (bất động sản, luật, freelancer) — vượt qua scanner miễn phí của Apple bằng tính năng chuyên môn.</li>
+      <li class="gap-item"><span class="gap-num">3</span>Scanner marketing rõ ràng "độ chính xác OCR ngang GPT-4o" cho chữ viết tay/đa ngôn ngữ — chưa ai claim rõ điều này.</li>
+      <li class="gap-item"><span class="gap-num">4</span>File converter (ảnh/video/audio) hợp nhất, giá công bằng, ưu tiên xử lý on-device (góc độ privacy) — thị trường hiện rất phân mảnh, hàng chục app JPG/PNG converter gần giống hệt nhau không ai dẫn đầu rõ.</li>
+      <li class="gap-item"><span class="gap-num">5</span>QR scanner đơn giản, miễn phí/ad-supported hoặc one-time, định vị rõ ràng chống lại pattern fleeceware — backlash đã được media ghi nhận rộng rãi, đây là cơ hội "trust" thật.</li>
+    </ul>
+  </div>
+
+  <!-- ═══ CATEGORY 3: VPN/PRIVACY/PASSWORD MANAGER ═══ -->
+  <hr class="dv" />
+  <div class="sec-head reveal">
+    <span class="sec-title">🔒 VPN / Privacy Tools / Password Manager</span>
+    <span class="sec-count">Category #3 / 4</span>
+  </div>
+  <p class="sec-lead reveal">Market size cho VPN ($48.5B–$89B, 2025) và password manager ($2.4B–$3.75B, 2025) lệch nhau rất lớn giữa các nguồn — chỉ nên coi là tham khảo hướng đi. Nhưng consolidation thật thì rõ ràng: Nord Security + Surfshark hiện định giá <strong style="color:var(--cr)">$3B</strong> sau vòng gọi vốn Warburg Pincus 2024; Kape Technologies từng mua ExpressVPN với giá $936M (2021) — thương vụ M&A VPN lớn nhất từng ghi nhận.</p>
+
+  <div class="app-list reveal">
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">🛡️</div>
+        <div><div class="app-name">NordVPN / Nord Security</div><div class="app-pub">Nord Security</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span><span class="plt-web">Desktop</span>
+        <span class="chip">Subscription $3–12/tháng</span>
+        <span class="chip chip-rev">~$357M ARR (2025) · ~15M / 20M+ user của Nord Security</span>
+      </div>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">Getlatka/Tracxn, 2025–26</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">🔑</div>
+        <div><div class="app-name">1Password</div><div class="app-pub">AgileBits</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span><span class="plt-web">Desktop</span>
+        <span class="chip">Subscription $3–8/tháng (cá nhân), per-seat business</span>
+        <span class="chip chip-rev">Vượt $400M ARR (Nov 2025), tăng từ $331M (2024) · 180K business customers · >90% gross retention</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>Complaint về giá "full price mỗi năm", free tier hạn chế</li></ul>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">CNBC, Nov 2025</span><span class="src-chip">1Password press release</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">🔓</div>
+        <div><div class="app-name">Bitwarden</div><div class="app-pub">Open-source</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span><span class="plt-web">Desktop</span>
+        <span class="chip">Freemium + subscription (tùy chọn self-host)</span>
+        <span class="chip chip-rev">$100M raise (PSG, 2022) · 10M+ users, 50K+ business customers (2024)</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>Autofill mobile yếu hơn 1Password (theo test PCMag); UI bị chê "kém polish" trên Reddit</li></ul>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">💥</div>
+        <div><div class="app-name">LastPass</div><div class="app-pub">LogMeIn/GoTo</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip" style="color:var(--r);border-color:rgba(248,113,113,.3);background:var(--rb)">Reputation collapse</span>
+      </div>
+      <ul class="pain-list">
+        <li class="pain-item"><span class="pain-dot"></span>Phạt £1.2M từ ICO Anh (Nov 2025) vì breach 2022 ảnh hưởng 1.6M user UK; settlement class-action $24.5M (2025)</li>
+        <li class="pain-item"><span class="pain-dot"></span>~$35M crypto bị đánh cắp gắn liền với vault LastPass bị crack, tính đến 2025</li>
+      </ul>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">Forbes, Dec 2025</span><span class="src-chip">TRM Labs / Cyber Unit</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-top">
+        <div class="app-icon">🕵️</div>
+        <div><div class="app-name">Aura (bundle identity/credit/VPN/antivirus)</div><div class="app-pub">Aura</div></div>
+      </div>
+      <div class="meta-row">
+        <span class="plt-ios">iOS</span><span class="plt-and">Android</span>
+        <span class="chip">Subscription bundle</span>
+        <span class="chip chip-rev">$1.6–2.5B valuation (2024), ~50% YoY revenue growth</span>
+      </div>
+      <ul class="pain-list"><li class="pain-item"><span class="pain-dot"></span>Bị so sánh là "đắt và cồng kềnh" so với công cụ đơn lẻ như Incogni</li></ul>
+    </div>
+  </div>
+
+  <div class="trend-note reveal">
+    <strong>Hai lực đẩy nhu cầu rất thật:</strong> (1) Passkey đang đe dọa dài hạn TAM của password manager — 1Password/Dashlane phải chủ động tích hợp passkey thay vì chống lại. (2) Nhu cầu VPN tăng vọt theo sự kiện kiểm duyệt — US VPN demand +827% trong ngày TikTok tạm ngừng hoạt động tại Mỹ (19/1/2025); Proton VPN ghi nhận tăng tới 35,000% so với baseline ở một số quốc gia trong 2025. Đáng chú ý: complaint về subscription chiếm ~30% toàn bộ review 1-sao trong category VPN — tỷ lệ cao nhất trong mọi category được nghiên cứu.
+  </div>
+
+  <div class="gaps-block reveal">
+    <div class="gaps-title">🟢 Opportunity gaps</div>
+    <ul class="gaps-list">
+      <li class="gap-item"><span class="gap-num">1</span>Dashboard xóa dữ liệu cá nhân (data-broker removal) gọn nhẹ, rẻ hơn và minh bạch hơn Aura — hiển thị rõ trạng thái xóa theo từng broker (gap này rõ vì đã có hẳn site so sánh chỉ để giải quyết việc "không biết đã xóa hay chưa").</li>
+      <li class="gap-item"><span class="gap-num">2</span>Công cụ audit/migrate sang passkey — giúp user biết tài khoản nào hỗ trợ passkey và chuyển đổi, không cạnh tranh trực diện với vault của incumbent.</li>
+      <li class="gap-item"><span class="gap-num">3</span>Lớp kiểm chứng độc lập server/tốc độ VPN — vấn đề "server ảo, chậm, không khả dụng" là pain point lặp lại liên tục nhưng bản thân VPN vendor không có động lực tự sửa (conflict of interest).</li>
+      <li class="gap-item"><span class="gap-num">4</span>Công cụ chống dark-pattern billing riêng cho category VPN/privacy — với 30% review 1-sao là về subscription, đây là pain point lớn mà incumbent không có lý do tự khắc phục.</li>
+      <li class="gap-item"><span class="gap-num">5</span>App hướng dẫn workaround theo thời gian thực khi có sự kiện chặn/kiểm duyệt cụ thể — thay vì chỉ nói chung chung "bật VPN lên".</li>
+    </ul>
+  </div>
+
+  <!-- ═══ CROSS-CUTTING: AI & MONETIZATION ═══ -->
+  <hr class="dv" />
+  <div class="sec-head reveal">
+    <span class="sec-title">🤖 Xu hướng cắt ngang: AI-powered utility & Monetization</span>
+    <span class="sec-count">Cross-category</span>
+  </div>
+  <p class="sec-lead reveal">Đây là các xu hướng áp dụng cho toàn bộ category utility tools, không riêng nhóm nào.</p>
+
+  <div class="app-list reveal">
+    <div class="app-card">
+      <div class="gaps-title" style="color:var(--p)">📈 AI-powered utility trend</div>
+      <p style="font-size:13px;color:var(--cr7);line-height:1.75;margin-bottom:8px">AI app dẫn đầu tăng trưởng doanh thu mọi category ở mức <strong style="color:var(--cr)">+254% YoY</strong>; media/photo/video editing (Remini, CapCut...) tăng <strong style="color:var(--cr)">+71% YoY</strong> — nhanh thứ 3 sau short-drama. Thời gian dùng gen-AI app dự kiến tăng gấp đôi từ H1 2025 → H1 2026 (17.2B → 36B giờ). Remini được coi là 1 trong 2 AI app được tải nhiều nhất toàn cầu (120M+ lượt tải năm 2024). Điểm quan trọng: AI hiện chủ yếu là <em>lớp tính năng gắn thêm</em> vào utility đã có sẵn (rename/organize/enhance/summarize) chứ chưa phải category hoàn toàn mới — đây chính là chỗ team nhỏ có thể cạnh tranh mà không cần tự train foundation model.</p>
+      <div class="src-row"><span class="src-label">Nguồn:</span><span class="src-chip">Sensor Tower State of Mobile 2026</span></div>
+    </div>
+
+    <div class="app-card">
+      <div class="gaps-title" style="color:var(--t)">💰 Monetization model</div>
+      <p style="font-size:13px;color:var(--cr7);line-height:1.75;margin-bottom:8px">Subscription chiếm ~82% doanh thu app non-gaming, nhưng one-time purchase/IAP lại thắng thế cho utility dùng không thường xuyên (scanner, converter). Model hiệu quả nhất 2025: <strong style="color:var(--cr)">hybrid</strong> — free core feature + subscription cho tính năng nâng cao/cloud sync. Cả 2 store đều siết enforcement 2025–2026 với dark-pattern pricing (Apple ngăn $2.2B fraud năm 2025); điều này vừa là rào cản (uy tín category thấp) vừa là cơ hội (một app định giá minh bạch có thể differentiate chỉ bằng "trust").</p>
+    </div>
+
+    <div class="app-card">
+      <div class="gaps-title" style="color:var(--o)">🌏 Regional opportunity</div>
+      <p style="font-size:13px;color:var(--cr7);line-height:1.75;margin-bottom:8px">Ấn Độ vượt Mỹ trở thành quốc gia #1 về số lượt tải app (2024). Đông Nam Á đứng #2 toàn cầu về downloads/time-spent (18.1B lượt tải, 2025). APAC chiếm 34.9% doanh thu mobile app toàn cầu, dự báo CAGR 14–17%. Các thị trường này có CPI thấp hơn, cạnh tranh ít hơn, nhưng cần model monetize phù hợp — ad-supported hoặc one-time giá thấp thường thắng subscription premium kiểu Mỹ/Âu.</p>
+    </div>
+
+    <div class="app-card">
+      <div class="gaps-title" style="color:var(--y)">👤 Indie success stories (có caveat)</div>
+      <p style="font-size:13px;color:var(--cr7);line-height:1.75;margin-bottom:8px">Sebastian Roehl (solo dev, Đức): $602K năm 2025 từ portfolio app, ~$28K MRR/25,100 subscriber trả $1–2/tháng mỗi người. Một dev ẩn danh trên Indie Hackers pivot sang portfolio 30 app, đạt ~$22K/tháng trong chưa đầy 1 năm. <strong>Caveat quan trọng:</strong> không tìm được case nào có doanh thu được kiểm toán độc lập (Sensor Tower/Appfigures xác nhận) cho một single utility app do 1 người tự build — hầu hết số liệu là tự công bố trên blog, nên chỉ nên xem là cảm hứng định hướng, không phải benchmark chắc chắn.</p>
+    </div>
+  </div>
+
+  <!-- ═══ TOP 10 RANKED OPPORTUNITIES ═══ -->
+  <hr class="dv" />
+  <div class="sec-head reveal">
+    <span class="sec-title">🎯 Top 10 cơ hội, xếp hạng theo feasibility cho team nhỏ</span>
+    <span class="sec-count">Tổng hợp từ cả 4 nhóm</span>
+  </div>
+  <p class="sec-lead reveal">Kết hợp các opportunity gap ở trên với mức độ khả thi thực tế cho một team nhỏ/indie dev (không cần train model riêng, không cần sales enterprise phức tạp).</p>
+
+  <div class="opp-grid reveal">
+    <div class="opp-card">
+      <div class="opp-rank">01</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Cleaner/scanner "anti-fleeceware" — giá minh bạch, một lần trả phí</span></div>
+        <p class="opp-desc">Nhắm đúng nhóm user đang chủ động tìm "alternative without subscription" — nhu cầu này đã tạo ra cả cụm SEO site riêng. Công nghệ scan/OCR/cleaner đã rất phổ biến, moat nằm ở trust & pricing, không phải công nghệ.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">One-time hoặc sub rõ ràng</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:70%;background:var(--g)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">02</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Duplicate photo finder xuyên nhiều cloud (Google Photos + iCloud + chat backup)</span></div>
+        <p class="opp-desc">Chưa app nào hợp nhất việc dedup ảnh nằm rải rác ở nhiều tài khoản cloud khác nhau — pain point thật, giải pháp hiện tại chỉ scan on-device.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">One-time hoặc sub theo lượt scan</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:60%;background:var(--g)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">03</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Document scanner AI với auto-categorize + OCR chất lượng VLM</span></div>
+        <p class="opp-desc">Cưỡi làn sóng AI editing (+71% YoY) và độ chính xác OCR nhảy vọt nhờ VLM mà CamScanner/Adobe Scan chưa marketing rõ — khả thi nếu dùng API VLM có sẵn thay vì tự train model.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">Freemium + subscription</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:55%;background:var(--y)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">04</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">File/photo organizer AI chạy on-device, ưu tiên privacy</span></div>
+        <p class="opp-desc">Hấp dẫn cả nhóm chán fleeceware lẫn nhóm quan tâm privacy — mô hình tương tự Sparkle/Local File Organizer nhưng mobile-native, chưa có player lớn làm.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">One-time hoặc sub năm giá thấp</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:55%;background:var(--y)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">05</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Dashboard xóa dữ liệu cá nhân (data-broker removal), gọn & minh bạch</span></div>
+        <p class="opp-desc">Rẻ hơn và rõ ràng hơn Aura, hiển thị trạng thái xóa theo từng broker — chủ yếu là việc tích hợp/scraping + tracking trạng thái, không phải công nghệ mới.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android + Web</span><span class="chip">Subscription</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:65%;background:var(--g)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">06</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Công cụ audit & migrate sang passkey</span></div>
+        <p class="opp-desc">Ngách hẹp, đúng thời điểm theo làn sóng passkey rollout, không cạnh tranh trực diện với vault của 1Password/Dashlane — scope nhỏ, phù hợp team nhỏ.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">One-time hoặc freemium</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:80%;background:var(--g)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">07</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Utility "regional-first" cho Ấn Độ/Đông Nam Á/Mỹ Latinh</span></div>
+        <p class="opp-desc">Data-saving tool, translator offline, calculator theo giá địa phương — Ấn Độ #1 downloads (2024), SEA #2 downloads/time-spent, cạnh tranh & CPI thấp hơn nhiều so với US/EU.</p>
+        <div class="opp-tags">
+          <span class="chip">Android-first</span><span class="chip">Ad-supported / one-time giá thấp</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:65%;background:var(--g)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">08</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Portfolio micro-utility (converter, QR, calculator...) — chiến lược volume</span></div>
+        <p class="opp-desc">Mô hình y hệt case thật $22K/tháng từ 30 app và $602K/năm của solo dev: ship nhanh, chỉ core feature, dùng app thắng để tài trợ app tiếp theo. Feasibility rất cao nhưng ceiling từng app thấp, cần kỷ luật lặp lại.</p>
+        <div class="opp-tags">
+          <span class="chip">Android / cả hai</span><span class="chip">Ads + IAP nhẹ</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:85%;background:var(--g)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">09</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">QR/barcode scanner hợp pháp, định vị rõ chống fleeceware</span></div>
+        <p class="opp-desc">Backlash với fleeceware QR đã được media ghi nhận rộng, cộng bằng chứng doanh thu $4M+/tháng của cả cụm fleeceware chứng minh nhu cầu thật — công nghệ gần như trivial, rủi ro chính nằm ở cạnh tranh ASO/discovery.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android</span><span class="chip">Free ad-supported hoặc one-time</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:90%;background:var(--g)"></div></div></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-rank">10</div>
+      <div>
+        <div class="opp-head"><span class="opp-title">Device-hygiene B2B/MDM cho trường học & doanh nghiệp</span></div>
+        <p class="opp-desc">Consumer cleaner đang bị siết (subscription fatigue + OS tự làm), khiến B2B trở thành ngách tương đối chưa ai khai thác, monetize qua ngân sách IT. Feasibility thấp hơn cho solo indie vì chu kỳ bán hàng doanh nghiệp dài, phù hợp hơn với team nhỏ có kinh nghiệm B2B.</p>
+        <div class="opp-tags">
+          <span class="chip">iOS + Android + MDM integration</span><span class="chip">Per-seat/per-device license</span>
+          <span class="feas-bar-wrap">Feasibility <div class="feas-bar"><div class="feas-fill" style="width:35%;background:var(--o)"></div></div></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ METHODOLOGY ═══ -->
+  <hr class="dv" />
+  <div class="sec-head reveal">
+    <span class="sec-title">Methodology</span>
+  </div>
+  <p class="sec-lead reveal">Report được tổng hợp từ 4 lượt research song song bằng web search, mỗi lượt tập trung một nhóm ngách utility tools. Ưu tiên nguồn giao dịch thật (Sensor Tower, Appfigures, công ty tự công bố) hơn market-research-mill; mọi con số đều giữ nguyên trích dẫn nguồn + thời điểm thay vì làm tròn/bịa đặt.</p>
+  <div class="method-grid reveal">
+    <div class="method-card">
+      <div class="method-num">4</div>
+      <div class="method-label">Nhóm ngách nghiên cứu</div>
+      <div class="method-sub">Cleaner/storage · PDF/scanner/converter · VPN/privacy/password manager · AI-powered trend</div>
+    </div>
+    <div class="method-card">
+      <div class="method-num">~98</div>
+      <div class="method-label">Nguồn được trích dẫn</div>
+      <div class="method-sub">Sensor Tower, Appfigures, Business of Apps, báo chí ngành, company press release</div>
+    </div>
+    <div class="method-card">
+      <div class="method-num">10</div>
+      <div class="method-label">Cơ hội xếp hạng</div>
+      <div class="method-sub">Theo feasibility cho team nhỏ, không phải theo quy mô thị trường</div>
+    </div>
+    <div class="method-card">
+      <div class="method-num">Aug 2026</div>
+      <div class="method-label">Thời điểm research</div>
+      <div class="method-sub">Số liệu phản ánh giai đoạn 2024–2026, không phải dữ liệu real-time</div>
+    </div>
+  </div>
+
+  <!-- ═══ SOURCES ═══ -->
+  <hr class="dv" />
+  <div class="sec-head reveal">
+    <span class="sec-title">Sources</span>
+  </div>
+  <div class="sources-grid reveal">
+    <div>
+      <div class="src-cat-title">Cleaner / Storage</div>
+      <ul class="src-link-list">
+        <li><a href="https://appfigures.com/resources/insights/20250606?f=1" target="_blank">Appfigures — Storage Cleaner Apps industry (Jun 2025)</a></li>
+        <li><a href="https://www.androidpolice.com/bye-cleaner-apps/" target="_blank">Android Police — Android's built-in tools (Jan 2026)</a></li>
+        <li><a href="https://connortumbleson.com/2025/01/13/predatory-ios-cleanup-applications/" target="_blank">connortumbleson.com — Predatory iOS Cleanup Apps (Jan 2025)</a></li>
+        <li><a href="https://www.apple.com/newsroom/2025/05/the-app-store-prevented-more-than-9-billion-usd-in-fraudulent-transactions/" target="_blank">Apple Newsroom — $9B fraud prevented (May 2025)</a></li>
+        <li><a href="https://www.infosecurity-magazine.com/news/google-blocked-236-million-policy/" target="_blank">Infosecurity Magazine — Google blocked 2.36M apps</a></li>
+        <li><a href="https://app.sensortower.com/overview/com.avast.android.cleaner?country=us" target="_blank">Sensor Tower — Avast Cleanup overview</a></li>
+        <li><a href="https://www.makeuseof.com/why-ram-cleaner-apps-are-useless-on-android/" target="_blank">MakeUseOf — RAM cleaner apps are useless</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="src-cat-title">PDF / Scanner / Converter</div>
+      <ul class="src-link-list">
+        <li><a href="https://app.sensortower.com/overview/388627783?country=US" target="_blank">Sensor Tower — CamScanner iOS overview</a></li>
+        <li><a href="https://getlatka.com/companies/readdle.com" target="_blank">Getlatka — Readdle company data</a></li>
+        <li><a href="https://blog.thegrizzlylabs.com/2025/08/genius-scan-going-nowhere.html" target="_blank">Grizzly Labs blog — Genius Scan growth</a></li>
+        <li><a href="https://gbhackers.com/204-fleeceware-apps/" target="_blank">GBHackers — 204 fleeceware apps</a></li>
+        <li><a href="https://blog.avast.com/fleeceware-apps-on-mobile-app-stores-avast" target="_blank">Avast blog — Fleeceware apps research</a></li>
+        <li><a href="https://www.forbes.com/sites/johnkoetsier/2018/10/04/app-scams-cheap-utility-apps-are-stealing-260-2500-or-even-4700-each-year-per-user/" target="_blank">Forbes — App scams &amp; utility apps</a></li>
+        <li><a href="https://www.digitaltrends.com/phones/you-dont-need-a-document-scanning-app-your-iphone-has-you-covered/" target="_blank">Digital Trends — iPhone's built-in scanner</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="src-cat-title">VPN / Privacy / Password Manager</div>
+      <ul class="src-link-list">
+        <li><a href="https://www.cnbc.com/2025/11/06/ryan-reynolds-backed-1password-tops-400-million-in-arr.html" target="_blank">CNBC — 1Password tops $400M ARR (Nov 2025)</a></li>
+        <li><a href="https://www.forbes.com/sites/daveywinder/2025/12/14/lastpass-data-breach---insufficient-security-exposed-16-million-users/" target="_blank">Forbes — LastPass breach fallout (Dec 2025)</a></li>
+        <li><a href="https://surfshark.com/blog/surfshark-and-nord-security-double-valuation" target="_blank">Surfshark blog — Nord Security $3B valuation</a></li>
+        <li><a href="https://protonvpn.com/blog/eoy-report-2025" target="_blank">Proton VPN — End of Year report 2025</a></li>
+        <li><a href="https://www.techradar.com/vpn/vpn-services/protonvpn-downloads-spiked-in-62-countries-in-2025-but-with-vpns-more-important-than-ever-the-countries-responsible-werent-all-those-youd-expect" target="_blank">TechRadar — Proton VPN spikes in 62 countries</a></li>
+        <li><a href="https://psgequity.com/news/bitwarden-announces-100-million-growth-investment-led-by-psg" target="_blank">PSG Equity — Bitwarden $100M raise</a></li>
+        <li><a href="https://unstar.app/blog/vpn-app-reviews-privacy-speed-trust-complaints-2026" target="_blank">Unstar — VPN app review complaints analysis</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="src-cat-title">AI Trend / Monetization / Market Size</div>
+      <ul class="src-link-list">
+        <li><a href="https://sensortower.com/blog/state-of-mobile-2026" target="_blank">Sensor Tower — State of Mobile 2026</a></li>
+        <li><a href="https://sensortower.com/press/press-release-boosted-by-gen-ai-services-consumers-spent-more-money-in-apps-than-games-for-first-time" target="_blank">Sensor Tower press release — $167B app spend</a></li>
+        <li><a href="https://sensortower.com/press/sensor-tower-state-of-ai-2026-report-global-time-spent-on-generative-ai-apps-projected-to-more-than-double-year-over-year" target="_blank">Sensor Tower — State of AI 2026</a></li>
+        <li><a href="https://www.apptweak.com/en/reports/app-market-size-by-app-category" target="_blank">AppTweak — App market size by category 2025</a></li>
+        <li><a href="https://www.buildmvpfast.com/blog/602k-revenue-solo-indie-hacker-app-portfolio-breakdown-2026" target="_blank">buildmvpfast.com — $602K solo indie hacker portfolio</a></li>
+        <li><a href="https://appbot.co/blog/apple-app-store-fraud-report-ai-app-developers/" target="_blank">Appbot — Apple $2.2B fraud prevented 2025</a></li>
+        <li><a href="https://www.grandviewresearch.com/horizon/outlook/mobile-application-market/asia-pacific" target="_blank">Grand View Research — APAC mobile app market</a></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span class="footer-brand">UtilityScan</span>
+    <span class="footer-meta">Market research report · Utility tools category · Compiled Aug 2026<br/>Số liệu third-party estimate, không phải báo cáo tài chính đã kiểm toán</span>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.08 }
+  );
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

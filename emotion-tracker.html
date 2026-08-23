@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>Emotion Daily Tracker — Deep Dive Persona</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0a0a0a; --card:#111111; --card2:#161616;
+      --bd:rgba(246,242,233,.08); --bd2:rgba(246,242,233,.15);
+      --cr:#f6f2e9; --cr7:rgba(246,242,233,.7); --cr5:rgba(246,242,233,.5);
+      --cr3:rgba(246,242,233,.3); --cr1:rgba(246,242,233,.06);
+      --g:#4ade80; --b:#60a5fa; --o:#fb923c;
+      --p:#c084fc; --pk:#f472b6;
+      --y:#facc15; --r:#f87171;
+      --serif:'Instrument Serif',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+    }
+    html { scroll-behavior:smooth }
+    body { background:var(--bg); color:var(--cr); font-family:var(--sans); font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden }
+
+    .bg-orbs { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden }
+    .orb { position:absolute; border-radius:50%; filter:blur(120px) }
+    .orb-1 { width:700px; height:700px; top:-200px; left:-200px; background:radial-gradient(circle,rgba(244,114,182,.07),transparent 70%) }
+    .orb-2 { width:500px; height:500px; top:50%; right:-200px; background:radial-gradient(circle,rgba(192,132,252,.06),transparent 70%) }
+    .orb-3 { width:400px; height:400px; bottom:0; left:25%; background:radial-gradient(circle,rgba(96,165,250,.05),transparent 70%) }
+
+    .wrap { position:relative; z-index:1; max-width:960px; margin:0 auto; padding:0 24px }
+
+    .hd { border-bottom:1px solid var(--bd); padding:15px 0; position:sticky; top:0; background:rgba(10,10,10,.9); backdrop-filter:blur(16px); z-index:200 }
+    .hd .wrap { display:flex; align-items:center; justify-content:space-between }
+    .hd-brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--cr); font-family:var(--serif); font-size:17px }
+    .hd-dot { width:8px; height:8px; border-radius:50%; background:var(--pk); box-shadow:0 0 8px var(--pk); animation:pulse 2s ease-in-out infinite }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.75)} }
+    .hd-meta { font-size:11px; color:var(--cr3); letter-spacing:.06em }
+    .hd-back { font-size:12px; color:var(--cr3); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .15s }
+    .hd-back:hover { color:var(--cr) }
+
+    .hero { padding:76px 0 56px; text-align:center }
+    .pill { display:inline-flex; align-items:center; gap:8px; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--pk); border:1px solid rgba(244,114,182,.2); border-radius:100px; padding:5px 16px; margin-bottom:28px }
+    .hero-h1 { font-family:var(--serif); font-size:clamp(2rem,5.5vw,3.6rem); font-weight:400; line-height:1.12; margin-bottom:18px }
+    .hero-h1 em { font-style:italic; color:var(--cr5) }
+    .hero-sub { font-size:16px; color:var(--cr5); max-width:560px; margin:0 auto 40px; line-height:1.75 }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-bottom:64px }
+    .stat-card { background:var(--card); border:1px solid var(--bd); border-radius:16px; padding:20px; text-align:center }
+    .stat-val { font-family:var(--serif); font-size:2rem; line-height:1; margin-bottom:4px }
+    .stat-val.pink { color:var(--pk) }
+    .stat-val.purple { color:var(--p) }
+    .stat-val.blue { color:var(--b) }
+    .stat-val.green { color:var(--g) }
+    .stat-label { font-size:11px; color:var(--cr3); letter-spacing:.04em }
+
+    hr.dv { border:none; border-top:1px solid var(--bd); margin:64px 0 }
+    .sec-eye { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--cr3); margin-bottom:10px }
+    .sec-h2 { font-family:var(--serif); font-size:clamp(1.5rem,4vw,2.2rem); font-weight:400; line-height:1.2; margin-bottom:8px }
+    .sec-h2 em { font-style:italic; color:var(--cr5) }
+    .sec-lead { font-size:14px; color:var(--cr5); max-width:600px; margin-bottom:32px; line-height:1.7 }
+
+    .profile-row { display:grid; grid-template-columns:auto 1fr auto; gap:24px; align-items:start; background:var(--card); border:1px solid var(--bd2); border-radius:20px; padding:28px; margin-bottom:12px }
+    @media(max-width:680px){ .profile-row { grid-template-columns:1fr } }
+    .profile-avatar { width:72px; height:72px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:32px; flex-shrink:0; border:1px solid var(--bd) }
+    .profile-name { font-family:var(--serif); font-size:1.4rem; margin-bottom:4px }
+    .profile-demo { font-size:12px; color:var(--cr3); margin-bottom:10px; letter-spacing:.02em }
+    .profile-tags { display:flex; flex-wrap:wrap; gap:6px }
+    .ptag { font-size:11px; padding:3px 10px; border-radius:100px; background:var(--cr1); border:1px solid var(--bd); color:var(--cr5) }
+    .ptag.pk { background:rgba(244,114,182,.08); border-color:rgba(244,114,182,.2); color:var(--pk) }
+    .profile-quote { font-family:var(--serif); font-style:italic; font-size:.95rem; color:var(--cr5); line-height:1.6; max-width:260px; border-left:2px solid var(--bd2); padding-left:14px }
+
+    .tools-label { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--cr3); margin-bottom:10px }
+    .tools-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px }
+    .tool-chip { display:flex; align-items:center; gap:6px; font-size:12px; padding:5px 12px; border-radius:100px; background:var(--card); border:1px solid var(--bd); color:var(--cr5); text-decoration:none; transition:border-color .15s,color .15s }
+    .tool-chip:hover { border-color:var(--bd2); color:var(--cr) }
+    .tool-chip-label { font-size:10px; color:var(--cr3); margin-left:2px }
+
+    .tree { display:flex; flex-direction:column; align-items:center; gap:0 }
+    .user-bubble { display:inline-flex; align-items:center; gap:12px; background:var(--card); border:1px solid rgba(244,114,182,.3); border-radius:100px; padding:12px 24px; font-family:var(--serif); font-size:1.05rem }
+    .tree-connector { display:flex; flex-direction:column; align-items:center }
+    .tc-line { width:2px; height:32px; background:linear-gradient(to bottom,var(--bd2),var(--bd)) }
+    .tc-label { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--cr3); background:var(--bg); padding:2px 8px; border-radius:4px; border:1px solid var(--bd) }
+
+    .pain-branches { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; width:100%; margin-bottom:0 }
+    .pain-node { background:var(--card2); border:1px solid rgba(248,113,113,.18); border-radius:14px; padding:18px; display:flex; flex-direction:column; gap:8px; position:relative }
+    .pain-num { position:absolute; top:-10px; left:16px; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; background:rgba(248,113,113,.15); color:var(--r); border:1px solid rgba(248,113,113,.25); border-radius:100px; padding:2px 10px }
+    .pain-title { font-weight:600; font-size:13px; margin-top:8px }
+    .pain-story { font-size:12px; color:var(--cr5); line-height:1.6 }
+    .pain-quote { font-size:11px; font-style:italic; color:var(--cr3); border-left:2px solid rgba(248,113,113,.3); padding-left:8px; margin-top:4px }
+
+    .gap-node { width:100%; background:rgba(251,146,60,.05); border:1px solid rgba(251,146,60,.2); border-radius:14px; padding:18px 22px; display:flex; align-items:flex-start; gap:14px }
+    .gap-icon { font-size:24px; flex-shrink:0; margin-top:2px }
+    .gap-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--o); margin-bottom:6px }
+    .gap-desc { font-size:13px; color:var(--cr5); line-height:1.65 }
+    .gap-desc strong { color:var(--cr) }
+
+    .product-match { width:100%; background:linear-gradient(135deg,rgba(244,114,182,.07) 0%,rgba(192,132,252,.04) 100%); border:1px solid rgba(244,114,182,.28); border-radius:16px; padding:24px; display:grid; grid-template-columns:1fr auto; gap:20px; align-items:center }
+    @media(max-width:580px){ .product-match { grid-template-columns:1fr } }
+    .pm-eyebrow { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--pk); margin-bottom:8px }
+    .pm-name { font-family:var(--serif); font-size:1.4rem; margin-bottom:6px }
+    .pm-why { font-size:13px; color:var(--cr5); line-height:1.65; margin-bottom:14px }
+    .pm-why strong { color:var(--cr) }
+    .pm-details { display:flex; flex-wrap:wrap; gap:8px }
+    .pm-detail { font-size:11px; padding:4px 12px; border-radius:100px; background:var(--cr1); border:1px solid var(--bd); color:var(--cr5) }
+    .pm-detail.hi { background:rgba(244,114,182,.1); border-color:rgba(244,114,182,.25); color:var(--pk) }
+    .pm-right { display:flex; flex-direction:column; align-items:flex-end; gap:6px }
+    .pm-mrr { font-family:var(--serif); font-size:1.6rem; color:var(--pk); white-space:nowrap }
+    .pm-mrr-sub { font-size:11px; color:var(--cr3); text-align:right }
+
+    .emo-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-bottom:48px }
+    .emo-card { background:var(--card); border:1px solid var(--bd); border-radius:16px; padding:20px }
+    .emo-card-header { display:flex; align-items:center; gap:12px; margin-bottom:12px }
+    .emo-icon { font-size:28px }
+    .emo-title { font-weight:600; font-size:14px }
+    .emo-subtitle { font-size:11px; color:var(--cr3); margin-top:1px }
+    .emo-bar-row { display:flex; flex-direction:column; gap:8px }
+    .emo-bar-item { display:grid; grid-template-columns:90px 1fr 36px; align-items:center; gap:8px }
+    .emo-bar-label { font-size:11px; color:var(--cr5) }
+    .emo-bar-track { height:5px; background:var(--cr1); border-radius:5px; overflow:hidden }
+    .emo-bar-fill { height:100%; border-radius:5px; transition:width 1.2s ease }
+    .emo-bar-pct { font-size:11px; color:var(--cr3); text-align:right; font-weight:500 }
+
+    .comp-wrap { background:var(--card); border:1px solid var(--bd); border-radius:16px; overflow-x:auto; margin-bottom:48px }
+    .ctable { width:100%; border-collapse:collapse; font-size:13px; min-width:580px }
+    .ctable th { text-align:left; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--cr3); padding:12px 16px; border-bottom:1px solid var(--bd); font-weight:500 }
+    .ctable td { padding:14px 16px; border-bottom:1px solid var(--bd); vertical-align:middle }
+    .ctable tr:last-child td { border-bottom:none }
+    .ctable tr.hl td { background:rgba(244,114,182,.03) }
+    .ctable tr:hover td { background:rgba(246,242,233,.02) }
+    .app-cell { display:flex; align-items:center; gap:10px }
+    .app-icon { font-size:20px }
+    .app-name { font-weight:600; font-size:13px }
+    .app-sub { font-size:11px; color:var(--cr3); margin-top:1px }
+    .tag { font-size:11px; padding:2px 8px; border-radius:100px; background:var(--cr1); color:var(--cr5) }
+    .tag-r { background:rgba(248,113,113,.12); color:var(--r) }
+    .tag-g { background:rgba(74,222,128,.1); color:var(--g) }
+    .tag-pk { background:rgba(244,114,182,.1); color:var(--pk) }
+    .tag-y { background:rgba(250,204,21,.1); color:var(--y) }
+    .price { font-size:12px; color:var(--o); font-weight:600 }
+    .rating { color:var(--y); font-weight:600; font-size:12px }
+
+    .opp-wrap { background:var(--card); border:1px solid rgba(244,114,182,.3); border-radius:24px; padding:40px; position:relative; overflow:hidden; margin-bottom:64px }
+    .opp-wrap::before { content:''; position:absolute; inset:0; border-radius:inherit; background:linear-gradient(135deg,rgba(244,114,182,.06) 0%,rgba(192,132,252,.03) 60%,transparent 100%); pointer-events:none }
+    .opp-crown-row { display:flex; align-items:center; gap:12px; margin-bottom:24px }
+    .opp-eyebrow { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--pk); font-weight:600 }
+    .opp-title { font-family:var(--serif); font-size:clamp(1.6rem,4vw,2.4rem); margin-top:2px }
+    .opp-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:32px }
+    @media(max-width:700px){ .opp-grid { grid-template-columns:1fr } }
+
+    .feat-list { display:flex; flex-direction:column; gap:10px }
+    .feat-item { display:flex; align-items:flex-start; gap:12px; background:var(--card2); border:1px solid var(--bd); border-radius:12px; padding:14px }
+    .feat-ico { font-size:20px; flex-shrink:0 }
+    .feat-title { font-size:13px; font-weight:600; margin-bottom:3px }
+    .feat-desc { font-size:12px; color:var(--cr5); line-height:1.5 }
+    .feat-badge { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:100px; margin-top:6px }
+    .feat-badge.diff { background:rgba(244,114,182,.12); color:var(--pk); border:1px solid rgba(244,114,182,.2) }
+    .feat-badge.tbl { background:rgba(74,222,128,.1); color:var(--g); border:1px solid rgba(74,222,128,.2) }
+
+    .rev-title { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--cr3); margin-bottom:16px }
+    .rev-row { display:grid; grid-template-columns:80px 1fr 72px; align-items:center; gap:12px; margin-bottom:10px }
+    .rev-label { font-size:11px; color:var(--cr3) }
+    .rev-track { height:6px; background:var(--cr1); border-radius:6px; overflow:hidden }
+    .rev-fill { height:100%; border-radius:6px; transition:width 1.2s ease }
+    .rev-val { font-size:12px; font-weight:600; text-align:right; color:var(--pk) }
+
+    .price-compare { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:24px }
+    .price-box { background:var(--card2); border:1px solid var(--bd); border-radius:12px; padding:16px; text-align:center }
+    .price-box.ours { border-color:rgba(244,114,182,.3); background:rgba(244,114,182,.05) }
+    .price-box-label { font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--cr3); margin-bottom:8px }
+    .price-box-val { font-family:var(--serif); font-size:1.8rem; margin-bottom:4px }
+    .price-box.ours .price-box-val { color:var(--pk) }
+    .price-box-sub { font-size:11px; color:var(--cr3) }
+
+    .journey-steps { display:flex; flex-direction:column; gap:0 }
+    .jstep { display:grid; grid-template-columns:48px 2px 1fr; gap:0 16px }
+    .jstep-day { font-size:11px; color:var(--cr3); text-align:right; padding-top:14px }
+    .jstep-spine { display:flex; flex-direction:column; align-items:center }
+    .jstep-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:16px }
+    .jstep-dot.pain { background:var(--r); box-shadow:0 0 8px rgba(248,113,113,.4) }
+    .jstep-dot.neutral { background:var(--cr3) }
+    .jstep-dot.wow { background:var(--pk); box-shadow:0 0 8px rgba(244,114,182,.5) }
+    .jstep-dot.retain { background:var(--g); box-shadow:0 0 8px rgba(74,222,128,.4) }
+    .jstep-line { width:2px; flex:1; background:var(--bd); margin-top:4px }
+    .jstep:last-child .jstep-line { display:none }
+    .jstep-body { background:var(--card2); border:1px solid var(--bd); border-radius:12px; padding:14px 16px; margin:8px 0 }
+    .jstep-phase { font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px }
+    .jstep-title { font-family:var(--serif); font-size:1rem; margin-bottom:6px }
+    .jstep-desc { font-size:12px; color:var(--cr5); line-height:1.55 }
+
+    .mood-frame { background:#0d0d0d; border:1px solid rgba(246,242,233,.06); border-radius:16px; padding:20px; max-width:340px; margin:0 auto }
+    .mood-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px }
+    .mood-date { font-size:12px; color:var(--cr3) }
+    .mood-streak { font-size:12px; color:var(--pk); font-weight:600 }
+    .mood-q { font-family:var(--serif); font-size:1.1rem; text-align:center; margin-bottom:20px; color:var(--cr7) }
+    .mood-emojis { display:flex; justify-content:space-around; margin-bottom:20px }
+    .mood-btn { display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; padding:8px; border-radius:12px; border:1px solid transparent; transition:all .15s }
+    .mood-btn:hover,.mood-btn.sel { border-color:rgba(244,114,182,.3); background:rgba(244,114,182,.07) }
+    .mood-btn span { font-size:28px }
+    .mood-btn small { font-size:10px; color:var(--cr3) }
+    .mood-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px }
+    .mood-tag { font-size:11px; padding:4px 12px; border-radius:100px; background:var(--cr1); border:1px solid var(--bd); color:var(--cr5); cursor:pointer; transition:all .15s }
+    .mood-tag:hover,.mood-tag.sel { background:rgba(244,114,182,.1); border-color:rgba(244,114,182,.25); color:var(--pk) }
+    .mood-note { width:100%; background:transparent; border:1px solid var(--bd); border-radius:10px; padding:10px 12px; font-size:12px; color:var(--cr5); font-family:var(--sans); resize:none; outline:none; transition:border-color .15s }
+    .mood-note:focus { border-color:rgba(244,114,182,.3) }
+    .mood-save { width:100%; margin-top:12px; padding:12px; background:linear-gradient(135deg,rgba(244,114,182,.2),rgba(192,132,252,.15)); border:1px solid rgba(244,114,182,.3); border-radius:12px; color:var(--pk); font-size:14px; font-weight:600; cursor:pointer; transition:all .15s }
+    .mood-save:hover { background:linear-gradient(135deg,rgba(244,114,182,.3),rgba(192,132,252,.2)) }
+    .hm-grid { display:flex; flex-wrap:wrap; gap:4px; margin-top:8px }
+    .hm-cell { width:18px; height:18px; border-radius:4px }
+
+    .insight-box { display:flex; align-items:flex-start; gap:14px; background:rgba(192,132,252,.06); border:1px solid rgba(192,132,252,.2); border-radius:14px; padding:18px 20px; margin-bottom:32px }
+    .insight-ico { font-size:20px; flex-shrink:0; margin-top:2px }
+    .insight-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--p); margin-bottom:5px }
+    .insight-text { font-size:13px; color:var(--cr5); line-height:1.65 }
+    .insight-text strong { color:var(--cr) }
+
+    .reveal { opacity:0; transform:translateY(16px); transition:opacity .5s ease,transform .5s ease }
+    .reveal.visible { opacity:1; transform:none }
+    .ft { border-top:1px solid var(--bd); padding:28px 0 44px; text-align:center; font-size:12px; color:var(--cr3); margin-top:72px }
+    @media(max-width:640px){ .hero { padding:48px 0 36px } .profile-quote { display:none } .opp-wrap { padding:24px } }
+
+    /* ── Feature list section ── */
+    .tier-wrap { margin-bottom:48px }
+    .tier-header { display:flex; align-items:center; gap:12px; margin-bottom:20px }
+    .tier-badge { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:4px 14px; border-radius:100px }
+    .tier-badge.t1 { background:rgba(244,114,182,.12); color:var(--pk); border:1px solid rgba(244,114,182,.25) }
+    .tier-badge.t2 { background:rgba(192,132,252,.12); color:var(--p); border:1px solid rgba(192,132,252,.25) }
+    .tier-badge.t3 { background:rgba(96,165,250,.12); color:var(--b); border:1px solid rgba(96,165,250,.25) }
+    .tier-badge.t4 { background:rgba(74,222,128,.1); color:var(--g); border:1px solid rgba(74,222,128,.2) }
+    .tier-timeline { font-size:12px; color:var(--cr3) }
+
+    .feat-table { width:100%; border-collapse:collapse; font-size:13px }
+    .feat-table th { text-align:left; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--cr3); padding:8px 14px; border-bottom:1px solid var(--bd); font-weight:500 }
+    .feat-table td { padding:12px 14px; border-bottom:1px solid var(--bd); vertical-align:top }
+    .feat-table tr:last-child td { border-bottom:none }
+    .feat-table tr:hover td { background:rgba(246,242,233,.02) }
+    .feat-num { font-size:11px; color:var(--cr3); font-weight:600; white-space:nowrap }
+    .feat-name { font-weight:600; font-size:13px; margin-bottom:3px }
+    .feat-detail { font-size:12px; color:var(--cr5); line-height:1.5 }
+    .feat-why { font-size:11px; color:var(--cr3); margin-top:4px; font-style:italic }
+    .ftag { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:100px; white-space:nowrap }
+    .ftag.mvp { background:rgba(244,114,182,.1); color:var(--pk); border:1px solid rgba(244,114,182,.2) }
+    .ftag.diff { background:rgba(96,165,250,.1); color:var(--b); border:1px solid rgba(96,165,250,.2) }
+    .ftag.ai { background:rgba(192,132,252,.1); color:var(--p); border:1px solid rgba(192,132,252,.2) }
+    .ftag.eco { background:rgba(74,222,128,.1); color:var(--g); border:1px solid rgba(74,222,128,.2) }
+    .ftag.free { background:rgba(250,204,21,.1); color:var(--y); border:1px solid rgba(250,204,21,.2) }
+
+    .build-roadmap { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-top:32px }
+    .rm-card { background:var(--card); border:1px solid var(--bd); border-radius:14px; padding:16px }
+    .rm-card-week { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px }
+    .rm-card-features { display:flex; flex-direction:column; gap:4px }
+    .rm-card-item { font-size:12px; color:var(--cr5); display:flex; gap:6px }
+    .rm-card-item::before { content:'→'; flex-shrink:0; }
+    .rm-card-goal { margin-top:10px; font-size:11px; font-weight:600; padding:3px 10px; border-radius:100px; display:inline-block }
+
+    .paywall-box { background:linear-gradient(135deg,rgba(251,146,60,.06),rgba(250,204,21,.04)); border:1px solid rgba(251,146,60,.2); border-radius:14px; padding:20px 24px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin-top:32px }
+    .paywall-icon { font-size:28px; flex-shrink:0 }
+    .paywall-title { font-size:13px; font-weight:600; margin-bottom:4px }
+    .paywall-desc { font-size:12px; color:var(--cr5); line-height:1.5 }
+    .paywall-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px }
+
+    .dl-btn { display:inline-flex; align-items:center; gap:8px; background:var(--card); border:1px solid var(--bd2); border-radius:12px; padding:12px 20px; font-size:13px; font-weight:600; color:var(--cr); cursor:pointer; transition:all .2s; text-decoration:none }
+    .dl-btn:hover { border-color:rgba(244,114,182,.4); background:rgba(244,114,182,.06); color:var(--pk) }
+    .dl-btn svg { flex-shrink:0 }
+  </style>
+</head>
+<body>
+<div class="bg-orbs" aria-hidden="true">
+  <span class="orb orb-1"></span><span class="orb orb-2"></span><span class="orb orb-3"></span>
+</div>
+
+<header class="hd">
+  <div class="wrap">
+    <a class="hd-brand" href="#"><span class="hd-dot"></span>Product Research 2026</a>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="hd-back" href="market-report.html">← All Segments</a>
+      <span class="hd-meta">🇺🇸 US · DEEP DIVE</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <div class="hero reveal">
+    <div class="pill">💜 New Persona · Emotion Tracker</div>
+    <h1 class="hero-h1">The Emotion<br/><em>Daily Tracker</em></h1>
+    <p class="hero-sub">Nhóm người muốn hiểu cảm xúc của chính mình — nhưng tất cả app hiện tại đều bắt họ dùng công cụ cảm giác như bảng y tế hơn là nhật ký cá nhân.</p>
+  </div>
+
+  <div class="stats-row reveal">
+    <div class="stat-card"><div class="stat-val pink">46M</div><div class="stat-label">Adults with mental health concerns (US)</div></div>
+    <div class="stat-card"><div class="stat-val purple">$6.2B</div><div class="stat-label">Mental wellness app market 2025</div></div>
+    <div class="stat-card"><div class="stat-val blue">73%</div><div class="stat-label">Gen Z report anxiety / burnout 2024</div></div>
+    <div class="stat-card"><div class="stat-val green">$3–5/mo</div><div class="stat-label">Willingness to pay (if private + beautiful)</div></div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Profile -->
+  <div class="reveal">
+    <p class="sec-eye">User Profile</p>
+    <h2 class="sec-h2">Ai là <em>The Emotion Daily Tracker?</em></h2>
+    <p class="sec-lead">Không phải người bệnh tâm lý — mà là người bình thường đang cố hiểu tại sao họ cảm thấy tốt một ngày và tệ ngày hôm sau.</p>
+    <div class="profile-row">
+      <div class="profile-avatar" style="background:rgba(244,114,182,.08);border-color:rgba(244,114,182,.2);">💜</div>
+      <div>
+        <div class="profile-name">The Emotion Daily Tracker</div>
+        <div class="profile-demo">22–38 tuổi · Remote worker / Student / Young professional · US · iPhone + Web</div>
+        <div class="profile-tags">
+          <span class="ptag pk">46M+ người tại US</span>
+          <span class="ptag">$6.2B wellness market</span>
+          <span class="ptag">Sẵn sàng trả $3–5/tháng</span>
+          <span class="ptag">73% Gen Z báo cáo burnout</span>
+          <span class="ptag">Privacy-conscious</span>
+        </div>
+      </div>
+      <div class="profile-quote">"Tôi thấy Daylio có ích nhưng sau 2 tuần nó trở nên nhàm — chỉ bấm emoji rồi không có gì xảy ra tiếp theo."</div>
+    </div>
+    <div class="tools-label">Công cụ đang dùng</div>
+    <div class="tools-row">
+      <span class="tool-chip">🌸 Daylio <span class="tool-chip-label">Freemium · #1 mood app · 160K reviews</span></span>
+      <span class="tool-chip">✨ Reflectly <span class="tool-chip-label">$49.99/yr · AI journaling</span></span>
+      <span class="tool-chip">🧠 Moodnotes <span class="tool-chip-label">$19.99/yr · CBT-based</span></span>
+      <span class="tool-chip">📊 Bearable <span class="tool-chip-label">Freemium · Health tracking</span></span>
+      <span class="tool-chip">💬 Wysa <span class="tool-chip-label">$8.99/mo · AI chatbot</span></span>
+      <span class="tool-chip">📓 Notion / Notes <span class="tool-chip-label">Free · Workaround</span></span>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Pain Journey -->
+  <div class="reveal">
+    <p class="sec-eye">Pain Journey</p>
+    <h2 class="sec-h2">Họ bị stuck <em>ở đâu?</em></h2>
+    <p class="sec-lead">4 điểm đau cốt lõi khiến không ai giữ được habit emotion tracking quá 3 tuần.</p>
+    <div class="tree">
+      <div style="text-align:center;margin-bottom:0;"><div class="user-bubble"><span>💜</span> The Emotion Daily Tracker</div></div>
+      <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+      <div class="pain-branches" style="margin-bottom:12px;">
+        <div class="pain-node">
+          <div class="pain-num">Pain #1</div>
+          <div class="pain-title">App cảm giác như bảng theo dõi bệnh viện</div>
+          <div class="pain-story">Mở Daylio hay Bearable, thấy checklist dài, charts clinical. Không có cảm giác "đây là của tôi". Sau 2 tuần bỏ vì cảm giác như điền form.</div>
+          <div class="pain-quote">"It feels like a symptom tracker, not a personal journal." — App Store, Bearable</div>
+        </div>
+        <div class="pain-node">
+          <div class="pain-num">Pain #2</div>
+          <div class="pain-title">Không có insight — chỉ biểu đồ, không hành động</div>
+          <div class="pain-story">Track xong 30 ngày, nhìn chart "bạn vui nhiều hơn thứ Tư" — nhưng rồi sao? Không gợi ý gì cụ thể. Data đẹp nhưng vô nghĩa.</div>
+          <div class="pain-quote">"I have months of data and still don't know what to do with it." — r/MentalHealth, 1.2K upvotes</div>
+        </div>
+        <div class="pain-node">
+          <div class="pain-num">Pain #3</div>
+          <div class="pain-title">Lo sợ dữ liệu cảm xúc bị lộ hoặc bán</div>
+          <div class="pain-story">Mental health data là loại nhạy cảm nhất. "Nếu bị hack hoặc bán cho advertiser thì sao?" Muốn local-first hoặc mã hóa đầu cuối.</div>
+          <div class="pain-quote">"I don't want my emotions sold to insurance companies." — Twitter/X, viral 2024</div>
+        </div>
+        <div class="pain-node">
+          <div class="pain-num">Pain #4</div>
+          <div class="pain-title">Không link được mood với context — cảm xúc có nguyên nhân</div>
+          <div class="pain-story">Biết mình buồn nhưng không biết tại sao. App không hỏi "hôm nay ngủ mấy tiếng?" Muốn track trigger bên cạnh mood.</div>
+          <div class="pain-quote">"I wish I could connect my mood drops to my sleep patterns." — ProductHunt</div>
+        </div>
+      </div>
+      <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">dẫn đến gap</div><div class="tc-line"></div></div>
+      <div class="gap-node" style="margin-bottom:12px;">
+        <div class="gap-icon">🕳️</div>
+        <div>
+          <div class="gap-title">Market Gap</div>
+          <div class="gap-desc">Không ai kết hợp được: <strong>UI đẹp như lifestyle app</strong> + <strong>AI insight thực sự có ích</strong> + <strong>privacy-first architecture</strong>. Đây là tam giác chưa có ai fill đủ.</div>
+        </div>
+      </div>
+      <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">product match</div><div class="tc-line"></div></div>
+      <div class="product-match">
+        <div>
+          <div class="pm-eyebrow">Product Recommendation</div>
+          <div class="pm-name">Moodloop — "Feel it. Understand it. Grow."</div>
+          <div class="pm-why">App check-in cảm xúc <strong>30 giây mỗi ngày</strong> — đẹp như BeReal, thông minh như Notion AI. <strong>Local-first</strong>, <strong>AI weekly insight</strong> ("Tuần này bạn tốt nhất sau khi vận động sáng"), trigger tracking tự động.</div>
+          <div class="pm-details">
+            <span class="pm-detail hi">30-sec daily check-in</span>
+            <span class="pm-detail hi">AI weekly pattern report</span>
+            <span class="pm-detail hi">Local-first / E2E encrypted</span>
+            <span class="pm-detail">Trigger correlation</span>
+            <span class="pm-detail">$3.99/mo hoặc $29/yr</span>
+            <span class="pm-detail">iOS + Web</span>
+          </div>
+        </div>
+        <div class="pm-right">
+          <div class="pm-mrr">$4–7K</div>
+          <div class="pm-mrr-sub">MRR tiềm năng<br/>1,500 users × $3.99</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Emotion categories -->
+  <div class="reveal">
+    <p class="sec-eye">Product Direction</p>
+    <h2 class="sec-h2">Emotion nào người dùng <em>muốn track nhất?</em></h2>
+    <p class="sec-lead">Dựa trên App Store reviews, Reddit threads — phân bổ nhu cầu thực tế theo category.</p>
+    <div class="emo-grid">
+      <div class="emo-card">
+        <div class="emo-card-header"><div class="emo-icon">😤</div><div><div class="emo-title">Stress &amp; Anxiety</div><div class="emo-subtitle">Trigger-based · Most requested · "Pain có tiền"</div></div></div>
+        <div class="emo-bar-row">
+          <div class="emo-bar-item"><div class="emo-bar-label">Daily stress</div><div class="emo-bar-track"><div class="emo-bar-fill" style="width:87%;background:linear-gradient(90deg,#f472b6,rgba(244,114,182,.4))"></div></div><div class="emo-bar-pct">87%</div></div>
+          <div class="emo-bar-item"><div class="emo-bar-label">Work anxiety</div><div class="emo-bar-track"><div class="emo-bar-fill" style="width:72%;background:linear-gradient(90deg,#f472b6,rgba(244,114,182,.4))"></div></div><div class="emo-bar-pct">72%</div></div>
+          <div class="emo-bar-item"><div class="emo-bar-label">Social anxiety</div><div class="emo-bar-track"><div class="emo-bar-fill" style="width:58%;background:linear-gradient(90deg,#f472b6,rgba(244,114,182,.4))"></div></div><div class="emo-bar-pct">58%</div></div>
+        </div>
+      </div>
+      <div class="emo-card">
+        <div class="emo-card-header"><div class="emo-icon">🌙</div><div><div class="emo-title">Sleep &amp; Recovery</div><div class="emo-subtitle">Trigger correlation · High willingness-to-pay</div></div></div>
+        <div class="emo-bar-row">
+          <div class="emo-bar-item"><div class="emo-bar-label">Sleep quality</div><div class="emo-bar-track"><div class="emo-bar-fill" style="width:84%;background:linear-gradient(90deg,#c084fc,rgba(192,132,252,.4))"></div></div><div class="emo-bar-pct">84%</div></div>
+          <div class="emo-bar-item"><div class="emo-bar-label">Morning feel</div><div class="emo-bar-track"><div class="emo-bar-fill" style="width:76%;background:linear-gradient(90deg,#c084fc,rgba(192,132,252,.4))"></div></div><div class="emo-bar-pct">76%</div></div>
+          <div class="emo-bar-item"><div class="emo-bar-label">Evening wind-down</div><div class="emo-bar-track"><div class="emo-bar-fill" style="width:61%;background:linear-gradient(90deg,#c084fc,rgba(192,132,252,.4))"></div></div><div class="emo-bar-pct">61%</div></div>
+        </div>
+      </div>
+      <div class="emo-card">
+        <div class="emo-card-header"><div class="emo-icon">⚡</div><div><div class="emo-title">Energy &amp; Mood</div><div class="emo-subtitle">Context-linked · Core feature · MVP must-have</div></div></div>
+        <div class="emo-bar-row">
+          <div class="emo-bar-item"><div class="emo-bar-label">Energy level</div><div class="emo-bar-track"><div class="emo-bar-fill" style="width:81%;background:linear-gradient(90deg,#facc15,rgba(250,204,21,.4))"></div></div><div class="emo-bar-pct">81%</div></div>
+          <div class="emo-bar-item"><div class="emo-bar-label">Overall mood</div><div class="emo-bar-track"><div class="emo-bar-fill" style="width:78%;background:linear-gradient(90deg,#facc15,rgba(250,204,21,.4))"></div></div><div class="emo-bar-pct">78%</div></div>
+          <div class="emo-bar-item"><div class="emo-bar-label">Motivation</div><div class="emo-bar-track"><div class="emo-bar-fill" style="width:63%;background:linear-gradient(90deg,#facc15,rgba(250,204,21,.4))"></div></div><div class="emo-bar-pct">63%</div></div>
+        </div>
+      </div>
+      <div class="emo-card">
+        <div class="emo-card-header"><div class="emo-icon">😔</div><div><div class="emo-title">Loneliness &amp; Connection</div><div class="emo-subtitle">Post-pandemic · Gen Z · Growing fast</div></div></div>
+        <div class="emo-bar-row">
+          <div class="emo-bar-item"><div class="emo-bar-label">Loneliness</div><div class="emo-bar-track"><div class="emo-bar-fill" style="width:69%;background:linear-gradient(90deg,#60a5fa,rgba(96,165,250,.4))"></div></div><div class="emo-bar-pct">69%</div></div>
+          <div class="emo-bar-item"><div class="emo-bar-label">Social energy</div><div class="emo-bar-track"><div class="emo-bar-fill" style="width:54%;background:linear-gradient(90deg,#60a5fa,rgba(96,165,250,.4))"></div></div><div class="emo-bar-pct">54%</div></div>
+          <div class="emo-bar-item"><div class="emo-bar-label">Gratitude</div><div class="emo-bar-track"><div class="emo-bar-fill" style="width:48%;background:linear-gradient(90deg,#60a5fa,rgba(96,165,250,.4))"></div></div><div class="emo-bar-pct">48%</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-ico">💡</div>
+      <div>
+        <div class="insight-title">Key Insight — MVP Focus</div>
+        <div class="insight-text">Top 2 emotion categories mà người dùng <strong>sẵn sàng trả tiền</strong>: <strong>Stress/Anxiety với trigger detection</strong> (#1, 87%) và <strong>Sleep-mood correlation</strong> (#2, 84%). Build 2 category này trước — đây là "pain có tiền". Loneliness/Gratitude là v2.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Competitors -->
+  <div class="reveal">
+    <p class="sec-eye">Competitor Landscape</p>
+    <h2 class="sec-h2">Ai đang <em>chiếm thị trường?</em></h2>
+    <p class="sec-lead">5 app chính — mỗi cái giải được một mảnh nhưng không ai fill được tam giác: đẹp + thông minh + riêng tư.</p>
+    <div class="comp-wrap">
+      <table class="ctable">
+        <thead><tr><th>App</th><th>Giá</th><th>Rating</th><th>Mạnh nhất</th><th>Yếu nhất</th><th>Privacy</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="app-cell"><div class="app-icon">🌸</div><div><div class="app-name">Daylio</div><div class="app-sub">Mood diary &amp; habit tracker</div></div></div></td>
+            <td><span class="price">Free / $3.99/mo</span></td>
+            <td><span class="rating">4.8 ★</span><div style="font-size:10px;color:var(--cr3)">160K reviews</div></td>
+            <td><span class="tag tag-g">Most popular</span></td>
+            <td><span class="tag tag-r">No AI insight</span></td>
+            <td><span class="tag tag-y">Cloud sync</span></td>
+          </tr>
+          <tr>
+            <td><div class="app-cell"><div class="app-icon">✨</div><div><div class="app-name">Reflectly</div><div class="app-sub">AI-powered journal</div></div></div></td>
+            <td><span class="price">$49.99/yr</span></td>
+            <td><span class="rating">4.6 ★</span><div style="font-size:10px;color:var(--cr3)">28K reviews</div></td>
+            <td><span class="tag tag-g">AI questions</span></td>
+            <td><span class="tag tag-r">Expensive, no web</span></td>
+            <td><span class="tag tag-y">Cloud only</span></td>
+          </tr>
+          <tr>
+            <td><div class="app-cell"><div class="app-icon">🧠</div><div><div class="app-name">Moodnotes</div><div class="app-sub">CBT-based mood tracker</div></div></div></td>
+            <td><span class="price">$19.99/yr</span></td>
+            <td><span class="rating">4.7 ★</span><div style="font-size:10px;color:var(--cr3)">9K reviews</div></td>
+            <td><span class="tag tag-g">CBT framework</span></td>
+            <td><span class="tag tag-r">Too clinical</span></td>
+            <td><span class="tag">iCloud only</span></td>
+          </tr>
+          <tr>
+            <td><div class="app-cell"><div class="app-icon">📊</div><div><div class="app-name">Bearable</div><div class="app-sub">Health &amp; mood tracking</div></div></div></td>
+            <td><span class="price">Free / $9.99/mo</span></td>
+            <td><span class="rating">4.6 ★</span><div style="font-size:10px;color:var(--cr3)">5K reviews</div></td>
+            <td><span class="tag tag-g">Trigger tracking</span></td>
+            <td><span class="tag tag-r">Overwhelming UI</span></td>
+            <td><span class="tag tag-y">Cloud sync</span></td>
+          </tr>
+          <tr class="hl">
+            <td><div class="app-cell"><div class="app-icon">💜</div><div><div class="app-name">Moodloop</div><div class="app-sub" style="color:var(--pk)">Our product</div></div></div></td>
+            <td><span class="price" style="color:var(--pk)">$3.99/mo</span></td>
+            <td><span style="font-size:11px;color:var(--cr3)">Building</span></td>
+            <td><span class="tag tag-pk">30s + AI insight</span></td>
+            <td><span class="tag">Early stage</span></td>
+            <td><span class="tag tag-g">Local-first E2E</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Mockup -->
+  <div class="reveal">
+    <p class="sec-eye">Product Vision</p>
+    <h2 class="sec-h2">Moodloop trông <em>như thế nào?</em></h2>
+    <p class="sec-lead">30 giây check-in — đủ để duy trì habit, đủ data để AI nhận ra pattern.</p>
+    <div style="background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:24px;margin-bottom:48px;">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:20px;">Interactive mockup — Daily check-in</div>
+      <div class="mood-frame">
+        <div class="mood-top"><div class="mood-date">Sunday, May 17</div><div class="mood-streak">🔥 12 days</div></div>
+        <div class="mood-q">How are you feeling right now?</div>
+        <div class="mood-emojis">
+          <div class="mood-btn"><span>😞</span><small>rough</small></div>
+          <div class="mood-btn"><span>😐</span><small>meh</small></div>
+          <div class="mood-btn sel"><span>🙂</span><small>okay</small></div>
+          <div class="mood-btn"><span>😊</span><small>good</small></div>
+          <div class="mood-btn"><span>🤩</span><small>great</small></div>
+        </div>
+        <div style="font-size:11px;color:var(--cr3);margin-bottom:8px;">What's on your mind?</div>
+        <div class="mood-tags">
+          <div class="mood-tag sel">😴 tired</div>
+          <div class="mood-tag">💼 work</div>
+          <div class="mood-tag">🏃 exercise</div>
+          <div class="mood-tag">👥 social</div>
+          <div class="mood-tag">☕ coffee</div>
+          <div class="mood-tag">🌧️ weather</div>
+        </div>
+        <textarea class="mood-note" rows="2" placeholder="Optional note…"></textarea>
+        <button class="mood-save">Save &amp; Done</button>
+        <div style="margin-top:20px;">
+          <div style="font-size:11px;color:var(--cr3);display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;"><span>This month</span><span style="color:var(--pk)">avg: okay 🙂</span></div>
+          <div class="hm-grid" id="heatmap"></div>
+        </div>
+      </div>
+      <div style="margin-top:24px;background:rgba(192,132,252,.06);border:1px solid rgba(192,132,252,.2);border-radius:14px;padding:18px;max-width:340px;margin-left:auto;margin-right:auto;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--p);margin-bottom:12px;">AI Weekly Insight</div>
+        <div style="font-family:var(--serif);font-size:1rem;margin-bottom:8px;">You feel best on Tuesday mornings.</div>
+        <div style="font-size:12px;color:var(--cr5);line-height:1.6;">Sau 12 ngày track: mood của bạn <strong style="color:var(--cr)">cao nhất sau khi ngủ 7h+</strong> và <strong style="color:var(--cr)">thấp nhất vào chiều thứ Năm</strong> sau meeting marathon. Thử block 30 phút walk lúc 4PM thứ Năm.</div>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.2);color:var(--p);">Sleep → Mood: 0.84 correlation</span>
+          <span style="font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.15);color:var(--pk);">12-day streak 🔥</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- User journey -->
+  <div class="reveal">
+    <p class="sec-eye">Retention Strategy</p>
+    <h2 class="sec-h2">User journey — <em>từ install đến paid</em></h2>
+    <div style="margin-bottom:64px;">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:20px;">30-day activation &amp; conversion path</div>
+      <div class="journey-steps">
+        <div class="jstep">
+          <div class="jstep-day">Day 1</div>
+          <div class="jstep-spine"><div class="jstep-dot pain"></div><div class="jstep-line"></div></div>
+          <div class="jstep-body"><div class="jstep-phase" style="color:var(--r)">Trigger</div><div class="jstep-title">Burnout / bad week → tìm app</div><div class="jstep-desc">Search "mood tracker app". Install vì UI đẹp. Check-in lần đầu trong 45 giây — không cảm thấy heavy.</div></div>
+        </div>
+        <div class="jstep">
+          <div class="jstep-day">Day 3–7</div>
+          <div class="jstep-spine"><div class="jstep-dot neutral"></div><div class="jstep-line"></div></div>
+          <div class="jstep-body"><div class="jstep-phase" style="color:var(--b)">Formation</div><div class="jstep-title">Daily nudge lúc 9PM — streak bắt đầu</div><div class="jstep-desc">Notification đúng giờ. Streak counter hiện. Không muốn break streak — tương tự Duolingo psychology.</div></div>
+        </div>
+        <div class="jstep">
+          <div class="jstep-day">Day 7</div>
+          <div class="jstep-spine"><div class="jstep-dot wow"></div><div class="jstep-line"></div></div>
+          <div class="jstep-body"><div class="jstep-phase wow">WOW Moment</div><div class="jstep-title">First weekly AI insight → "aha!"</div><div class="jstep-desc">Weekly report lần đầu: "Bạn luôn cảm thấy tệ sau khi làm việc muộn hơn 10PM." Pattern mà bản thân không nhận ra.</div></div>
+        </div>
+        <div class="jstep">
+          <div class="jstep-day">Day 14</div>
+          <div class="jstep-spine"><div class="jstep-dot neutral"></div><div class="jstep-line"></div></div>
+          <div class="jstep-body"><div class="jstep-phase" style="color:var(--o)">Paywall</div><div class="jstep-title">Freemium limit hit → upgrade prompt</div><div class="jstep-desc">Muốn xem historical trends → gặp paywall. Đã thấy value từ weekly insight nên conversion rate cao hơn ngày 1 rất nhiều.</div></div>
+        </div>
+        <div class="jstep">
+          <div class="jstep-day">Day 30+</div>
+          <div class="jstep-spine"><div class="jstep-dot retain"></div><div class="jstep-line"></div></div>
+          <div class="jstep-body"><div class="jstep-phase retain">Retained</div><div class="jstep-title">Monthly report + data ownership = long-term user</div><div class="jstep-desc">Data ở local device. Monthly summary export. Churn rate thấp vì switching cost cao — 30 ngày data cá nhân.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Opportunity -->
+  <div class="opp-wrap reveal">
+    <div style="position:relative;z-index:1;">
+      <div class="opp-crown-row">
+        <div style="font-size:28px;">🔒</div>
+        <div><div class="opp-eyebrow">Product Strategy · Local-first · Lifetime</div><div class="opp-title">Nhật ký giấc ngủ — <em>không server, mua một lần</em></div></div>
+      </div>
+      <div style="font-size:14px;color:var(--cr5);max-width:640px;line-height:1.75;margin-bottom:32px;">
+        Không subscription, không server, không sợ app bị đóng hay tăng giá. <strong style="color:var(--cr)">Data sống trên thiết bị của bạn, mã hóa bởi bạn, backup bởi bạn.</strong> Mua một lần — dùng mãi.
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:32px;">
+        <div style="background:var(--card2);border:1px solid rgba(244,114,182,.2);border-radius:16px;padding:20px;">
+          <div style="font-size:28px;margin-bottom:12px;">📱</div>
+          <div style="font-weight:600;color:var(--cr);margin-bottom:8px;font-size:14px;">Local-first</div>
+          <div style="font-size:12px;color:var(--cr5);line-height:1.6;">Data sống trên thiết bị. Không server, không cloud, không tài khoản.</div>
+        </div>
+        <div style="background:var(--card2);border:1px solid rgba(192,132,252,.2);border-radius:16px;padding:20px;">
+          <div style="font-size:28px;margin-bottom:12px;">🎫</div>
+          <div style="font-weight:600;color:var(--cr);margin-bottom:8px;font-size:14px;">Lifetime $9.99</div>
+          <div style="font-size:12px;color:var(--cr5);line-height:1.6;">Mua một lần, dùng mãi. Không subscription, không tăng giá.</div>
+        </div>
+        <div style="background:var(--card2);border:1px solid rgba(96,165,250,.2);border-radius:16px;padding:20px;">
+          <div style="font-size:28px;margin-bottom:12px;">🤖</div>
+          <div style="font-weight:600;color:var(--cr);margin-bottom:8px;font-size:14px;">AI Bridge</div>
+          <div style="font-size:12px;color:var(--cr5);line-height:1.6;">Không API key. App build prompt từ data local → mở thẳng Claude / ChatGPT.</div>
+        </div>
+        <div style="background:var(--card2);border:1px solid rgba(74,222,128,.2);border-radius:16px;padding:20px;">
+          <div style="font-size:28px;margin-bottom:12px;">🔐</div>
+          <div style="font-weight:600;color:var(--cr);margin-bottom:8px;font-size:14px;">AES-256 Export</div>
+          <div style="font-size:12px;color:var(--cr5);line-height:1.6;">Xuất JSON mã hóa. Backup lên Drive cá nhân. Import lại bất cứ lúc nào.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <hr class="dv" />
+
+  <!-- Feature List -->
+  <div class="reveal">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:32px;">
+      <div>
+        <p class="sec-eye">Danh sách tính năng · Nhật ký giấc ngủ local-first</p>
+        <h2 class="sec-h2">15 tính năng — <em>không server, mua một lần</em></h2>
+        <p class="sec-lead" style="margin-bottom:0;">Lifetime $9.99. Tất cả tính năng mở khóa ngay. Không freemium, không server cost, không sợ app bị đóng hay tăng giá.</p>
+      </div>
+      <button class="dl-btn" onclick="downloadMD()" style="margin-top:8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Tải file .md
+      </button>
+    </div>
+
+    <!-- Tier 1 -->
+    <div class="tier-wrap">
+      <div class="tier-header">
+        <span class="tier-badge t1">Tier 1 · Nhật ký cốt lõi</span>
+        <span class="tier-timeline">Tuần 1–3 · Build first</span>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow-x:auto;">
+        <table class="feat-table">
+          <thead><tr><th>#</th><th>Tính năng</th><th>Mô tả</th><th>Lý do</th><th>Loại</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="feat-num">01</span></td>
+              <td><div class="feat-name">🌙 Câu hỏi xoay vòng buổi sáng</div></td>
+              <td><div class="feat-detail">20+ biến thể: "Hôm qua ngủ thế nào?" / "Sáng nay tỉnh dậy cảm giác sao?" / "Đêm qua có ngon giấc không?" / "Năng lượng buổi sáng?" / "Bạn đã nghỉ ngơi đủ chưa?" — thay đổi mỗi ngày</div></td>
+              <td><div class="feat-why">Tránh nhàm — cảm giác được hỏi thăm thật sự, không phải điền form</div></td>
+              <td><span class="ftag mvp">Core</span></td>
+            </tr>
+            <tr>
+              <td><span class="feat-num">02</span></td>
+              <td><div class="feat-name">😴 7 Sleep mood icons</div></td>
+              <td><div class="feat-detail">💀 Kiệt sức → 😵 Tệ lắm → 😴 Mệt → 😐 Bình thường → 🙂 Ổn → 😊 Ngon → ✨ Tuyệt vời. Tap 1 cái, xong — không cần gõ gì thêm</div></td>
+              <td><div class="feat-why">Zero friction là core thesis. Mất >5 giây → user bỏ sau tuần đầu</div></td>
+              <td><span class="ftag mvp">Core</span></td>
+            </tr>
+            <tr>
+              <td><span class="feat-num">03</span></td>
+              <td><div class="feat-name">📝 Quick note 1 dòng</div></td>
+              <td><div class="feat-detail">Optional text field sau icon tap. Tối đa 140 ký tự. Placeholder thay đổi theo câu hỏi hôm đó. Lưu local vào IndexedDB</div></td>
+              <td><div class="feat-why">Cho phép ghi context mà không ép buộc — optional = không friction thêm</div></td>
+              <td><span class="ftag mvp">Core</span></td>
+            </tr>
+            <tr>
+              <td><span class="feat-num">04</span></td>
+              <td><div class="feat-name">🔥 Streak counter + Heatmap</div></td>
+              <td><div class="feat-detail">Chuỗi ngày check-in liên tiếp + calendar heatmap 30 ngày màu theo mood. Milestone ở 7, 14, 30, 60, 100 ngày. Tính hoàn toàn local từ IndexedDB</div></td>
+              <td><div class="feat-why">Duolingo psychology: không ai muốn break streak. Retention rẻ nhất có thể build</div></td>
+              <td><span class="ftag mvp">Core</span></td>
+            </tr>
+            <tr>
+              <td><span class="feat-num">05</span></td>
+              <td><div class="feat-name">🔔 Local notification (PWA)</div></td>
+              <td><div class="feat-detail">Push notification qua Service Worker — không cần server. Học giờ check-in thói quen của user để tự adjust. Tin nhắn thay đổi theo câu hỏi hôm đó</div></td>
+              <td><div class="feat-why">Reminder đúng giờ tăng D7 retention ~25%→45%. PWA notification không cần backend</div></td>
+              <td><span class="ftag mvp">Core</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tier 2 -->
+    <div class="tier-wrap">
+      <div class="tier-header">
+        <span class="tier-badge t2">Tier 2 · Data &amp; Insights</span>
+        <span class="tier-timeline">Tuần 4–5 · Data layer</span>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow-x:auto;">
+        <table class="feat-table">
+          <thead><tr><th>#</th><th>Tính năng</th><th>Mô tả</th><th>Lý do</th><th>Loại</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="feat-num">06</span></td>
+              <td><div class="feat-name">⏱️ Duration picker 5 nút</div></td>
+              <td><div class="feat-detail">&lt;5h / 6h / 7h / 8h / 9h+. Tap 1 cái sau icon mood. Step 2 chỉ mất 1 giây thêm. Lưu local</div></td>
+              <td><div class="feat-why">Duration là điểm dữ liệu quan trọng nhất để tính sleep debt và correlation</div></td>
+              <td><span class="ftag diff">Data</span></td>
+            </tr>
+            <tr>
+              <td><span class="feat-num">07</span></td>
+              <td><div class="feat-name">🏷️ Context tags 1-tap</div></td>
+              <td><div class="feat-detail">☕ Cà phê muộn / 📱 Điện thoại trước ngủ / 🍷 Rượu / 🏃 Tập thể dục / 😰 Stress cao / 💊 Thuốc / 🌡️ Quá nóng / 😴 Ngủ trưa. Chọn nhiều, lưu nhanh</div></td>
+              <td><div class="feat-why">Unlock correlation analysis — data moat của app. Không app nào làm nhẹ bằng</div></td>
+              <td><span class="ftag diff">Data</span></td>
+            </tr>
+            <tr>
+              <td><span class="feat-num">08</span></td>
+              <td><div class="feat-name">📊 Sleep score + debt (pure JS)</div></td>
+              <td><div class="feat-detail">Sleep score 0–100: mood trung bình + duration + consistency. Sleep debt: "Bạn đang nợ ~2.5h tuần này." Thuật toán chạy hoàn toàn local, không API</div></td>
+              <td><div class="feat-why">Rise app kiếm $100/năm chỉ với sleep debt. Rất ít consumer app làm điều này đơn giản</div></td>
+              <td><span class="ftag diff">Insight</span></td>
+            </tr>
+            <tr>
+              <td><span class="feat-num">09</span></td>
+              <td><div class="feat-name">📈 Trend charts (Chart.js local)</div></td>
+              <td><div class="feat-detail">Line chart mood 7/30 ngày, bar chart theo tags, heatmap cả năm. Chart.js bundle vào app — không gọi API, render từ IndexedDB. Filter 7/30/90 ngày</div></td>
+              <td><div class="feat-why">Visual progress = retention. User thấy improvement → không bỏ app</div></td>
+              <td><span class="ftag diff">Insight</span></td>
+            </tr>
+            <tr>
+              <td><span class="feat-num">10</span></td>
+              <td><div class="feat-name">🛡️ Streak freeze</div></td>
+              <td><div class="feat-detail">1 lần/tháng user được bảo vệ streak khi quên check-in. Phải chủ động "dùng" — không tự động. Badge "streak protected" ngày hôm sau</div></td>
+              <td><div class="feat-why">Giảm churn đột ngột do bỏ lỡ 1 ngày — retention killer lớn nhất của streak-based apps</div></td>
+              <td><span class="ftag diff">Retention</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tier 3 -->
+    <div class="tier-wrap">
+      <div class="tier-header">
+        <span class="tier-badge t3">Tier 3 · AI Bridge</span>
+        <span class="tier-timeline">Tuần 5–6 · Không API key, không server cost</span>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow-x:auto;">
+        <table class="feat-table">
+          <thead><tr><th>#</th><th>Tính năng</th><th>Mô tả</th><th>Lý do</th><th>Loại</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="feat-num">11</span></td>
+              <td><div class="feat-name">🤖 Fixed prompt templates</div></td>
+              <td><div class="feat-detail">4 template cố định: "Phân tích giấc ngủ tuần này" / "Gợi ý cải thiện" / "So sánh tuần trước" / "Tìm correlation". App build prompt từ data local → user click "Mở trong Claude" hoặc "Mở trong ChatGPT" → window.open()</div></td>
+              <td><div class="feat-why">Không cần API key hay subscription AI. User tự chọn AI tool. Zero server cost</div></td>
+              <td><span class="ftag ai">AI Bridge</span></td>
+            </tr>
+            <tr>
+              <td><span class="feat-num">12</span></td>
+              <td><div class="feat-name">📋 Data summary card</div></td>
+              <td><div class="feat-detail">Card tóm tắt 7 ngày gần nhất: mood trung bình, duration, top tags, điểm nổi bật. Hiển thị dạng structured text → copy vào AI chat hoặc mở thẳng. Preview trước khi send</div></td>
+              <td><div class="feat-why">User thấy data của mình ở dạng readable → tăng trust + tự học pattern không cần AI</div></td>
+              <td><span class="ftag ai">AI Bridge</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="background:var(--card2);border:1px solid rgba(96,165,250,.15);border-radius:14px;padding:20px;margin-top:16px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--b);margin-bottom:12px;">AI Prompt Preview · Ví dụ output từ template #11</div>
+        <pre style="font-family:monospace;font-size:11px;color:var(--cr5);line-height:1.7;overflow-x:auto;white-space:pre-wrap;">Đây là dữ liệu giấc ngủ 7 ngày của tôi:
+
+Ngày       Mood        Giờ ngủ   Tags
+────────────────────────────────────────
+12/05 Thứ 2  😴 Mệt      6.0h    stress-cao, điện-thoại
+13/05 Thứ 3  😐 Bình      7.0h    —
+14/05 Thứ 4  😊 Ngon      8.0h    tập-thể-dục
+15/05 Thứ 5  🙂 Ổn        7.5h    —
+16/05 Thứ 6  😵 Tệ        5.5h    rượu, ngủ-muộn
+17/05 Thứ 7  😐 Bình      9.0h    —
+18/05 CN     😊 Ngon      8.5h    tập-thể-dục
+
+Sleep score tuần: 64/100 | Sleep debt: +1.5h
+Hãy phân tích pattern và đề xuất 3 thay đổi cụ thể.</pre>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+          <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.25);border-radius:100px;padding:6px 16px;font-size:12px;color:var(--b);">🤖 Mở trong Claude</div>
+          <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:100px;padding:6px 16px;font-size:12px;color:var(--g);">✨ Mở trong ChatGPT</div>
+          <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(246,242,233,.05);border:1px solid var(--bd);border-radius:100px;padding:6px 16px;font-size:12px;color:var(--cr5);">📋 Copy prompt</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tier 4 -->
+    <div class="tier-wrap">
+      <div class="tier-header">
+        <span class="tier-badge t4">Tier 4 · Portability</span>
+        <span class="tier-timeline">Tuần 6 · Export + Launch</span>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow-x:auto;">
+        <table class="feat-table">
+          <thead><tr><th>#</th><th>Tính năng</th><th>Mô tả</th><th>Lý do</th><th>Loại</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="feat-num">13</span></td>
+              <td><div class="feat-name">🔐 AES-256 Export (Web Crypto API)</div></td>
+              <td><div class="feat-detail">Xuất toàn bộ data thành JSON, mã hóa AES-256-GCM bằng Web Crypto API. User tự đặt password. File download về máy → upload lên Google Drive / Dropbox cá nhân. Zero server</div></td>
+              <td><div class="feat-why">Privacy USP mạnh nhất. User tin tưởng → mua. Data không bao giờ lên server của chúng ta</div></td>
+              <td><span class="ftag eco">Portability</span></td>
+            </tr>
+            <tr>
+              <td><span class="feat-num">14</span></td>
+              <td><div class="feat-name">📥 JSON Import + Merge</div></td>
+              <td><div class="feat-detail">Import file đã export (decrypt bằng password). Merge với data hiện tại theo ngày — không duplicate. Hỗ trợ chuyển thiết bị và restore backup</div></td>
+              <td><div class="feat-why">Data portability = trust signal. User không sợ mất data khi đổi điện thoại</div></td>
+              <td><span class="ftag eco">Portability</span></td>
+            </tr>
+            <tr>
+              <td><span class="feat-num">15</span></td>
+              <td><div class="feat-name">⏰ Backup reminder hàng tháng</div></td>
+              <td><div class="feat-detail">Local notification mỗi đầu tháng: "Hãy backup data của bạn." 1 tap → download file encrypted. Không gửi data ra ngoài — chỉ nhắc user tự backup</div></td>
+              <td><div class="feat-why">Giảm lo mất data → tăng trust → giảm churn. Cost: $0 (local notification)</div></td>
+              <td><span class="ftag eco">Portability</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Build Roadmap -->
+    <div class="reveal">
+      <p class="sec-eye">Lộ trình build</p>
+      <h2 class="sec-h2" style="margin-bottom:20px;">6 tuần <em>từ zero đến launch</em></h2>
+      <div class="build-roadmap">
+        <div class="rm-card" style="border-color:rgba(244,114,182,.2);">
+          <div class="rm-card-week" style="color:var(--pk);">Tuần 1–3 · Nhật ký</div>
+          <div class="rm-card-features">
+            <div class="rm-card-item">Câu hỏi xoay vòng (20+ biến thể)</div>
+            <div class="rm-card-item">7 sleep mood icons</div>
+            <div class="rm-card-item">Quick note 1 dòng</div>
+            <div class="rm-card-item">Streak counter + heatmap</div>
+            <div class="rm-card-item">Local notification (PWA)</div>
+          </div>
+          <div class="rm-card-goal" style="background:rgba(244,114,182,.1);color:var(--pk);">→ Habit formation</div>
+        </div>
+        <div class="rm-card" style="border-color:rgba(192,132,252,.2);">
+          <div class="rm-card-week" style="color:var(--p);">Tuần 4–5 · Data</div>
+          <div class="rm-card-features">
+            <div class="rm-card-item">Duration picker 5 nút</div>
+            <div class="rm-card-item">Context tags 1-tap</div>
+            <div class="rm-card-item">Sleep score + debt (pure JS)</div>
+            <div class="rm-card-item">Trend charts (Chart.js local)</div>
+            <div class="rm-card-item">Streak freeze</div>
+          </div>
+          <div class="rm-card-goal" style="background:rgba(192,132,252,.1);color:var(--p);">→ Data collection</div>
+        </div>
+        <div class="rm-card" style="border-color:rgba(96,165,250,.2);">
+          <div class="rm-card-week" style="color:var(--b);">Tuần 5–6 · AI Bridge</div>
+          <div class="rm-card-features">
+            <div class="rm-card-item">4 fixed prompt templates</div>
+            <div class="rm-card-item">Data summary card</div>
+            <div class="rm-card-item">Open in Claude / ChatGPT</div>
+          </div>
+          <div class="rm-card-goal" style="background:rgba(96,165,250,.1);color:var(--b);">→ AI without API cost</div>
+        </div>
+        <div class="rm-card" style="border-color:rgba(74,222,128,.2);">
+          <div class="rm-card-week" style="color:var(--g);">Tuần 6 · Export + Launch</div>
+          <div class="rm-card-features">
+            <div class="rm-card-item">AES-256 export (Web Crypto)</div>
+            <div class="rm-card-item">JSON import + merge</div>
+            <div class="rm-card-item">Backup reminder local</div>
+            <div class="rm-card-item">App Store / Web submit</div>
+          </div>
+          <div class="rm-card-goal" style="background:rgba(74,222,128,.1);color:var(--g);">→ Ship &amp; sell</div>
+        </div>
+      </div>
+
+      <div class="paywall-box">
+        <div class="paywall-icon">🎫</div>
+        <div>
+          <div class="paywall-title">Lifetime Pricing — $9.99 một lần</div>
+          <div class="paywall-desc">Tất cả 15 tính năng mở khóa ngay. ~$7/user sau 30% App Store cut. Server cost: ~$0/tháng (Firebase Hosting free tier đủ dùng). Break-even: 143 users. Conservative target: 500 users tháng đầu = $3,500.</div>
+          <div class="paywall-tags">
+            <span style="font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(244,114,182,.1);border:1px solid rgba(244,114,182,.2);color:var(--pk);">$9.99 lifetime</span>
+            <span style="font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);color:var(--g);">~$0 server/tháng</span>
+            <span style="font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);color:var(--b);">143 users break-even</span>
+            <span style="font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(250,204,21,.1);border:1px solid rgba(250,204,21,.2);color:var(--y);">tất cả 15 tính năng</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="ft">
+  <div class="wrap">
+    <div style="margin-bottom:8px;">Product Research 2026 · US Market · <a href="market-report.html" style="color:var(--cr5);text-decoration:none;">← Back to all segments</a></div>
+    <div style="color:rgba(246,242,233,.2);">Emotion Daily Tracker · Moodloop concept · Deep Dive</div>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  document.querySelectorAll('.mood-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('sel'));
+      btn.classList.add('sel');
+    });
+  });
+
+  document.querySelectorAll('.mood-tag').forEach(tag => {
+    tag.addEventListener('click', () => tag.classList.toggle('sel'));
+  });
+
+  const hm = document.getElementById('heatmap');
+  if (hm) {
+    const colors = ['rgba(244,114,182,.3)','rgba(244,114,182,.5)','rgba(244,114,182,.7)','rgba(244,114,182,.9)'];
+    for (let i = 1; i <= 31; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'hm-cell';
+      if (i <= 17) {
+        cell.style.background = colors[Math.floor(Math.random() * colors.length)];
+      } else {
+        cell.style.background = 'rgba(246,242,233,.04)';
+        cell.style.border = '1px solid rgba(246,242,233,.06)';
+      }
+      hm.appendChild(cell);
+    }
+  }
+
+  const barObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.emo-bar-fill, .rev-fill').forEach(f => {
+          const w = f.style.width; f.style.width = '0';
+          setTimeout(() => { f.style.width = w; }, 100);
+        });
+        barObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.emo-grid, .opp-wrap').forEach(el => barObs.observe(el));
+
+  function downloadMD() {
+    const md = `# Danh sách tính năng — Nhật ký giấc ngủ local-first
+> Cập nhật: ${new Date().toLocaleDateString('vi-VN')} · Product Research 2026 · US Market
+
+## Concept cốt lõi
+**"Hôm qua bạn ngủ thế nào?"** — 1 câu hỏi mỗi sáng, 1 icon tap, xong.
+Dữ liệu sống trên thiết bị. Không server. Mua một lần $9.99 — dùng mãi.
+
+---
+
+## USP — 4 trụ cột
+
+| Trụ | Mô tả |
+|-----|-------|
+| 📱 Local-first | Data trong IndexedDB trên thiết bị. Không cloud, không tài khoản bắt buộc |
+| 🎫 Lifetime $9.99 | Mua một lần, tất cả 15 tính năng. Không subscription, không tăng giá |
+| 🤖 AI Bridge | App build prompt → user mở Claude / ChatGPT. Zero API cost |
+| 🔐 AES-256 Export | Web Crypto API. Backup tự quản lên Drive / Dropbox cá nhân |
+
+---
+
+## Tier 1 — Nhật ký cốt lõi · Tuần 1–3
+
+| # | Tính năng | Mô tả |
+|---|-----------|-------|
+| 01 | 🌙 Câu hỏi xoay vòng | 20+ biến thể: "Hôm qua ngủ thế nào?" / "Sáng nay cảm giác sao?" / "Đêm qua ngon giấc không?" / "Năng lượng buổi sáng?" |
+| 02 | 😴 7 Sleep mood icons | 💀→😵→😴→😐→🙂→😊→✨. Tap 1 cái, xong |
+| 03 | 📝 Quick note 1 dòng | Optional text 140 ký tự. Lưu local IndexedDB |
+| 04 | 🔥 Streak + Heatmap | Streak counter + calendar 30 ngày màu theo mood. Milestone 7/14/30/60/100 ngày |
+| 05 | 🔔 Local notification | PWA Service Worker. Không server. Tự adjust theo thói quen check-in |
+
+---
+
+## Tier 2 — Data & Insights · Tuần 4–5
+
+| # | Tính năng | Mô tả |
+|---|-----------|-------|
+| 06 | ⏱️ Duration picker | <5h / 6h / 7h / 8h / 9h+. 1 tap sau icon mood |
+| 07 | 🏷️ Context tags | ☕ Cà phê muộn / 📱 Điện thoại / 🍷 Rượu / 🏃 Tập TD / 😰 Stress / 💊 Thuốc |
+| 08 | 📊 Sleep score + debt | 0–100 điểm local JS. Sleep debt: "Nợ ~2.5h tuần này." Không API |
+| 09 | 📈 Trend charts | Chart.js bundle local. Line/bar/heatmap. Filter 7/30/90 ngày |
+| 10 | 🛡️ Streak freeze | 1 lần/tháng bảo vệ streak. User chủ động dùng |
+
+---
+
+## Tier 3 — AI Bridge · Tuần 5–6
+
+| # | Tính năng | Mô tả |
+|---|-----------|-------|
+| 11 | 🤖 Fixed prompt templates | 4 template cố định. App build prompt từ data local → window.open() sang Claude / ChatGPT |
+| 12 | 📋 Data summary card | 7 ngày gần nhất dạng structured text. Copy hoặc send thẳng sang AI |
+
+**Ví dụ prompt được build tự động:**
+\`\`\`
+Đây là dữ liệu giấc ngủ 7 ngày của tôi:
+
+Ngày       Mood        Giờ ngủ   Tags
+────────────────────────────────────────
+12/05 Thứ 2  😴 Mệt      6.0h    stress-cao, điện-thoại
+13/05 Thứ 3  😐 Bình      7.0h    —
+14/05 Thứ 4  😊 Ngon      8.0h    tập-thể-dục
+
+Sleep score: 64/100 | Sleep debt: +1.5h
+Hãy phân tích pattern và đề xuất 3 thay đổi cụ thể.
+\`\`\`
+
+---
+
+## Tier 4 — Portability · Tuần 6
+
+| # | Tính năng | Mô tả |
+|---|-----------|-------|
+| 13 | 🔐 AES-256 Export | Web Crypto API. JSON mã hóa. Download → upload Drive / Dropbox cá nhân |
+| 14 | 📥 JSON Import + Merge | Decrypt bằng password. Merge không duplicate. Chuyển thiết bị dễ dàng |
+| 15 | ⏰ Backup reminder | Local notification đầu tháng. 1 tap → download file. Zero server |
+
+---
+
+## Lộ trình build (6 tuần)
+
+\`\`\`
+Tuần 1–3   #01–05   Nhật ký cốt lõi → Habit formation
+Tuần 4–5   #06–10   Data layer → Trend + insight (pure JS)
+Tuần 5–6   #11–12   AI Bridge → Không API cost
+Tuần 6     #13–15   Export + Launch → Ship
+\`\`\`
+
+---
+
+## Pricing — Lifetime $9.99
+
+| Metric | Value |
+|--------|-------|
+| Giá bán | $9.99 một lần |
+| Sau App Store cut (30%) | ~$7/user |
+| Server cost/tháng | ~$0 (Firebase Hosting free tier) |
+| Break-even | 143 users |
+| Conservative target | 500 users tháng đầu = $3,500 |
+
+---
+
+## Câu hỏi xoay vòng — 20 biến thể
+
+1. "Hôm qua bạn ngủ thế nào?"
+2. "Sáng nay tỉnh dậy cảm giác sao?"
+3. "Đêm qua có ngon giấc không?"
+4. "Năng lượng buổi sáng của bạn hôm nay?"
+5. "Bạn đã nghỉ ngơi đủ chưa?"
+6. "Giấc ngủ tối qua ra sao?"
+7. "Bạn cảm thấy thế nào khi thức dậy?"
+8. "Đêm qua bạn ngủ sâu không?"
+9. "Sáng nay bạn tỉnh táo chưa?"
+10. "Hôm nay bạn khởi đầu ngày với năng lượng thế nào?"
+11. "Giấc ngủ đêm qua điểm mấy?"
+12. "Bạn có thức dậy giữa đêm không?"
+13. "Cơ thể bạn cảm thấy được nghỉ ngơi chưa?"
+14. "Tâm trạng ngay lúc thức dậy của bạn?"
+15. "Đêm qua bạn ngủ được mấy tiếng?"
+16. "Bạn cảm thấy sẵn sàng cho ngày hôm nay chưa?"
+17. "Buổi sáng này cơ thể bạn cảm thấy thế nào?"
+18. "Giấc ngủ có giúp bạn phục hồi không?"
+19. "Hôm nay bạn cần thêm cà phê không?"
+20. "Đêm qua — ngon hay không?"
+
+---
+
+*Generated by Sleep Mood Check-in · Product Research 2026 · Local-first, Lifetime $9.99*
+`;
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sleep-mood-features-local-first.md';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+</script>
+</body>
+</html>

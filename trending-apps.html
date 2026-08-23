@@ -1,0 +1,1196 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>AppScan — Weekly Trending Apps Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:    #0a0a0a;
+      --card:  #111111;
+      --card2: #161616;
+      --bd:    rgba(246,242,233,.08);
+      --bd2:   rgba(246,242,233,.15);
+      --cr:    #f6f2e9;
+      --cr7:   rgba(246,242,233,.7);
+      --cr5:   rgba(246,242,233,.5);
+      --cr3:   rgba(246,242,233,.3);
+      --cr1:   rgba(246,242,233,.06);
+      --g:     #4ade80;
+      --gb:    rgba(74,222,128,.12);
+      --b:     #60a5fa;
+      --bb:    rgba(96,165,250,.12);
+      --o:     #fb923c;
+      --ob:    rgba(251,146,60,.12);
+      --p:     #c084fc;
+      --pb:    rgba(192,132,252,.12);
+      --pk:    #f472b6;
+      --pkb:   rgba(244,114,182,.12);
+      --y:     #facc15;
+      --yb:    rgba(250,204,21,.12);
+      --r:     #f87171;
+      --rb:    rgba(248,113,113,.12);
+      --t:     #2dd4bf;
+      --tb:    rgba(45,212,191,.12);
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans:  'Inter', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--cr); font-family: var(--sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+    /* ── Orbs ── */
+    .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(120px); }
+    .orb-1 { width: 700px; height: 700px; top: -200px; left: -200px; background: radial-gradient(circle, rgba(74,222,128,.07), transparent 70%); }
+    .orb-2 { width: 500px; height: 500px; top: 40%; right: -200px; background: radial-gradient(circle, rgba(96,165,250,.06), transparent 70%); }
+    .orb-3 { width: 400px; height: 400px; bottom: 0; left: 25%; background: radial-gradient(circle, rgba(192,132,252,.05), transparent 70%); }
+
+    /* ── Layout ── */
+    .wrap { position: relative; z-index: 1; max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Header ── */
+    .topbar { height: 58px; display: flex; align-items: center; border-bottom: 1px solid var(--bd); position: sticky; top: 0; background: rgba(10,10,10,.9); backdrop-filter: blur(16px); z-index: 200; }
+    .topbar .wrap { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .brand { font-family: var(--serif); font-size: 19px; letter-spacing: -.3px; color: var(--cr); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--g); box-shadow: 0 0 10px var(--g); animation: pulse 2.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.7)} }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; letter-spacing: .3px; white-space: nowrap; }
+    .badge-green { background: var(--gb); color: var(--g); border: 1px solid rgba(74,222,128,.2); }
+    .badge-blue  { background: var(--bb); color: var(--b); border: 1px solid rgba(96,165,250,.2); }
+    .badge-orange{ background: var(--ob); color: var(--o); border: 1px solid rgba(251,146,60,.2); }
+    .badge-purple{ background: var(--pb); color: var(--p); border: 1px solid rgba(192,132,252,.2); }
+    .badge-teal  { background: var(--tb); color: var(--t); border: 1px solid rgba(45,212,191,.2); }
+    .badge-red   { background: var(--rb); color: var(--r); border: 1px solid rgba(248,113,113,.2); }
+    .badge-yellow{ background: var(--yb); color: var(--y); border: 1px solid rgba(250,204,21,.2); }
+    .badge-pink  { background: var(--pkb); color: var(--pk); border: 1px solid rgba(244,114,182,.2); }
+
+    /* ── Hero ── */
+    .hero { padding: 68px 0 48px; text-align: center; }
+    .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; color: var(--cr3); margin-bottom: 16px; }
+    .hero-h1 { font-family: var(--serif); font-size: clamp(2rem, 5.5vw, 3.6rem); font-weight: 400; line-height: 1.1; margin-bottom: 16px; }
+    .hero-h1 em { font-style: italic; color: var(--cr5); }
+    .hero-sub { font-size: 15px; color: var(--cr5); max-width: 560px; margin: 0 auto 36px; line-height: 1.75; }
+    .hero-meta { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+    .hero-stat { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--cr3); }
+    .hero-stat strong { color: var(--cr7); font-weight: 600; }
+    .hero-stat-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--cr3); }
+
+    /* ── Summary bar ── */
+    .summary-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--bd); border: 1px solid var(--bd); border-radius: 16px; overflow: hidden; margin: 32px 0 48px; }
+    @media(max-width:680px){ .summary-bar { grid-template-columns: repeat(2, 1fr); } }
+    .sum-cell { background: var(--card); padding: 18px 22px; }
+    .sum-label { font-size: 11px; color: var(--cr3); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 4px; }
+    .sum-val { font-size: 1.6rem; font-family: var(--serif); font-weight: 400; }
+    .sum-sub { font-size: 11px; color: var(--cr3); margin-top: 2px; }
+
+    /* ── Section ── */
+    hr.dv { border: none; border-top: 1px solid var(--bd); margin: 60px 0; }
+    .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+    .sec-title { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; }
+    .sec-lead { font-size: 13px; color: var(--cr3); max-width: 640px; line-height: 1.7; margin-bottom: 28px; }
+
+    /* ── Category filter ── */
+    .filter-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+    .filter-btn { display: flex; align-items: center; gap: 7px; padding: 8px 15px; border-radius: 10px; border: 1px solid var(--bd); background: var(--card); cursor: pointer; font-size: 12px; color: var(--cr5); transition: all .18s; user-select: none; font-family: var(--sans); }
+    .filter-btn:hover { border-color: var(--bd2); color: var(--cr); }
+    .filter-btn.active { border-color: rgba(74,222,128,.35); background: rgba(74,222,128,.07); color: var(--cr); }
+    .filter-btn .fi { font-size: 15px; }
+
+    /* ── Sort row ── */
+    .sort-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .sort-label { font-size: 12px; color: var(--cr3); }
+    .sort-group { display: flex; gap: 4px; }
+    .sort-btn { padding: 5px 12px; border-radius: 8px; border: 1px solid var(--bd); background: transparent; color: var(--cr5); font-size: 11px; cursor: pointer; font-family: var(--sans); transition: all .15s; }
+    .sort-btn.active { background: var(--cr1); border-color: var(--bd2); color: var(--cr); }
+
+    /* ── App Card ── */
+    .app-list { display: flex; flex-direction: column; gap: 12px; }
+    .app-card { background: var(--card); border: 1px solid var(--bd); border-radius: 18px; padding: 0; overflow: hidden; transition: border-color .2s; }
+    .app-card:hover { border-color: var(--bd2); }
+    .app-card-head { display: grid; grid-template-columns: 48px 1fr auto; gap: 16px; align-items: center; padding: 20px 22px; cursor: pointer; }
+    .app-rank { font-size: 11px; font-weight: 700; color: var(--cr3); width: 28px; text-align: center; }
+    .app-rank.gold   { color: var(--y); }
+    .app-rank.silver { color: #a1a1aa; }
+    .app-rank.bronze { color: var(--o); }
+    .app-main { display: flex; align-items: center; gap: 14px; }
+    .app-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; border: 1px solid var(--bd); }
+    .app-info {}
+    .app-name { font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+    .app-tagline { font-size: 12px; color: var(--cr5); margin-top: 2px; }
+    .app-tags { display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+    .tag { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 5px; letter-spacing: .3px; }
+    .tag-cat { background: var(--cr1); color: var(--cr5); }
+
+    .app-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+    .trend-badge { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; }
+    .trend-up   { color: var(--g); }
+    .trend-down { color: var(--r); }
+    .trend-new  { color: var(--y); }
+    .trend-arrow { font-size: 16px; }
+    .app-spark { display: flex; align-items: flex-end; gap: 2px; height: 28px; }
+    .spark-bar { width: 5px; border-radius: 2px 2px 0 0; background: var(--cr1); transition: background .3s; }
+    .spark-bar.hi { background: var(--g); }
+    .spark-bar.md { background: rgba(74,222,128,.4); }
+
+    /* ── App Body (expanded) ── */
+    .app-body { border-top: 1px solid var(--bd); padding: 20px 22px 22px; display: none; }
+    .app-body.open { display: block; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--bd); border: 1px solid var(--bd); border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
+    @media(max-width:640px){ .stats-grid { grid-template-columns: repeat(2,1fr); } }
+    .stat-cell { background: var(--card2); padding: 14px 16px; }
+    .stat-lbl { font-size: 10px; color: var(--cr3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 3px; }
+    .stat-val { font-size: 1.15rem; font-weight: 600; }
+    .stat-sub { font-size: 10px; color: var(--cr3); margin-top: 1px; }
+
+    .detail-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    @media(max-width:640px){ .detail-cols { grid-template-columns: 1fr; } }
+    .detail-block { background: var(--card2); border: 1px solid var(--bd); border-radius: 12px; padding: 16px; }
+    .db-title { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--cr3); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .pain-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .pain-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: var(--cr7); line-height: 1.5; }
+    .pain-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--r); flex-shrink: 0; margin-top: 5px; }
+    .opp-dot  { background: var(--g); }
+    .insight-dot { background: var(--b); }
+
+    .review-quote { font-size: 12px; color: var(--cr5); font-style: italic; padding: 10px 14px; background: rgba(246,242,233,.03); border-left: 2px solid var(--bd2); border-radius: 0 6px 6px 0; margin-top: 8px; line-height: 1.6; }
+
+    .sources-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding-top: 14px; border-top: 1px solid var(--bd); margin-top: 4px; }
+    .src-label { font-size: 11px; color: var(--cr3); }
+    .src-chip { font-size: 10px; padding: 2px 8px; border-radius: 5px; border: 1px solid var(--bd); color: var(--cr3); background: transparent; }
+
+    /* ── Sources section ── */
+    .sources-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    @media(max-width:640px){ .sources-grid { grid-template-columns: 1fr; } }
+    .src-card { background: var(--card); border: 1px solid var(--bd); border-radius: 14px; padding: 18px; }
+    .src-name { font-weight: 600; font-size: 14px; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+    .src-desc { font-size: 12px; color: var(--cr5); line-height: 1.6; }
+    .src-freq { font-size: 10px; color: var(--cr3); margin-top: 8px; }
+
+    /* ── Methodology ── */
+    .method-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 24px; }
+    @media(max-width:640px){ .method-grid { grid-template-columns: repeat(2,1fr); } }
+    .method-card { background: var(--card); border: 1px solid var(--bd); border-radius: 12px; padding: 16px; }
+    .method-num { font-family: var(--serif); font-size: 2rem; color: var(--cr3); margin-bottom: 4px; }
+    .method-label { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
+    .method-sub { font-size: 11px; color: var(--cr3); line-height: 1.5; }
+
+    /* ── Footer ── */
+    footer { border-top: 1px solid var(--bd); padding: 36px 0; margin-top: 80px; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-brand { font-family: var(--serif); font-size: 16px; color: var(--cr5); }
+    .footer-meta { font-size: 12px; color: var(--cr3); text-align: right; }
+
+    /* ── Collapse chevron ── */
+    .chevron { font-size: 13px; color: var(--cr3); transition: transform .25s; margin-left: 6px; }
+    .app-card.expanded .chevron { transform: rotate(180deg); }
+
+    /* ── Opportunity Score ── */
+    .opp-score { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; }
+    .opp-bar-wrap { width: 60px; height: 5px; background: var(--cr1); border-radius: 3px; overflow: hidden; }
+    .opp-bar-fill { height: 100%; border-radius: 3px; }
+
+    /* ── Platform badges ── */
+    .plt-ios { background: rgba(96,165,250,.1); color: var(--b); border: 1px solid rgba(96,165,250,.2); font-size: 10px; padding: 1px 6px; border-radius: 4px; font-weight: 500; }
+    .plt-and { background: rgba(74,222,128,.1); color: var(--g); border: 1px solid rgba(74,222,128,.2); font-size: 10px; padding: 1px 6px; border-radius: 4px; font-weight: 500; }
+
+    /* ── Sticky filter ── */
+    .filter-sticky { position: sticky; top: 58px; z-index: 100; background: rgba(10,10,10,.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--bd); padding: 12px 0; margin-bottom: 28px; }
+
+    /* Utils */
+    .flex-center { display: flex; align-items: center; }
+    .gap-6 { gap: 6px; }
+    .gap-8 { gap: 8px; }
+    .text-g { color: var(--g); }
+    .text-b { color: var(--b); }
+    .text-o { color: var(--o); }
+    .text-p { color: var(--p); }
+    .text-r { color: var(--r); }
+    .text-y { color: var(--y); }
+    .text-t { color: var(--t); }
+  </style>
+</head>
+<body>
+<div class="bg-orbs" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- Header -->
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="home.html">
+      <div class="brand-dot"></div>
+      AppScan
+    </a>
+    <div class="topbar-right">
+      <span class="badge badge-green">&#9679; Live</span>
+      <span class="badge badge-blue" style="display:none" id="last-update">Updated 2h ago</span>
+      <span style="font-size:12px;color:var(--cr3)">Week of Jun 16–22, 2026</span>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="wrap">
+    <p class="hero-eyebrow">Weekly Intelligence Report · #24 · 2026</p>
+    <h1 class="hero-h1">This week's<br/><em>breakout apps</em></h1>
+    <p class="hero-sub">Trending signals crawled từ App Store, Google Play, Sensor Tower, data.ai và Product Hunt. Cập nhật mỗi thứ Hai hàng tuần.</p>
+    <div class="hero-meta">
+      <span class="hero-stat"><strong>1,240</strong> apps tracked</span>
+      <span class="hero-stat-sep"></span>
+      <span class="hero-stat"><strong>8</strong> data sources</span>
+      <span class="hero-stat-sep"></span>
+      <span class="hero-stat"><strong>12</strong> categories</span>
+      <span class="hero-stat-sep"></span>
+      <span class="hero-stat">Last crawl: <strong>Jun 18, 2026 · 06:00 UTC</strong></span>
+    </div>
+  </div>
+</section>
+
+<!-- Summary bar -->
+<div class="wrap">
+  <div class="summary-bar">
+    <div class="sum-cell">
+      <div class="sum-label">Breakout signals</div>
+      <div class="sum-val text-g">47</div>
+      <div class="sum-sub">+12 vs last week</div>
+    </div>
+    <div class="sum-cell">
+      <div class="sum-label">Avg. weekly growth</div>
+      <div class="sum-val text-b">+184%</div>
+      <div class="sum-sub">downloads WoW</div>
+    </div>
+    <div class="sum-cell">
+      <div class="sum-label">Top category</div>
+      <div class="sum-val text-p">AI Tools</div>
+      <div class="sum-sub">31% of breakouts</div>
+    </div>
+    <div class="sum-cell">
+      <div class="sum-label">Avg. opp. score</div>
+      <div class="sum-val text-o">7.4 / 10</div>
+      <div class="sum-sub">indie viability</div>
+    </div>
+  </div>
+</div>
+
+<!-- Filter sticky -->
+<div class="filter-sticky">
+  <div class="wrap">
+    <div class="filter-wrap" id="filter-wrap">
+      <button class="filter-btn active" data-cat="all" onclick="filterCat(this)"><span class="fi">&#128200;</span> All Apps</button>
+      <button class="filter-btn" data-cat="ai" onclick="filterCat(this)"><span class="fi">&#129302;</span> AI Tools</button>
+      <button class="filter-btn" data-cat="productivity" onclick="filterCat(this)"><span class="fi">&#128203;</span> Productivity</button>
+      <button class="filter-btn" data-cat="health" onclick="filterCat(this)"><span class="fi">&#129658;</span> Health & Fitness</button>
+      <button class="filter-btn" data-cat="social" onclick="filterCat(this)"><span class="fi">&#128241;</span> Social</button>
+      <button class="filter-btn" data-cat="finance" onclick="filterCat(this)"><span class="fi">&#128178;</span> Finance</button>
+      <button class="filter-btn" data-cat="creative" onclick="filterCat(this)"><span class="fi">&#127912;</span> Creative</button>
+      <button class="filter-btn" data-cat="dev" onclick="filterCat(this)"><span class="fi">&#128187;</span> Dev Tools</button>
+    </div>
+  </div>
+</div>
+
+<!-- App list -->
+<main class="wrap" style="padding-bottom: 20px;">
+  <div class="sort-row">
+    <span class="sort-label" id="result-count">Showing 10 apps</span>
+    <div class="sort-group">
+      <button class="sort-btn active" onclick="sortApps('growth',this)">Growth %</button>
+      <button class="sort-btn" onclick="sortApps('downloads',this)">Downloads</button>
+      <button class="sort-btn" onclick="sortApps('opp',this)">Opp. Score</button>
+      <button class="sort-btn" onclick="sortApps('revenue',this)">Revenue</button>
+    </div>
+  </div>
+
+  <div class="app-list" id="app-list">
+
+    <!-- ── 1. Captions ── -->
+    <div class="app-card" data-cat="ai creative" data-growth="420" data-downloads="3200000" data-opp="9.1" data-revenue="8500000">
+      <div class="app-card-head" onclick="toggleCard(this)">
+        <span class="app-rank gold">#1</span>
+        <div class="app-main">
+          <div class="app-icon" style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(96,165,250,.2))">&#127916;</div>
+          <div class="app-info">
+            <div class="app-name">
+              Captions
+              <span class="badge badge-purple">NEW #1</span>
+            </div>
+            <div class="app-tagline">AI video creation with auto captions, avatars & dubbing</div>
+            <div class="app-tags">
+              <span class="tag tag-cat">AI Tools</span>
+              <span class="tag tag-cat">Creative</span>
+              <span class="plt-ios">iOS</span>
+              <span class="plt-and">Android</span>
+            </div>
+          </div>
+        </div>
+        <div class="app-right">
+          <div class="trend-badge trend-up"><span class="trend-arrow">&#8599;</span> +420%</div>
+          <div class="app-spark">
+            <div class="spark-bar" style="height:25%"></div>
+            <div class="spark-bar" style="height:30%"></div>
+            <div class="spark-bar md" style="height:40%"></div>
+            <div class="spark-bar md" style="height:50%"></div>
+            <div class="spark-bar md" style="height:65%"></div>
+            <div class="spark-bar hi" style="height:80%"></div>
+            <div class="spark-bar hi" style="height:100%"></div>
+          </div>
+          <span class="chevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="app-body">
+        <div class="stats-grid">
+          <div class="stat-cell">
+            <div class="stat-lbl">Weekly Installs</div>
+            <div class="stat-val text-g">3.2M</div>
+            <div class="stat-sub">+420% WoW</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-lbl">MAU</div>
+            <div class="stat-val text-b">18.4M</div>
+            <div class="stat-sub">+22% MoM</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-lbl">Revenue (MRR)</div>
+            <div class="stat-val text-o">$8.5M</div>
+            <div class="stat-sub">$12.99–$29.99/mo</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-lbl">App Rating</div>
+            <div class="stat-val text-y">4.7 &#9733;</div>
+            <div class="stat-sub">128K ratings</div>
+          </div>
+        </div>
+        <div class="detail-cols">
+          <div class="detail-block">
+            <div class="db-title"><span>&#128308;</span> Pain Points (từ reviews)</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot"></span>Watermark không xóa được ở plan free — cực kỳ bực bội</li>
+              <li class="pain-item"><span class="pain-dot"></span>Render video quá chậm trên Android low-end</li>
+              <li class="pain-item"><span class="pain-dot"></span>Bộ nhớ cache chiếm >2GB trên điện thoại</li>
+              <li class="pain-item"><span class="pain-dot"></span>Không hỗ trợ export 4K ở tier basic</li>
+              <li class="pain-item"><span class="pain-dot"></span>Auto-caption sai nhiều với tiếng Việt / accent</li>
+            </ul>
+            <div class="review-quote">"Great app but the watermark ruins every video unless you pay $30/month. Need a one-time purchase option." — 1-star review, Jun 2026</div>
+          </div>
+          <div class="detail-block">
+            <div class="db-title"><span>&#128994;</span> Opportunity Signals</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Market cần app tương tự cho ngôn ngữ phi-Latin (Việt, Thai, Arabic)</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Niche: short-form content cho educators thay vì creators</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>One-time purchase model thay vì subscription sẽ thu hút 40% user hiện tại</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>B2B play: batch processing cho marketing teams</li>
+            </ul>
+            <div class="opp-score" style="margin-top:12px">
+              Opp. Score:
+              <div class="opp-bar-wrap"><div class="opp-bar-fill" style="width:91%;background:var(--g)"></div></div>
+              <strong class="text-g">9.1 / 10</strong>
+            </div>
+          </div>
+        </div>
+        <div class="detail-block" style="margin-bottom:16px">
+          <div class="db-title"><span>&#128201;</span> Growth Catalysts tuần này</div>
+          <ul class="pain-list" style="flex-direction:row;flex-wrap:wrap;gap:8px">
+            <li class="pain-item" style="background:var(--cr1);padding:6px 10px;border-radius:8px;flex:1;min-width:200px"><span class="pain-dot insight-dot"></span>TikTok Creator Fund hỗ trợ tool → viral loop</li>
+            <li class="pain-item" style="background:var(--cr1);padding:6px 10px;border-radius:8px;flex:1;min-width:200px"><span class="pain-dot insight-dot"></span>iOS 20 Featured trong App Store banner</li>
+            <li class="pain-item" style="background:var(--cr1);padding:6px 10px;border-radius:8px;flex:1;min-width:200px"><span class="pain-dot insight-dot"></span>3 YouTube creators với >5M sub đăng review</li>
+          </ul>
+        </div>
+        <div class="sources-row">
+          <span class="src-label">Sources:</span>
+          <span class="src-chip">Sensor Tower</span>
+          <span class="src-chip">App Store Charts</span>
+          <span class="src-chip">Play Store Trending</span>
+          <span class="src-chip">Reddit r/videoediting</span>
+          <span class="src-chip">Twitter/X mentions</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 2. Perplexity Pro ── -->
+    <div class="app-card" data-cat="ai productivity" data-growth="310" data-downloads="2800000" data-opp="8.2" data-revenue="22000000">
+      <div class="app-card-head" onclick="toggleCard(this)">
+        <span class="app-rank gold">#2</span>
+        <div class="app-main">
+          <div class="app-icon" style="background:linear-gradient(135deg,rgba(45,212,191,.2),rgba(96,165,250,.15))">&#128269;</div>
+          <div class="app-info">
+            <div class="app-name">Perplexity AI <span class="badge badge-teal">&#8593; 2</span></div>
+            <div class="app-tagline">AI-powered answer engine replacing traditional search</div>
+            <div class="app-tags">
+              <span class="tag tag-cat">AI Tools</span>
+              <span class="tag tag-cat">Productivity</span>
+              <span class="plt-ios">iOS</span>
+              <span class="plt-and">Android</span>
+            </div>
+          </div>
+        </div>
+        <div class="app-right">
+          <div class="trend-badge trend-up"><span class="trend-arrow">&#8599;</span> +310%</div>
+          <div class="app-spark">
+            <div class="spark-bar md" style="height:30%"></div>
+            <div class="spark-bar md" style="height:45%"></div>
+            <div class="spark-bar md" style="height:55%"></div>
+            <div class="spark-bar hi" style="height:65%"></div>
+            <div class="spark-bar hi" style="height:78%"></div>
+            <div class="spark-bar hi" style="height:88%"></div>
+            <div class="spark-bar hi" style="height:100%"></div>
+          </div>
+          <span class="chevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="app-body">
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="stat-lbl">Weekly Installs</div><div class="stat-val text-g">2.8M</div><div class="stat-sub">+310% WoW</div></div>
+          <div class="stat-cell"><div class="stat-lbl">MAU</div><div class="stat-val text-b">82M</div><div class="stat-sub">+48% MoM</div></div>
+          <div class="stat-cell"><div class="stat-lbl">Revenue (MRR)</div><div class="stat-val text-o">$22M</div><div class="stat-sub">$20/mo Pro plan</div></div>
+          <div class="stat-cell"><div class="stat-lbl">App Rating</div><div class="stat-val text-y">4.8 &#9733;</div><div class="stat-sub">342K ratings</div></div>
+        </div>
+        <div class="detail-cols">
+          <div class="detail-block">
+            <div class="db-title"><span>&#128308;</span> Pain Points</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot"></span>Hallucination vẫn xảy ra — cites nguồn sai</li>
+              <li class="pain-item"><span class="pain-dot"></span>Không có offline mode, cần internet liên tục</li>
+              <li class="pain-item"><span class="pain-dot"></span>Free tier limit 5 AI searches/day — quá ít</li>
+              <li class="pain-item"><span class="pain-dot"></span>Không nhớ context giữa các sessions</li>
+              <li class="pain-item"><span class="pain-dot"></span>UI on iPad chưa optimize</li>
+            </ul>
+            <div class="review-quote">"Best search engine but I need it to remember my previous research threads. Starting from scratch every time is annoying." — 3-star, Jun 2026</div>
+          </div>
+          <div class="detail-block">
+            <div class="db-title"><span>&#128994;</span> Opportunity Signals</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Vertical search engines cho niche: legal, medical, finance</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Persistent memory + project workspace = killer feature gap</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Local-first search với privacy-focus cho enterprise</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Student-tier pricing ($5/mo) chiếm 45M edu market</li>
+            </ul>
+            <div class="opp-score" style="margin-top:12px">Opp. Score: <div class="opp-bar-wrap"><div class="opp-bar-fill" style="width:82%;background:var(--b)"></div></div><strong class="text-b">8.2 / 10</strong></div>
+          </div>
+        </div>
+        <div class="sources-row">
+          <span class="src-label">Sources:</span>
+          <span class="src-chip">data.ai</span>
+          <span class="src-chip">Sensor Tower</span>
+          <span class="src-chip">Product Hunt</span>
+          <span class="src-chip">Hacker News</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 3. Whoop 5.0 ── -->
+    <div class="app-card" data-cat="health" data-growth="280" data-downloads="1900000" data-opp="7.8" data-revenue="45000000">
+      <div class="app-card-head" onclick="toggleCard(this)">
+        <span class="app-rank gold">#3</span>
+        <div class="app-main">
+          <div class="app-icon" style="background:linear-gradient(135deg,rgba(248,113,113,.2),rgba(251,146,60,.15))">&#128147;</div>
+          <div class="app-info">
+            <div class="app-name">WHOOP 5.0 <span class="badge badge-orange">Hardware launch</span></div>
+            <div class="app-tagline">Advanced recovery & strain tracker companion app</div>
+            <div class="app-tags">
+              <span class="tag tag-cat">Health & Fitness</span>
+              <span class="plt-ios">iOS</span>
+              <span class="plt-and">Android</span>
+            </div>
+          </div>
+        </div>
+        <div class="app-right">
+          <div class="trend-badge trend-up"><span class="trend-arrow">&#8599;</span> +280%</div>
+          <div class="app-spark">
+            <div class="spark-bar" style="height:20%"></div>
+            <div class="spark-bar" style="height:25%"></div>
+            <div class="spark-bar md" style="height:35%"></div>
+            <div class="spark-bar md" style="height:50%"></div>
+            <div class="spark-bar hi" style="height:70%"></div>
+            <div class="spark-bar hi" style="height:90%"></div>
+            <div class="spark-bar hi" style="height:100%"></div>
+          </div>
+          <span class="chevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="app-body">
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="stat-lbl">Weekly Installs</div><div class="stat-val text-g">1.9M</div><div class="stat-sub">+280% WoW</div></div>
+          <div class="stat-cell"><div class="stat-lbl">Active Members</div><div class="stat-val text-b">6.2M</div><div class="stat-sub">paid subscribers</div></div>
+          <div class="stat-cell"><div class="stat-lbl">Revenue (MRR)</div><div class="stat-val text-o">$45M</div><div class="stat-sub">$30/mo membership</div></div>
+          <div class="stat-cell"><div class="stat-lbl">App Rating</div><div class="stat-val text-y">4.5 &#9733;</div><div class="stat-sub">89K ratings</div></div>
+        </div>
+        <div class="detail-cols">
+          <div class="detail-block">
+            <div class="db-title"><span>&#128308;</span> Pain Points</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot"></span>Requires hardware + membership — double cost barrier ($239 + $30/mo)</li>
+              <li class="pain-item"><span class="pain-dot"></span>Data accuracy inconsistent với người có wrist tattoos</li>
+              <li class="pain-item"><span class="pain-dot"></span>App crash khi sync >30 ngày data cùng lúc</li>
+              <li class="pain-item"><span class="pain-dot"></span>Không có standalone mode — mọi thứ cần band</li>
+              <li class="pain-item"><span class="pain-dot"></span>Export data sang CSV bị locked behind paid tier cao nhất</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <div class="db-title"><span>&#128994;</span> Opportunity Signals</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Software-only recovery tracking dùng iPhone camera (no hardware)</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>HRV coaching cho athletes ở developing markets</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Sleep quality analyzer thuần AI — $4.99/mo vs $30/mo</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Corporate wellness B2B play</li>
+            </ul>
+            <div class="opp-score" style="margin-top:12px">Opp. Score: <div class="opp-bar-wrap"><div class="opp-bar-fill" style="width:78%;background:var(--o)"></div></div><strong class="text-o">7.8 / 10</strong></div>
+          </div>
+        </div>
+        <div class="sources-row">
+          <span class="src-label">Sources:</span>
+          <span class="src-chip">App Store Charts</span>
+          <span class="src-chip">Apptopia</span>
+          <span class="src-chip">Reddit r/whoop</span>
+          <span class="src-chip">TechCrunch</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 4. Notion AI ── -->
+    <div class="app-card" data-cat="ai productivity" data-growth="195" data-downloads="2100000" data-opp="6.5" data-revenue="38000000">
+      <div class="app-card-head" onclick="toggleCard(this)">
+        <span class="app-rank silver">#4</span>
+        <div class="app-main">
+          <div class="app-icon" style="background:rgba(246,242,233,.07)">&#128221;</div>
+          <div class="app-info">
+            <div class="app-name">Notion AI <span class="badge badge-blue">v4.0</span></div>
+            <div class="app-tagline">AI workspace — write, plan, analyze & automate</div>
+            <div class="app-tags">
+              <span class="tag tag-cat">Productivity</span>
+              <span class="tag tag-cat">AI Tools</span>
+              <span class="plt-ios">iOS</span>
+              <span class="plt-and">Android</span>
+            </div>
+          </div>
+        </div>
+        <div class="app-right">
+          <div class="trend-badge trend-up"><span class="trend-arrow">&#8599;</span> +195%</div>
+          <div class="app-spark">
+            <div class="spark-bar md" style="height:55%"></div>
+            <div class="spark-bar md" style="height:60%"></div>
+            <div class="spark-bar md" style="height:65%"></div>
+            <div class="spark-bar hi" style="height:72%"></div>
+            <div class="spark-bar hi" style="height:82%"></div>
+            <div class="spark-bar hi" style="height:90%"></div>
+            <div class="spark-bar hi" style="height:100%"></div>
+          </div>
+          <span class="chevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="app-body">
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="stat-lbl">Weekly Installs</div><div class="stat-val text-g">2.1M</div><div class="stat-sub">+195% WoW</div></div>
+          <div class="stat-cell"><div class="stat-lbl">MAU</div><div class="stat-val text-b">112M</div><div class="stat-sub">+18% QoQ</div></div>
+          <div class="stat-cell"><div class="stat-lbl">Revenue (MRR)</div><div class="stat-val text-o">$38M</div><div class="stat-sub">$8–$16/mo per user</div></div>
+          <div class="stat-cell"><div class="stat-lbl">App Rating</div><div class="stat-val text-y">4.6 &#9733;</div><div class="stat-sub">412K ratings</div></div>
+        </div>
+        <div class="detail-cols">
+          <div class="detail-block">
+            <div class="db-title"><span>&#128308;</span> Pain Points</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot"></span>Slow load time trên mobile — 4–6 giây cold start</li>
+              <li class="pain-item"><span class="pain-dot"></span>AI feature tính thêm $10/mo — không worth với casual users</li>
+              <li class="pain-item"><span class="pain-dot"></span>Offline mode unreliable — mất data khi hết internet</li>
+              <li class="pain-item"><span class="pain-dot"></span>Database relations quá phức tạp cho non-tech users</li>
+              <li class="pain-item"><span class="pain-dot"></span>Không có native calendar view trên mobile</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <div class="db-title"><span>&#128994;</span> Opportunity Signals</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Simple note-taking với AI tích hợp sẵn — no add-on upsell</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Mobile-first approach vs Notion's desktop-centric UX</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Students & solo users bị overwhelmed — need opinionated templates</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Offline-first with sync — huge underserved segment</li>
+            </ul>
+            <div class="opp-score" style="margin-top:12px">Opp. Score: <div class="opp-bar-wrap"><div class="opp-bar-fill" style="width:65%;background:var(--p)"></div></div><strong class="text-p">6.5 / 10</strong></div>
+          </div>
+        </div>
+        <div class="sources-row">
+          <span class="src-label">Sources:</span>
+          <span class="src-chip">Sensor Tower</span>
+          <span class="src-chip">App Store</span>
+          <span class="src-chip">Product Hunt</span>
+          <span class="src-chip">r/Notion</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 5. Locket Widget ── -->
+    <div class="app-card" data-cat="social" data-growth="380" data-downloads="1600000" data-opp="8.7" data-revenue="3200000">
+      <div class="app-card-head" onclick="toggleCard(this)">
+        <span class="app-rank silver">#5</span>
+        <div class="app-main">
+          <div class="app-icon" style="background:linear-gradient(135deg,rgba(244,114,182,.2),rgba(192,132,252,.15))">&#128247;</div>
+          <div class="app-info">
+            <div class="app-name">Locket Widget <span class="badge badge-pink">&#8593; 8</span></div>
+            <div class="app-tagline">Live photos from friends directly on your home screen</div>
+            <div class="app-tags">
+              <span class="tag tag-cat">Social</span>
+              <span class="plt-ios">iOS</span>
+              <span class="plt-and">Android</span>
+            </div>
+          </div>
+        </div>
+        <div class="app-right">
+          <div class="trend-badge trend-up"><span class="trend-arrow">&#8599;</span> +380%</div>
+          <div class="app-spark">
+            <div class="spark-bar" style="height:15%"></div>
+            <div class="spark-bar" style="height:18%"></div>
+            <div class="spark-bar md" style="height:30%"></div>
+            <div class="spark-bar md" style="height:48%"></div>
+            <div class="spark-bar hi" style="height:68%"></div>
+            <div class="spark-bar hi" style="height:85%"></div>
+            <div class="spark-bar hi" style="height:100%"></div>
+          </div>
+          <span class="chevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="app-body">
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="stat-lbl">Weekly Installs</div><div class="stat-val text-g">1.6M</div><div class="stat-sub">+380% WoW</div></div>
+          <div class="stat-cell"><div class="stat-lbl">MAU</div><div class="stat-val text-b">38M</div><div class="stat-sub">+65% MoM</div></div>
+          <div class="stat-cell"><div class="stat-lbl">Revenue (MRR)</div><div class="stat-val text-o">$3.2M</div><div class="stat-sub">$2.99/mo premium</div></div>
+          <div class="stat-cell"><div class="stat-lbl">App Rating</div><div class="stat-val text-y">4.4 &#9733;</div><div class="stat-sub">210K ratings</div></div>
+        </div>
+        <div class="detail-cols">
+          <div class="detail-block">
+            <div class="db-title"><span>&#128308;</span> Pain Points</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot"></span>Widget không update real-time — delay 10–15 phút</li>
+              <li class="pain-item"><span class="pain-dot"></span>Giới hạn chỉ 1–2 bạn thân ở free tier</li>
+              <li class="pain-item"><span class="pain-dot"></span>Notification spam khi bạn bè gửi liên tục</li>
+              <li class="pain-item"><span class="pain-dot"></span>Không có privacy control — ai cũng xem được nếu biết link</li>
+              <li class="pain-item"><span class="pain-dot"></span>Android widget lag hơn iOS đáng kể</li>
+            </ul>
+            <div class="review-quote">"Love the concept but the free version is basically useless. Should allow at least 5 friends." — 2-star, Jun 2026</div>
+          </div>
+          <div class="detail-block">
+            <div class="db-title"><span>&#128994;</span> Opportunity Signals</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Family-focused version (parents ↔ kids) — different emotional hook</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Long-distance couples niche — premium features ($9.99/mo)</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Real-time location + photo combo widget</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>B2B: team presence widget for remote workers</li>
+            </ul>
+            <div class="opp-score" style="margin-top:12px">Opp. Score: <div class="opp-bar-wrap"><div class="opp-bar-fill" style="width:87%;background:var(--pk)"></div></div><strong class="text-p">8.7 / 10</strong></div>
+          </div>
+        </div>
+        <div class="sources-row">
+          <span class="src-label">Sources:</span>
+          <span class="src-chip">App Store Trending</span>
+          <span class="src-chip">TikTok mentions</span>
+          <span class="src-chip">Apptopia</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 6. Cursor (AI Code Editor) ── -->
+    <div class="app-card" data-cat="dev ai" data-growth="245" data-downloads="980000" data-opp="7.2" data-revenue="28000000">
+      <div class="app-card-head" onclick="toggleCard(this)">
+        <span class="app-rank silver">#6</span>
+        <div class="app-main">
+          <div class="app-icon" style="background:linear-gradient(135deg,rgba(96,165,250,.2),rgba(45,212,191,.1))">&#128187;</div>
+          <div class="app-info">
+            <div class="app-name">Cursor <span class="badge badge-teal">Dev #1</span></div>
+            <div class="app-tagline">AI-first code editor with agentic pair programming</div>
+            <div class="app-tags">
+              <span class="tag tag-cat">Dev Tools</span>
+              <span class="tag tag-cat">AI Tools</span>
+              <span class="plt-ios" style="background:rgba(246,242,233,.07);color:var(--cr5);border-color:var(--bd)">macOS</span>
+              <span class="plt-ios" style="background:rgba(246,242,233,.07);color:var(--cr5);border-color:var(--bd)">Windows</span>
+            </div>
+          </div>
+        </div>
+        <div class="app-right">
+          <div class="trend-badge trend-up"><span class="trend-arrow">&#8599;</span> +245%</div>
+          <div class="app-spark">
+            <div class="spark-bar md" style="height:40%"></div>
+            <div class="spark-bar md" style="height:50%"></div>
+            <div class="spark-bar md" style="height:58%"></div>
+            <div class="spark-bar hi" style="height:68%"></div>
+            <div class="spark-bar hi" style="height:80%"></div>
+            <div class="spark-bar hi" style="height:92%"></div>
+            <div class="spark-bar hi" style="height:100%"></div>
+          </div>
+          <span class="chevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="app-body">
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="stat-lbl">Weekly Downloads</div><div class="stat-val text-g">980K</div><div class="stat-sub">+245% WoW</div></div>
+          <div class="stat-cell"><div class="stat-lbl">Active Users</div><div class="stat-val text-b">4.2M</div><div class="stat-sub">monthly devs</div></div>
+          <div class="stat-cell"><div class="stat-lbl">Revenue (MRR)</div><div class="stat-val text-o">$28M</div><div class="stat-sub">$20–$40/mo</div></div>
+          <div class="stat-cell"><div class="stat-lbl">NPS Score</div><div class="stat-val text-y">+72</div><div class="stat-sub">class-leading</div></div>
+        </div>
+        <div class="detail-cols">
+          <div class="detail-block">
+            <div class="db-title"><span>&#128308;</span> Pain Points</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot"></span>Agent mode "goes rogue" — edits files không được yêu cầu</li>
+              <li class="pain-item"><span class="pain-dot"></span>Context window limit khiến AI "quên" code đầu file</li>
+              <li class="pain-item"><span class="pain-dot"></span>Heavy RAM usage — 2GB+ khi mở project lớn</li>
+              <li class="pain-item"><span class="pain-dot"></span>Không có mobile app hoặc iPad version</li>
+              <li class="pain-item"><span class="pain-dot"></span>Privacy concern — code sent to cloud by default</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <div class="db-title"><span>&#128994;</span> Opportunity Signals</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Local-first AI coding (on-device model) — privacy play</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Beginner-friendly AI coding cho non-engineers (vibe coding)</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Mobile-first code review & PR tool dùng AI</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>AI coding cho specific verticals (Shopify apps, no-code)</li>
+            </ul>
+            <div class="opp-score" style="margin-top:12px">Opp. Score: <div class="opp-bar-wrap"><div class="opp-bar-fill" style="width:72%;background:var(--t)"></div></div><strong class="text-t">7.2 / 10</strong></div>
+          </div>
+        </div>
+        <div class="sources-row">
+          <span class="src-label">Sources:</span>
+          <span class="src-chip">data.ai</span>
+          <span class="src-chip">Hacker News</span>
+          <span class="src-chip">GitHub trending</span>
+          <span class="src-chip">X/Twitter Dev</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 7. Remini ── -->
+    <div class="app-card" data-cat="ai creative" data-growth="220" data-downloads="2400000" data-opp="8.5" data-revenue="12000000">
+      <div class="app-card-head" onclick="toggleCard(this)">
+        <span class="app-rank bronze">#7</span>
+        <div class="app-main">
+          <div class="app-icon" style="background:linear-gradient(135deg,rgba(250,204,21,.2),rgba(251,146,60,.15))">&#10024;</div>
+          <div class="app-info">
+            <div class="app-name">Remini <span class="badge badge-yellow">Viral</span></div>
+            <div class="app-tagline">AI photo & video enhancer — restore old photos to HD</div>
+            <div class="app-tags">
+              <span class="tag tag-cat">AI Tools</span>
+              <span class="tag tag-cat">Creative</span>
+              <span class="plt-ios">iOS</span>
+              <span class="plt-and">Android</span>
+            </div>
+          </div>
+        </div>
+        <div class="app-right">
+          <div class="trend-badge trend-up"><span class="trend-arrow">&#8599;</span> +220%</div>
+          <div class="app-spark">
+            <div class="spark-bar" style="height:30%"></div>
+            <div class="spark-bar md" style="height:42%"></div>
+            <div class="spark-bar md" style="height:55%"></div>
+            <div class="spark-bar hi" style="height:70%"></div>
+            <div class="spark-bar hi" style="height:84%"></div>
+            <div class="spark-bar hi" style="height:92%"></div>
+            <div class="spark-bar hi" style="height:100%"></div>
+          </div>
+          <span class="chevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="app-body">
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="stat-lbl">Weekly Installs</div><div class="stat-val text-g">2.4M</div><div class="stat-sub">+220% WoW</div></div>
+          <div class="stat-cell"><div class="stat-lbl">MAU</div><div class="stat-val text-b">62M</div><div class="stat-sub">+30% MoM</div></div>
+          <div class="stat-cell"><div class="stat-lbl">Revenue (MRR)</div><div class="stat-val text-o">$12M</div><div class="stat-sub">$4.99–$9.99/mo</div></div>
+          <div class="stat-cell"><div class="stat-lbl">App Rating</div><div class="stat-val text-y">4.3 &#9733;</div><div class="stat-sub">1.1M ratings</div></div>
+        </div>
+        <div class="detail-cols">
+          <div class="detail-block">
+            <div class="db-title"><span>&#128308;</span> Pain Points</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot"></span>Free tier chỉ 5 credits/ngày — không đủ dùng</li>
+              <li class="pain-item"><span class="pain-dot"></span>AI thêm artifacts lạ vào ảnh (hallucinated faces)</li>
+              <li class="pain-item"><span class="pain-dot"></span>Batch processing bị giới hạn — 1 ảnh 1 lần</li>
+              <li class="pain-item"><span class="pain-dot"></span>Privacy: ảnh gia đình upload lên cloud</li>
+              <li class="pain-item"><span class="pain-dot"></span>Subscription renewal không transparent</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <div class="db-title"><span>&#128994;</span> Opportunity Signals</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>On-device AI photo enhancer — privacy-safe, no upload</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Family photo digitization service (photos → HD → album)</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>One-time purchase model chiếm user base hiện tại</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Desktop app cho photographers với batch processing</li>
+            </ul>
+            <div class="opp-score" style="margin-top:12px">Opp. Score: <div class="opp-bar-wrap"><div class="opp-bar-fill" style="width:85%;background:var(--y)"></div></div><strong class="text-y">8.5 / 10</strong></div>
+          </div>
+        </div>
+        <div class="sources-row">
+          <span class="src-label">Sources:</span>
+          <span class="src-chip">Play Store Charts</span>
+          <span class="src-chip">Sensor Tower</span>
+          <span class="src-chip">TikTok viral</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 8. Superhuman ── -->
+    <div class="app-card" data-cat="ai productivity" data-growth="165" data-downloads="620000" data-opp="6.8" data-revenue="16000000">
+      <div class="app-card-head" onclick="toggleCard(this)">
+        <span class="app-rank bronze">#8</span>
+        <div class="app-main">
+          <div class="app-icon" style="background:linear-gradient(135deg,rgba(248,113,113,.15),rgba(192,132,252,.1))">&#128140;</div>
+          <div class="app-info">
+            <div class="app-name">Superhuman <span class="badge badge-purple">AI Email</span></div>
+            <div class="app-tagline">Fastest email client with AI-powered inbox management</div>
+            <div class="app-tags">
+              <span class="tag tag-cat">Productivity</span>
+              <span class="tag tag-cat">AI Tools</span>
+              <span class="plt-ios">iOS</span>
+              <span class="plt-ios" style="background:rgba(246,242,233,.07);color:var(--cr5);border-color:var(--bd)">macOS</span>
+            </div>
+          </div>
+        </div>
+        <div class="app-right">
+          <div class="trend-badge trend-up"><span class="trend-arrow">&#8599;</span> +165%</div>
+          <div class="app-spark">
+            <div class="spark-bar md" style="height:50%"></div>
+            <div class="spark-bar md" style="height:58%"></div>
+            <div class="spark-bar md" style="height:65%"></div>
+            <div class="spark-bar hi" style="height:74%"></div>
+            <div class="spark-bar hi" style="height:82%"></div>
+            <div class="spark-bar hi" style="height:90%"></div>
+            <div class="spark-bar hi" style="height:100%"></div>
+          </div>
+          <span class="chevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="app-body">
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="stat-lbl">Weekly Downloads</div><div class="stat-val text-g">620K</div><div class="stat-sub">+165% WoW</div></div>
+          <div class="stat-cell"><div class="stat-lbl">Paid Users</div><div class="stat-val text-b">480K</div><div class="stat-sub">high-intent</div></div>
+          <div class="stat-cell"><div class="stat-lbl">Revenue (MRR)</div><div class="stat-val text-o">$16M</div><div class="stat-sub">$30/mo flat</div></div>
+          <div class="stat-cell"><div class="stat-lbl">NPS</div><div class="stat-val text-y">+58</div><div class="stat-sub">power users love it</div></div>
+        </div>
+        <div class="detail-cols">
+          <div class="detail-block">
+            <div class="db-title"><span>&#128308;</span> Pain Points</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot"></span>$30/mo quá đắt với non-executive users</li>
+              <li class="pain-item"><span class="pain-dot"></span>iOS notification grouping kém hơn native Mail</li>
+              <li class="pain-item"><span class="pain-dot"></span>Onboarding dài 2–3 tuần training — steep learning curve</li>
+              <li class="pain-item"><span class="pain-dot"></span>Không hỗ trợ non-Google email providers tốt</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <div class="db-title"><span>&#128994;</span> Opportunity Signals</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Affordable AI email ($9/mo) cho knowledge workers</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Android-first version — Superhuman chỉ có iOS/Mac</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>AI email cho SMBs với team inbox management</li>
+            </ul>
+            <div class="opp-score" style="margin-top:12px">Opp. Score: <div class="opp-bar-wrap"><div class="opp-bar-fill" style="width:68%;background:var(--p)"></div></div><strong class="text-p">6.8 / 10</strong></div>
+          </div>
+        </div>
+        <div class="sources-row">
+          <span class="src-label">Sources:</span>
+          <span class="src-chip">data.ai</span>
+          <span class="src-chip">App Store</span>
+          <span class="src-chip">LinkedIn buzz</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 9. Arc Search ── -->
+    <div class="app-card" data-cat="ai productivity" data-growth="190" data-downloads="1100000" data-opp="8.9" data-revenue="0">
+      <div class="app-card-head" onclick="toggleCard(this)">
+        <span class="app-rank bronze">#9</span>
+        <div class="app-main">
+          <div class="app-icon" style="background:linear-gradient(135deg,rgba(96,165,250,.2),rgba(192,132,252,.15))">&#127760;</div>
+          <div class="app-info">
+            <div class="app-name">Arc Search <span class="badge badge-blue">Browse for me</span></div>
+            <div class="app-tagline">AI browser that reads the web and answers you directly</div>
+            <div class="app-tags">
+              <span class="tag tag-cat">Productivity</span>
+              <span class="tag tag-cat">AI Tools</span>
+              <span class="plt-ios">iOS</span>
+              <span class="plt-and">Android</span>
+            </div>
+          </div>
+        </div>
+        <div class="app-right">
+          <div class="trend-badge trend-up"><span class="trend-arrow">&#8599;</span> +190%</div>
+          <div class="app-spark">
+            <div class="spark-bar" style="height:25%"></div>
+            <div class="spark-bar md" style="height:38%"></div>
+            <div class="spark-bar md" style="height:52%"></div>
+            <div class="spark-bar hi" style="height:66%"></div>
+            <div class="spark-bar hi" style="height:78%"></div>
+            <div class="spark-bar hi" style="height:88%"></div>
+            <div class="spark-bar hi" style="height:100%"></div>
+          </div>
+          <span class="chevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="app-body">
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="stat-lbl">Weekly Installs</div><div class="stat-val text-g">1.1M</div><div class="stat-sub">+190% WoW</div></div>
+          <div class="stat-cell"><div class="stat-lbl">MAU</div><div class="stat-val text-b">8.4M</div><div class="stat-sub">+42% MoM</div></div>
+          <div class="stat-cell"><div class="stat-lbl">Revenue</div><div class="stat-val text-o">$0</div><div class="stat-sub">currently free</div></div>
+          <div class="stat-cell"><div class="stat-lbl">App Rating</div><div class="stat-val text-y">4.7 &#9733;</div><div class="stat-sub">94K ratings</div></div>
+        </div>
+        <div class="detail-cols">
+          <div class="detail-block">
+            <div class="db-title"><span>&#128308;</span> Pain Points</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot"></span>"Browse for me" sai thông tin cho queries phức tạp</li>
+              <li class="pain-item"><span class="pain-dot"></span>Không có tab management rõ ràng</li>
+              <li class="pain-item"><span class="pain-dot"></span>Extensions support rất hạn chế</li>
+              <li class="pain-item"><span class="pain-dot"></span>Chưa rõ model kiếm tiền — user lo app đóng cửa</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <div class="db-title"><span>&#128994;</span> Opportunity Signals</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>AI browser cho specific verticals: shopping, travel, research</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Privacy-first AI browser (DuckDuckGo angle)</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>B2B research browser với citation export</li>
+            </ul>
+            <div class="opp-score" style="margin-top:12px">Opp. Score: <div class="opp-bar-wrap"><div class="opp-bar-fill" style="width:89%;background:var(--g)"></div></div><strong class="text-g">8.9 / 10</strong></div>
+          </div>
+        </div>
+        <div class="sources-row">
+          <span class="src-label">Sources:</span>
+          <span class="src-chip">App Store Charts</span>
+          <span class="src-chip">Product Hunt</span>
+          <span class="src-chip">X/Twitter</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 10. Clubhouse revival ── -->
+    <div class="app-card" data-cat="social ai" data-growth="140" data-downloads="850000" data-opp="5.4" data-revenue="1800000">
+      <div class="app-card-head" onclick="toggleCard(this)">
+        <span class="app-rank bronze">#10</span>
+        <div class="app-main">
+          <div class="app-icon" style="background:linear-gradient(135deg,rgba(250,204,21,.15),rgba(74,222,128,.1))">&#127908;</div>
+          <div class="app-info">
+            <div class="app-name">Clubhouse AI <span class="badge badge-yellow">Relaunch</span></div>
+            <div class="app-tagline">AI-moderated live audio rooms & async conversations</div>
+            <div class="app-tags">
+              <span class="tag tag-cat">Social</span>
+              <span class="tag tag-cat">AI Tools</span>
+              <span class="plt-ios">iOS</span>
+              <span class="plt-and">Android</span>
+            </div>
+          </div>
+        </div>
+        <div class="app-right">
+          <div class="trend-badge trend-up"><span class="trend-arrow">&#8599;</span> +140%</div>
+          <div class="app-spark">
+            <div class="spark-bar" style="height:10%"></div>
+            <div class="spark-bar" style="height:12%"></div>
+            <div class="spark-bar" style="height:18%"></div>
+            <div class="spark-bar md" style="height:45%"></div>
+            <div class="spark-bar md" style="height:65%"></div>
+            <div class="spark-bar hi" style="height:82%"></div>
+            <div class="spark-bar hi" style="height:100%"></div>
+          </div>
+          <span class="chevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="app-body">
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="stat-lbl">Weekly Installs</div><div class="stat-val text-g">850K</div><div class="stat-sub">+140% WoW</div></div>
+          <div class="stat-cell"><div class="stat-lbl">MAU</div><div class="stat-val text-b">4.1M</div><div class="stat-sub">post-relaunch</div></div>
+          <div class="stat-cell"><div class="stat-lbl">Revenue (MRR)</div><div class="stat-val text-o">$1.8M</div><div class="stat-sub">creator subscriptions</div></div>
+          <div class="stat-cell"><div class="stat-lbl">App Rating</div><div class="stat-val text-y">3.9 &#9733;</div><div class="stat-sub">64K ratings</div></div>
+        </div>
+        <div class="detail-cols">
+          <div class="detail-block">
+            <div class="db-title"><span>&#128308;</span> Pain Points</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot"></span>Chưa có đủ speaker/host quality control</li>
+              <li class="pain-item"><span class="pain-dot"></span>Discovery không tốt — khó tìm rooms hay</li>
+              <li class="pain-item"><span class="pain-dot"></span>AI transcript hay bị lỗi với accents</li>
+              <li class="pain-item"><span class="pain-dot"></span>Notification fatigue từ room invites</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <div class="db-title"><span>&#128994;</span> Opportunity Signals</div>
+            <ul class="pain-list">
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Audio content cho specific communities (dev, founder, health)</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>AI podcast creator từ audio conversations</li>
+              <li class="pain-item"><span class="pain-dot opp-dot"></span>Corporate live audio (town halls, AMAs) B2B tool</li>
+            </ul>
+            <div class="opp-score" style="margin-top:12px">Opp. Score: <div class="opp-bar-wrap"><div class="opp-bar-fill" style="width:54%;background:var(--cr3)"></div></div><strong style="color:var(--cr5)">5.4 / 10</strong></div>
+          </div>
+        </div>
+        <div class="sources-row">
+          <span class="src-label">Sources:</span>
+          <span class="src-chip">data.ai</span>
+          <span class="src-chip">App Store</span>
+          <span class="src-chip">The Verge</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /app-list -->
+</main>
+
+<hr class="dv" style="margin-top:48px">
+
+<!-- Data Sources section -->
+<section class="wrap" style="padding-bottom:20px">
+  <div class="sec-head">
+    <h2 class="sec-title">Data Sources</h2>
+  </div>
+  <p class="sec-lead">AppScan tổng hợp dữ liệu từ 8 nguồn uy tín, cập nhật hàng tuần vào thứ Hai lúc 06:00 UTC.</p>
+  <div class="sources-grid">
+    <div class="src-card">
+      <div class="src-name"><span>&#128241;</span> Sensor Tower</div>
+      <div class="src-desc">App Store & Play Store intelligence: download estimates, revenue, rankings, keyword data cho 5M+ apps trên toàn cầu.</div>
+      <div class="src-freq">Crawl frequency: daily · Delay: ~48h</div>
+    </div>
+    <div class="src-card">
+      <div class="src-name"><span>&#128202;</span> data.ai (App Annie)</div>
+      <div class="src-desc">Market intelligence platform với MAU, engagement metrics, competitive benchmarks và store analytics.</div>
+      <div class="src-freq">Crawl frequency: weekly · Delay: 72h</div>
+    </div>
+    <div class="src-card">
+      <div class="src-name"><span>&#128269;</span> Apptopia</div>
+      <div class="src-desc">Independent app analytics với revenue estimates, SDK usage data và demographic breakdown.</div>
+      <div class="src-freq">Crawl frequency: weekly · Delay: 48h</div>
+    </div>
+    <div class="src-card">
+      <div class="src-name"><span>&#128640;</span> Product Hunt</div>
+      <div class="src-desc">Daily new product launches với upvotes, comments và maker discussions — leading indicator cho viral growth.</div>
+      <div class="src-freq">Crawl frequency: daily · Real-time</div>
+    </div>
+    <div class="src-card">
+      <div class="src-name"><span>&#127381;</span> App Store & Play Store</div>
+      <div class="src-desc">Official ranking charts, editorial features, Review RSS feeds và keyword trending data.</div>
+      <div class="src-freq">Crawl frequency: 6h · Delay: 6h</div>
+    </div>
+    <div class="src-card">
+      <div class="src-name"><span>&#128172;</span> Reddit & X/Twitter</div>
+      <div class="src-desc">r/apps, r/androidapps, r/iosgaming và X trending keywords — social proof & organic buzz signal.</div>
+      <div class="src-freq">Crawl frequency: 12h · Near real-time</div>
+    </div>
+  </div>
+</section>
+
+<hr class="dv">
+
+<!-- Methodology -->
+<section class="wrap" style="padding-bottom:20px">
+  <div class="sec-head">
+    <h2 class="sec-title">Methodology</h2>
+  </div>
+  <p class="sec-lead">Trending Score = weighted composite của 4 signals. Opportunity Score = độ dễ để indie dev build alternative.</p>
+  <div class="method-grid">
+    <div class="method-card">
+      <div class="method-num">40%</div>
+      <div class="method-label">Download Velocity</div>
+      <div class="method-sub">Week-over-week growth in new installs từ Sensor Tower & data.ai</div>
+    </div>
+    <div class="method-card">
+      <div class="method-num">25%</div>
+      <div class="method-label">Social Mentions</div>
+      <div class="method-sub">Spike in Reddit posts, X/Twitter impressions, TikTok hashtag views</div>
+    </div>
+    <div class="method-card">
+      <div class="method-num">20%</div>
+      <div class="method-label">Review Sentiment</div>
+      <div class="method-sub">Positive review velocity + rating delta trong 7 ngày gần nhất</div>
+    </div>
+    <div class="method-card">
+      <div class="method-num">15%</div>
+      <div class="method-label">Media Coverage</div>
+      <div class="method-sub">Press mentions từ TechCrunch, The Verge, Product Hunt features</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="footer-brand">AppScan by <em>Tien Research</em></div>
+      <div class="footer-meta">
+        Week #24 · Jun 16–22, 2026<br/>
+        Data for research purposes only. Not financial advice.
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleCard(headEl) {
+    const card = headEl.closest('.app-card');
+    const body = card.querySelector('.app-body');
+    const isOpen = card.classList.contains('expanded');
+    // Close all others
+    document.querySelectorAll('.app-card.expanded').forEach(c => {
+      c.classList.remove('expanded');
+      c.querySelector('.app-body').classList.remove('open');
+    });
+    if (!isOpen) {
+      card.classList.add('expanded');
+      body.classList.add('open');
+    }
+  }
+
+  function filterCat(btn) {
+    const cat = btn.dataset.cat;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cards = document.querySelectorAll('.app-card');
+    let visible = 0;
+    cards.forEach(card => {
+      const cardCat = card.dataset.cat || '';
+      if (cat === 'all' || cardCat.includes(cat)) {
+        card.style.display = '';
+        visible++;
+      } else {
+        card.style.display = 'none';
+        card.classList.remove('expanded');
+        const body = card.querySelector('.app-body');
+        if (body) body.classList.remove('open');
+      }
+    });
+    document.getElementById('result-count').textContent = 'Showing ' + visible + ' app' + (visible !== 1 ? 's' : '');
+  }
+
+  function sortApps(key, btn) {
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const list = document.getElementById('app-list');
+    const cards = Array.from(list.querySelectorAll('.app-card'));
+    cards.sort((a, b) => {
+      const aVal = parseFloat(a.dataset[key]) || 0;
+      const bVal = parseFloat(b.dataset[key]) || 0;
+      return bVal - aVal;
+    });
+    cards.forEach((c, i) => {
+      list.appendChild(c);
+      // update rank display
+      const rankEl = c.querySelector('.app-rank');
+      const newRank = i + 1;
+      if (rankEl) {
+        rankEl.className = 'app-rank' + (newRank === 1 ? ' gold' : newRank <= 3 ? ' silver' : newRank <= 6 ? ' bronze' : '');
+        rankEl.textContent = '#' + newRank;
+      }
+    });
+  }
+
+  // Auto-expand first card
+  document.addEventListener('DOMContentLoaded', () => {
+    const first = document.querySelector('.app-card');
+    if (first) {
+      first.classList.add('expanded');
+      first.querySelector('.app-body').classList.add('open');
+    }
+    document.getElementById('last-update').style.display = 'flex';
+  });
+</script>
+</body>
+</html>

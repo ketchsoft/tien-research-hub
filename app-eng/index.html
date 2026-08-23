@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WordJail – English Learning App Mockup</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f0f13;
+    --surface: #1a1a24;
+    --surface2: #22222f;
+    --accent: #7c5cfc;
+    --accent2: #a78bfa;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --text: #f1f0ff;
+    --muted: #7c7a96;
+    --border: #2e2d42;
+  }
+
+  body {
+    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── Top bar ── */
+  .topbar {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 12px;
+  }
+  .topbar .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+  .topbar .logo span { color: var(--accent2); }
+  .topbar .badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .prd-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: opacity .2s;
+  }
+  .prd-btn:hover { opacity: .85; }
+
+  /* ── Flow nav ── */
+  .flow-nav {
+    display: flex;
+    gap: 6px;
+    padding: 12px 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 900px;
+  }
+  .flow-tab {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .flow-tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+  .flow-tab:hover:not(.active) { border-color: var(--accent2); color: var(--text); }
+
+  /* ── Phone frame ── */
+  .stage {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    padding: 16px 24px 40px;
+    max-width: 900px;
+    width: 100%;
+  }
+  .phone-wrap { flex-shrink: 0; }
+  .phone {
+    width: 320px;
+    height: 640px;
+    background: #000;
+    border-radius: 44px;
+    border: 6px solid #2a2a3a;
+    box-shadow: 0 0 0 1px #111, 0 32px 80px rgba(0,0,0,.6), inset 0 0 0 1px #333;
+    position: relative;
+    overflow: hidden;
+  }
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100px; height: 28px;
+    background: #000;
+    border-radius: 0 0 18px 18px;
+    z-index: 100;
+  }
+
+  /* ── Screens container ── */
+  .screens { position: absolute; inset: 0; overflow: hidden; }
+  .screen {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .35s ease;
+    overflow: hidden;
+  }
+  .screen.active { opacity: 1; pointer-events: all; }
+
+  /* ── Screen: Home ── */
+  .s-home {
+    background: linear-gradient(160deg, #0f0f18 0%, #1a1030 100%);
+    display: flex;
+    flex-direction: column;
+    padding: 44px 20px 20px;
+    gap: 14px;
+  }
+  .home-header { display: flex; justify-content: space-between; align-items: center; }
+  .home-greeting { font-size: 13px; color: var(--muted); }
+  .home-name { font-size: 18px; font-weight: 700; }
+  .streak-chip {
+    background: linear-gradient(135deg, #ff6b35, #f7c948);
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .word-card {
+    background: linear-gradient(135deg, #4c1d95, #6d28d9, #7c3aed);
+    border-radius: 20px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .word-card::after {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 100px; height: 100px;
+    background: rgba(255,255,255,.06);
+    border-radius: 50%;
+  }
+  .word-label { font-size: 11px; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .word-main { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+  .word-type { font-size: 11px; color: rgba(255,255,255,.5); margin: 2px 0; }
+  .word-phonetic { font-size: 13px; color: rgba(255,255,255,.7); margin: 4px 0; }
+  .word-def { font-size: 13px; color: rgba(255,255,255,.85); line-height: 1.5; margin-top: 8px; }
+  .word-example { font-size: 11px; color: rgba(255,255,255,.55); font-style: italic; margin-top: 6px; line-height: 1.4; }
+  .stats-row { display: flex; gap: 10px; }
+  .stat-box {
+    flex: 1;
+    background: var(--surface2);
+    border-radius: 14px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .stat-num { font-size: 20px; font-weight: 800; color: var(--accent2); }
+  .stat-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .action-row { display: flex; gap: 10px; }
+  .action-btn {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 11px;
+    color: var(--muted);
+    transition: all .2s;
+  }
+  .action-btn:hover { border-color: var(--accent); color: var(--text); }
+  .action-btn .icon { font-size: 20px; margin-bottom: 4px; }
+  .progress-section { }
+  .prog-label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .prog-bar { background: var(--surface2); border-radius: 10px; height: 6px; }
+  .prog-fill { background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 10px; height: 100%; transition: width .5s; }
+
+  /* ── Screen: Lock Screen ── */
+  .s-lock {
+    background: linear-gradient(180deg, #0a0814 0%, #1a1040 50%, #0a0814 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 44px 20px 20px;
+  }
+  .lock-time { font-size: 52px; font-weight: 200; text-align: center; margin-top: 20px; }
+  .lock-date { font-size: 13px; color: rgba(255,255,255,.5); text-align: center; margin-bottom: 28px; }
+  .lock-word-card {
+    width: 100%;
+    background: rgba(255,255,255,.08);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 20px;
+    padding: 18px;
+  }
+  .lock-word-header { display: flex; align-items: center; gap: 8px; font-size: 11px; color: rgba(255,255,255,.5); margin-bottom: 10px; }
+  .lock-word-header .dot { width: 6px; height: 6px; background: var(--accent2); border-radius: 50%; }
+  .lock-word-big { font-size: 22px; font-weight: 800; }
+  .lock-phonetic { font-size: 12px; color: rgba(255,255,255,.55); margin: 4px 0; }
+  .lock-def { font-size: 12px; color: rgba(255,255,255,.7); line-height: 1.5; margin-top: 6px; }
+  .lock-tap { font-size: 11px; color: rgba(255,255,255,.4); text-align: center; margin-top: auto; padding-top: 20px; }
+  .lock-actions { display: flex; gap: 10px; width: 100%; margin-top: 14px; }
+  .lock-action {
+    flex: 1;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px;
+    padding: 10px;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255,255,255,.6);
+    cursor: pointer;
+  }
+
+  /* ── Screen: Popup Spell ── */
+  .s-popup {
+    background: rgba(0,0,0,.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 44px 16px 16px;
+  }
+  .popup-card {
+    width: 100%;
+    background: var(--surface);
+    border-radius: 24px;
+    padding: 20px;
+    border: 1px solid var(--border);
+  }
+  .popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .popup-title { font-size: 13px; font-weight: 700; }
+  .popup-close-x { font-size: 18px; color: var(--muted); cursor: default; }
+  .popup-close-x::after { content: '✕'; }
+  .progress-steps { display: flex; gap: 6px; margin-bottom: 16px; }
+  .step-dot { flex: 1; height: 4px; border-radius: 2px; background: var(--surface2); }
+  .step-dot.done { background: var(--success); }
+  .step-dot.active { background: var(--accent); }
+  .popup-word-ref { text-align: center; margin-bottom: 14px; }
+  .popup-word-ref .pw { font-size: 11px; color: var(--muted); }
+  .popup-word-ref .pdef { font-size: 12px; color: var(--text); margin-top: 4px; }
+  .spell-prompt { font-size: 12px; color: var(--muted); text-align: center; margin-bottom: 10px; }
+  .spell-input-row { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .spell-box {
+    width: 28px; height: 34px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    transition: border-color .2s;
+  }
+  .spell-box.filled { border-color: var(--accent); background: rgba(124,92,252,.1); }
+  .spell-box.correct { border-color: var(--success); background: rgba(34,197,94,.1); }
+  .spell-box.wrong { border-color: var(--danger); background: rgba(239,68,68,.1); }
+  .spell-hint { font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 12px; }
+  .fake-keyboard {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .key {
+    background: var(--surface2);
+    border-radius: 6px;
+    padding: 6px 2px;
+    text-align: center;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .key:hover { background: var(--accent); }
+  .key.wide { grid-column: span 2; }
+
+  /* ── Screen: Popup Pronounce ── */
+  .s-pronounce {
+    background: rgba(0,0,0,.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 44px 16px 16px;
+  }
+  .mic-area { display: flex; flex-direction: column; align-items: center; padding: 16px 0; }
+  .mic-ring {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    cursor: pointer;
+    position: relative;
+    transition: transform .2s;
+  }
+  .mic-ring:active { transform: scale(.93); }
+  .mic-ring.recording::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 3px solid var(--accent);
+    animation: pulse-ring 1s infinite;
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+  .mic-instruction { font-size: 12px; color: var(--muted); margin-top: 12px; text-align: center; }
+  .phonetic-display { text-align: center; margin: 12px 0; }
+  .phonetic-big { font-size: 18px; color: var(--accent2); letter-spacing: 1px; }
+  .waveform { display: flex; align-items: center; justify-content: center; gap: 3px; height: 32px; margin: 10px 0; }
+  .wave-bar {
+    width: 4px;
+    background: var(--accent);
+    border-radius: 2px;
+    animation: wave 0.8s ease-in-out infinite alternate;
+  }
+  .wave-bar:nth-child(2) { animation-delay: .1s; }
+  .wave-bar:nth-child(3) { animation-delay: .2s; }
+  .wave-bar:nth-child(4) { animation-delay: .15s; }
+  .wave-bar:nth-child(5) { animation-delay: .05s; }
+  @keyframes wave { from { height: 6px; } to { height: 24px; } }
+
+  /* ── Screen: Popup Quiz ── */
+  .s-quiz {
+    background: rgba(0,0,0,.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 44px 16px 16px;
+  }
+  .quiz-q { font-size: 13px; color: var(--text); text-align: center; margin: 10px 0 14px; line-height: 1.5; }
+  .quiz-word { font-size: 20px; font-weight: 800; color: var(--accent2); text-align: center; margin-bottom: 6px; }
+  .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt {
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 11px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .quiz-opt:hover { border-color: var(--accent); }
+  .quiz-opt.correct { border-color: var(--success); background: rgba(34,197,94,.1); }
+  .quiz-opt.wrong { border-color: var(--danger); background: rgba(239,68,68,.08); }
+  .opt-letter {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .complete-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 14px;
+    padding: 13px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 14px;
+    transition: opacity .2s;
+  }
+  .complete-btn:hover { opacity: .9; }
+  .complete-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* ── Screen: Library ── */
+  .s-library {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    padding: 44px 16px 16px;
+    gap: 12px;
+    overflow-y: auto;
+  }
+  .lib-header { font-size: 16px; font-weight: 800; padding: 0 0 4px; }
+  .lib-tabs { display: flex; gap: 8px; }
+  .lib-tab {
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .lib-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  .pack-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .pack-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .pack-info { flex: 1; min-width: 0; }
+  .pack-name { font-size: 13px; font-weight: 700; }
+  .pack-count { font-size: 11px; color: var(--muted); margin: 2px 0; }
+  .pack-prog-bar { height: 4px; background: var(--surface2); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+  .pack-prog-fill { height: 100%; border-radius: 2px; }
+  .pack-action {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent2);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .import-btn {
+    background: var(--surface2);
+    border: 2px dashed var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s;
+  }
+  .import-btn:hover { border-color: var(--accent); }
+  .import-btn .import-icon { font-size: 24px; margin-bottom: 6px; }
+  .import-btn .import-text { font-size: 12px; color: var(--muted); }
+  .import-btn .import-sub { font-size: 10px; color: var(--border); margin-top: 4px; }
+
+  /* ── Screen: Settings ── */
+  .s-settings {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    padding: 44px 16px 16px;
+    gap: 10px;
+    overflow-y: auto;
+  }
+  .settings-header { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+  .settings-section-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin: 6px 0 4px; }
+  .setting-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 13px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .setting-row + .setting-row { margin-top: 6px; }
+  .setting-label { font-size: 13px; }
+  .setting-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .toggle {
+    width: 44px; height: 26px;
+    background: var(--success);
+    border-radius: 13px;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 21px;
+    width: 20px; height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    transition: left .2s;
+  }
+  .toggle.off { background: var(--surface2); }
+  .toggle.off::after { left: 3px; }
+  .select-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: var(--accent2);
+    cursor: pointer;
+  }
+
+  /* ── Description panel (right side) ── */
+  .desc-panel {
+    flex: 1;
+    min-width: 0;
+  }
+  .desc-screen-name {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .desc-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .desc-features { display: flex; flex-direction: column; gap: 12px; }
+  .feature-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .feature-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .feature-title { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+  .feature-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 16px;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .flow-arrow .arr { color: var(--accent2); font-weight: 700; }
+  .next-screen-btn {
+    margin-top: 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 11px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent2);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all .2s;
+  }
+  .next-screen-btn:hover { border-color: var(--accent2); background: var(--surface); }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    padding: 16px 24px 32px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 700px) {
+    .stage { flex-direction: column; align-items: center; }
+    .desc-panel { width: 100%; max-width: 320px; }
+    .flow-nav { padding: 8px 16px; }
+  }
+
+  /* ── Spinner for quiz complete ── */
+  .success-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s;
+  }
+  .success-overlay.show { opacity: 1; pointer-events: all; }
+  .success-circle {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--success), #16a34a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    animation: pop .4s ease;
+  }
+  @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+  .success-msg { font-size: 16px; font-weight: 800; }
+  .success-sub { font-size: 12px; color: var(--muted); text-align: center; }
+  .xp-pill {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 14px;
+    font-weight: 800;
+  }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="logo">Word<span>Jail</span></div>
+  <div class="badge">English Learning App</div>
+  <button class="prd-btn" onclick="downloadPRD()">⬇ Download PRD.md</button>
+</div>
+
+<!-- Flow navigation tabs -->
+<div class="flow-nav">
+  <button class="flow-tab active" onclick="goScreen(0, this)">🏠 Home</button>
+  <button class="flow-tab" onclick="goScreen(1, this)">🔒 Lock Screen</button>
+  <button class="flow-tab" onclick="goScreen(2, this)">✍️ Spell (1/3)</button>
+  <button class="flow-tab" onclick="goScreen(3, this)">🎤 Pronounce (2/3)</button>
+  <button class="flow-tab" onclick="goScreen(4, this)">❓ Quiz (3/3)</button>
+  <button class="flow-tab" onclick="goScreen(5, this)">📚 Library</button>
+  <button class="flow-tab" onclick="goScreen(6, this)">⚙️ Settings</button>
+</div>
+
+<!-- Stage: phone + description -->
+<div class="stage">
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="screens">
+
+        <!-- SCREEN 0: Home -->
+        <div class="screen s-home active" id="screen-0">
+          <div class="home-header">
+            <div>
+              <div class="home-greeting">Chào buổi sáng 👋</div>
+              <div class="home-name">Hanh</div>
+            </div>
+            <div class="streak-chip">🔥 14</div>
+          </div>
+          <div class="word-card">
+            <div class="word-label">📖 Word of the Day</div>
+            <div class="word-main">EPHEMERAL</div>
+            <div class="word-type">adjective · /ɪˈfem.ər.əl/</div>
+            <div class="word-def">Tồn tại trong thời gian rất ngắn; thoáng qua</div>
+            <div class="word-example">"The beauty of cherry blossoms is ephemeral."</div>
+          </div>
+          <div class="stats-row">
+            <div class="stat-box">
+              <div class="stat-num">247</div>
+              <div class="stat-lbl">Từ đã học</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-num">87%</div>
+              <div class="stat-lbl">Quiz accuracy</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-num">3/5</div>
+              <div class="stat-lbl">Hôm nay</div>
+            </div>
+          </div>
+          <div class="progress-section">
+            <div class="prog-label">TOEIC 700 · 247/700 từ</div>
+            <div class="prog-bar"><div class="prog-fill" style="width:35%"></div></div>
+          </div>
+          <div class="action-row">
+            <div class="action-btn"><div class="icon">📚</div>Thư viện</div>
+            <div class="action-btn"><div class="icon">📊</div>Thống kê</div>
+            <div class="action-btn"><div class="icon">⚙️</div>Cài đặt</div>
+          </div>
+        </div>
+
+        <!-- SCREEN 1: Lock Screen -->
+        <div class="screen s-lock" id="screen-1">
+          <div class="lock-time">10:42</div>
+          <div class="lock-date">Thứ Năm, 22 tháng 5</div>
+          <div class="lock-word-card">
+            <div class="lock-word-header">
+              <div class="dot"></div>
+              WordJail · Từ vựng
+            </div>
+            <div class="lock-word-big">EPHEMERAL</div>
+            <div class="lock-phonetic">/ɪˈfem.ər.əl/ · adj</div>
+            <div class="lock-def">Tồn tại trong thời gian rất ngắn; thoáng qua</div>
+            <div class="lock-actions">
+              <div class="lock-action">🔊 Nghe</div>
+              <div class="lock-action">✍️ Luyện tập</div>
+            </div>
+          </div>
+          <div class="lock-tap">Chạm để mở khoá · Vuốt lên để luyện tập</div>
+        </div>
+
+        <!-- SCREEN 2: Popup - Spell -->
+        <div class="screen s-popup" id="screen-2">
+          <div class="popup-card">
+            <div class="popup-header">
+              <div class="popup-title">⚡ Luyện tập ngay</div>
+              <div class="popup-close-x" title="Không thể bỏ qua!"></div>
+            </div>
+            <div class="progress-steps">
+              <div class="step-dot active"></div>
+              <div class="step-dot"></div>
+              <div class="step-dot"></div>
+            </div>
+            <div class="popup-word-ref">
+              <div class="pw">EPHEMERAL · adj</div>
+              <div class="pdef">Tồn tại trong thời gian rất ngắn</div>
+            </div>
+            <div class="spell-prompt">Gõ lại từ này:</div>
+            <div class="spell-input-row" id="spell-boxes">
+              <div class="spell-box" data-i="0"></div>
+              <div class="spell-box" data-i="1"></div>
+              <div class="spell-box" data-i="2"></div>
+              <div class="spell-box" data-i="3"></div>
+              <div class="spell-box" data-i="4"></div>
+              <div class="spell-box" data-i="5"></div>
+              <div class="spell-box" data-i="6"></div>
+              <div class="spell-box" data-i="7"></div>
+              <div class="spell-box" data-i="8"></div>
+            </div>
+            <div class="spell-hint" id="spell-hint">Nhấn vào chữ cái bên dưới ↓</div>
+            <div class="fake-keyboard" id="fake-kb"></div>
+          </div>
+        </div>
+
+        <!-- SCREEN 3: Popup - Pronounce -->
+        <div class="screen s-pronounce" id="screen-3">
+          <div class="popup-card">
+            <div class="popup-header">
+              <div class="popup-title">⚡ Luyện tập ngay</div>
+              <div class="popup-close-x"></div>
+            </div>
+            <div class="progress-steps">
+              <div class="step-dot done"></div>
+              <div class="step-dot active"></div>
+              <div class="step-dot"></div>
+            </div>
+            <div class="popup-word-ref">
+              <div class="pw">EPHEMERAL</div>
+            </div>
+            <div class="phonetic-display">
+              <div class="phonetic-big">/ɪˈfem.ər.əl/</div>
+            </div>
+            <div class="mic-area">
+              <div class="mic-ring" id="mic-btn" onclick="toggleMic()">🎤</div>
+              <div class="mic-instruction" id="mic-instr">Nhấn giữ để phát âm</div>
+            </div>
+            <div class="waveform" id="waveform" style="display:none">
+              <div class="wave-bar" style="height:8px"></div>
+              <div class="wave-bar" style="height:16px"></div>
+              <div class="wave-bar" style="height:22px"></div>
+              <div class="wave-bar" style="height:14px"></div>
+              <div class="wave-bar" style="height:10px"></div>
+            </div>
+            <div style="font-size:11px;color:var(--muted);text-align:center;margin:8px 0">hoặc</div>
+            <button class="complete-btn" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:12px;padding:10px" onclick="goScreen(4, document.querySelectorAll('.flow-tab')[4])">Bỏ qua lần này (giới hạn 3 lần/ngày)</button>
+            <button class="complete-btn" onclick="goScreen(4, document.querySelectorAll('.flow-tab')[4])" id="pronounce-done" style="margin-top:8px" disabled>Tiếp theo →</button>
+          </div>
+        </div>
+
+        <!-- SCREEN 4: Popup - Quiz -->
+        <div class="screen s-quiz" id="screen-4">
+          <div class="popup-card" style="position:relative">
+            <div class="popup-header">
+              <div class="popup-title">⚡ Luyện tập ngay</div>
+              <div class="popup-close-x"></div>
+            </div>
+            <div class="progress-steps">
+              <div class="step-dot done"></div>
+              <div class="step-dot done"></div>
+              <div class="step-dot active"></div>
+            </div>
+            <div class="quiz-word">EPHEMERAL</div>
+            <div class="quiz-q">Chọn nghĩa đúng của từ trên:</div>
+            <div class="quiz-opts">
+              <div class="quiz-opt" onclick="answerQuiz(this, false)">
+                <div class="opt-letter">A</div> Vĩnh cửu, bất diệt
+              </div>
+              <div class="quiz-opt" onclick="answerQuiz(this, true)">
+                <div class="opt-letter">B</div> Tồn tại trong thời gian ngắn
+              </div>
+              <div class="quiz-opt" onclick="answerQuiz(this, false)">
+                <div class="opt-letter">C</div> Khổng lồ, to lớn
+              </div>
+              <div class="quiz-opt" onclick="answerQuiz(this, false)">
+                <div class="opt-letter">D</div> Bí ẩn, khó hiểu
+              </div>
+            </div>
+            <button class="complete-btn" id="quiz-done-btn" disabled onclick="showSuccess()">Hoàn thành 🎉</button>
+
+            <!-- Success overlay -->
+            <div class="success-overlay" id="success-overlay">
+              <div class="success-circle">✓</div>
+              <div class="success-msg">Xuất sắc!</div>
+              <div class="xp-pill">+15 XP</div>
+              <div class="success-sub">Streak 14 ngày!<br>Popup tiếp theo sau 2 giờ</div>
+              <button class="complete-btn" style="width:auto;padding:11px 24px;margin:0" onclick="goScreen(0, document.querySelectorAll('.flow-tab')[0])">← Về Home</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCREEN 5: Library -->
+        <div class="screen s-library" id="screen-5">
+          <div class="lib-header">📚 Thư viện từ vựng</div>
+          <div class="lib-tabs">
+            <div class="lib-tab active">Đã cài</div>
+            <div class="lib-tab">Khám phá</div>
+            <div class="lib-tab">Import</div>
+          </div>
+          <div class="pack-card">
+            <div class="pack-icon" style="background:#1e1060">🏆</div>
+            <div class="pack-info">
+              <div class="pack-name">TOEIC 700</div>
+              <div class="pack-count">247 / 700 từ đã học</div>
+              <div class="pack-prog-bar"><div class="pack-prog-fill" style="width:35%;background:#7c5cfc"></div></div>
+            </div>
+            <div class="pack-action">Đang học</div>
+          </div>
+          <div class="pack-card">
+            <div class="pack-icon" style="background:#0c2f1e">🎓</div>
+            <div class="pack-info">
+              <div class="pack-name">IELTS Academic</div>
+              <div class="pack-count">0 / 3000 từ đã học</div>
+              <div class="pack-prog-bar"><div class="pack-prog-fill" style="width:0%;background:#22c55e"></div></div>
+            </div>
+            <div class="pack-action" style="color:var(--success)">Bắt đầu</div>
+          </div>
+          <div class="pack-card">
+            <div class="pack-icon" style="background:#2d1b0e">🤙</div>
+            <div class="pack-info">
+              <div class="pack-name">Slang & Idioms</div>
+              <div class="pack-count">64 / 200 từ đã học</div>
+              <div class="pack-prog-bar"><div class="pack-prog-fill" style="width:32%;background:#f59e0b"></div></div>
+            </div>
+            <div class="pack-action">Đang học</div>
+          </div>
+          <div class="pack-card">
+            <div class="pack-icon" style="background:#0f1f2d">💼</div>
+            <div class="pack-info">
+              <div class="pack-name">Business English</div>
+              <div class="pack-count">0 / 500 từ đã học</div>
+              <div class="pack-prog-bar"><div class="pack-prog-fill" style="width:0%;background:#38bdf8"></div></div>
+            </div>
+            <div class="pack-action" style="color:var(--muted)">Chưa cài</div>
+          </div>
+          <div class="import-btn">
+            <div class="import-icon">📥</div>
+            <div class="import-text">Import từ vựng của bạn</div>
+            <div class="import-sub">Hỗ trợ CSV, Anki (.apkg), JSON</div>
+          </div>
+        </div>
+
+        <!-- SCREEN 6: Settings -->
+        <div class="screen s-settings" id="screen-6">
+          <div class="settings-header">⚙️ Cài đặt</div>
+
+          <div class="settings-section-label">Thông báo</div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Popup nhắc nhở</div>
+              <div class="setting-sub">Bắt buộc hoàn thành trước khi tắt</div>
+            </div>
+            <div class="toggle" onclick="this.classList.toggle('off')"></div>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Tần suất</div>
+              <div class="setting-sub">Popup xuất hiện mỗi...</div>
+            </div>
+            <div class="select-chip">Mỗi 2h</div>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Giờ nghỉ ngơi</div>
+              <div class="setting-sub">Không popup trong khoảng này</div>
+            </div>
+            <div class="select-chip">22:00 – 7:00</div>
+          </div>
+
+          <div class="settings-section-label">Widget màn hình khoá</div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Hiển thị từ vựng</div>
+              <div class="setting-sub">Hiển thị word of the day</div>
+            </div>
+            <div class="toggle" onclick="this.classList.toggle('off')"></div>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Hiển thị phiên âm</div>
+              <div class="setting-sub">Kèm /phonetic/</div>
+            </div>
+            <div class="toggle off" onclick="this.classList.toggle('off')"></div>
+          </div>
+
+          <div class="settings-section-label">Học tập</div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Độ khó</div>
+              <div class="setting-sub">Spaced repetition algorithm</div>
+            </div>
+            <div class="select-chip">Trung bình</div>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Nhận diện giọng nói</div>
+              <div class="setting-sub">Dùng micro để chấm phát âm</div>
+            </div>
+            <div class="toggle" onclick="this.classList.toggle('off')"></div>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Bỏ qua phát âm</div>
+              <div class="setting-sub">Cho phép skip tối đa 3 lần/ngày</div>
+            </div>
+            <div class="toggle" onclick="this.classList.toggle('off')"></div>
+          </div>
+        </div>
+
+      </div><!-- /screens -->
+
+      <!-- success overlay is inside popup-card for screen-4 -->
+    </div><!-- /phone -->
+  </div><!-- /phone-wrap -->
+
+  <!-- Description panel -->
+  <div class="desc-panel" id="desc-panel">
+    <!-- Filled by JS -->
+  </div>
+</div><!-- /stage -->
+
+<div class="footer">WordJail · Mockup v1.0 · Firebase: streak-habit-mvp · /app-eng</div>
+
+<script>
+// ── Screen data ──
+const screens = [
+  {
+    name: "🏠 Home",
+    subtitle: "Dashboard chính hiển thị từ hôm nay, streak ngày liên tiếp, và tiến độ học tập theo từng gói từ vựng.",
+    features: [
+      { icon: "📖", title: "Word of the Day", desc: "Hiển thị 1 từ mỗi ngày theo thuật toán Spaced Repetition (SM-2). Từ mới mỗi sáng 7h." },
+      { icon: "🔥", title: "Streak Counter", desc: "Đếm số ngày liên tiếp hoàn thành ít nhất 1 popup. Mất streak nếu bỏ lỡ cả ngày." },
+      { icon: "📊", title: "Stats nhanh", desc: "Tổng từ đã học, độ chính xác quiz, số popup đã xử lý hôm nay." },
+      { icon: "📚", title: "Progress bar", desc: "Tiến độ của gói từ vựng đang học chính (active pack)." },
+    ],
+    next: { label: "Xem Lock Screen →", idx: 1 }
+  },
+  {
+    name: "🔒 Lock Screen",
+    subtitle: "Widget hiển thị trên màn hình khoá. User thấy từ mới mọi lúc, không cần mở app.",
+    features: [
+      { icon: "🕐", title: "Passive Learning", desc: "Từ hiển thị tự nhiên khi user nhìn vào màn hình khoá. Tạo repetition không có effort." },
+      { icon: "🔊", title: "Nút nghe phát âm", desc: "Tap để nghe audio phát âm chuẩn mà không cần unlock." },
+      { icon: "✍️", title: "Shortcut luyện tập", desc: "Tap 'Luyện tập' mở thẳng vào popup 3 bước mà không cần unlock." },
+      { icon: "📱", title: "Platform notes", desc: "iOS: WidgetKit (iOS 16+), Live Activities. Android: Full flexibility với custom lock screen overlay." },
+    ],
+    next: { label: "Xem Popup Spell →", idx: 2 }
+  },
+  {
+    name: "✍️ Bước 1/3 – Đánh vần",
+    subtitle: "Popup xuất hiện định kỳ. User PHẢI hoàn thành để tiếp tục dùng điện thoại bình thường.",
+    features: [
+      { icon: "🚫", title: "Không thể tắt", desc: "Nút X bị disable. Chỉ có thể dismiss bằng cách hoàn thành đúng." },
+      { icon: "⌨️", title: "Gõ lại từ", desc: "User gõ từng chữ cái. Rung nếu sai, highlight xanh nếu đúng." },
+      { icon: "💡", title: "Gợi ý thông minh", desc: "Sau 2 lần sai liên tiếp → hiện gợi ý chữ cái đầu tiên." },
+      { icon: "⏱️", title: "Timed bonus", desc: "Hoàn thành trong 30s → +5 XP bonus. Tạo động lực làm nhanh." },
+    ],
+    next: { label: "Xem Pronounce →", idx: 3 }
+  },
+  {
+    name: "🎤 Bước 2/3 – Phát âm",
+    subtitle: "Dùng speech recognition để chấm phát âm. User có thể skip tối đa 3 lần/ngày.",
+    features: [
+      { icon: "🎙️", title: "Speech Recognition", desc: "So sánh giọng nói với phonetic chuẩn. Accept nếu >= 70% similarity." },
+      { icon: "🌊", title: "Visual feedback", desc: "Waveform animation khi đang ghi âm. Kết quả hiện ngay sau khi thả nút." },
+      { icon: "🔁", title: "Retry không giới hạn", desc: "User thử lại nhiều lần. Không bị phạt nếu sai, chỉ cần đạt ngưỡng." },
+      { icon: "⏭️", title: "Skip có giới hạn", desc: "Bỏ qua tối đa 3 lần/ngày. Hết skip → bắt buộc phải phát âm." },
+    ],
+    next: { label: "Xem Quiz →", idx: 4 }
+  },
+  {
+    name: "❓ Bước 3/3 – Quiz",
+    subtitle: "Multiple choice 4 đáp án. Chọn sai → đổi màu đỏ và lock lựa chọn đó, thử lại.",
+    features: [
+      { icon: "✅", title: "Immediate feedback", desc: "Tap → ngay lập tức highlight đúng/sai. Không cần bấm Submit riêng." },
+      { icon: "🔒", title: "Wrong answer lock", desc: "Đáp án sai bị lock (mờ đi). User thử tiếp với 3 đáp án còn lại." },
+      { icon: "🎉", title: "Completion reward", desc: "Hoàn thành cả 3 bước → animation, +XP, thông báo streak." },
+      { icon: "⏰", title: "Cooldown reset", desc: "Popup tiếp theo được lên lịch sau N giờ (user tự cài)." },
+    ],
+    next: { label: "Xem Library →", idx: 5 }
+  },
+  {
+    name: "📚 Thư viện",
+    subtitle: "Quản lý gói từ vựng built-in và import từ nguồn ngoài.",
+    features: [
+      { icon: "🏆", title: "TOEIC 700", desc: "700 từ hay gặp nhất trong đề thi TOEIC. Phân theo topic: Business, HR, Finance, Logistics..." },
+      { icon: "🎓", title: "IELTS Academic 3000", desc: "Oxford Academic Word List + IELTS band 6.5-8.0 vocabulary." },
+      { icon: "🤙", title: "Slang & Idioms", desc: "200 cụm slang & idiom thông dụng trong phim, podcast Mỹ/Anh." },
+      { icon: "📥", title: "Import custom", desc: "Upload CSV (word, def, example, phonetic), Anki .apkg, hoặc JSON. Share pack giữa friends." },
+    ],
+    next: { label: "Xem Settings →", idx: 6 }
+  },
+  {
+    name: "⚙️ Settings",
+    subtitle: "Cấu hình tần suất popup, giờ nghỉ ngơi, và các tuỳ chọn học tập.",
+    features: [
+      { icon: "⏰", title: "Popup frequency", desc: "Tần suất: 1h, 2h, 4h, hoặc custom. Giờ nghỉ ngơi tránh popup lúc ngủ." },
+      { icon: "🔒", title: "Lock screen widget", desc: "Bật/tắt widget, chọn hiện phiên âm, nghĩa, ví dụ." },
+      { icon: "🧠", title: "Spaced Repetition", desc: "SM-2 algorithm: từ khó → xuất hiện lại sớm hơn. Từ dễ → giãn khoảng cách." },
+      { icon: "🎤", title: "Voice settings", desc: "Bật/tắt mic, cài ngưỡng accuracy, số lần skip phát âm mỗi ngày." },
+    ],
+    next: { label: "← Về Home", idx: 0 }
+  },
+];
+
+let currentScreen = 0;
+
+function goScreen(idx, tabEl) {
+  document.querySelectorAll('.screen').forEach((s,i) => {
+    s.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.flow-tab').forEach(t => t.classList.remove('active'));
+  if (tabEl) tabEl.classList.add('active');
+  currentScreen = idx;
+  renderDesc(idx);
+
+  // Reset quiz state when revisiting
+  if (idx === 4) resetQuiz();
+  if (idx === 2) resetSpell();
+  if (idx === 3) resetMic();
+}
+
+function renderDesc(idx) {
+  const s = screens[idx];
+  const panel = document.getElementById('desc-panel');
+  panel.innerHTML = `
+    <div class="desc-screen-name">${s.name}</div>
+    <div class="desc-subtitle">${s.subtitle}</div>
+    <div class="desc-features">
+      ${s.features.map(f => `
+        <div class="feature-item">
+          <div class="feature-icon">${f.icon}</div>
+          <div>
+            <div class="feature-title">${f.title}</div>
+            <div class="feature-desc">${f.desc}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    ${s.next ? `<button class="next-screen-btn" onclick="goScreen(${s.next.idx}, document.querySelectorAll('.flow-tab')[${s.next.idx}])">
+      ${s.next.label}
+    </button>` : ''}
+  `;
+}
+
+// ── Spell logic ──
+const TARGET = 'EPHEMERAL';
+let spellIdx = 0;
+
+function buildKeyboard() {
+  const keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const kb = document.getElementById('fake-kb');
+  if (!kb) return;
+  kb.innerHTML = keys.map(k =>
+    `<div class="key" onclick="typeKey('${k}')">${k}</div>`
+  ).join('') + `<div class="key wide" onclick="backspace()">⌫</div>`;
+}
+
+function typeKey(k) {
+  if (spellIdx >= TARGET.length) return;
+  const boxes = document.querySelectorAll('#spell-boxes .spell-box');
+  const expected = TARGET[spellIdx];
+  boxes[spellIdx].textContent = k;
+  if (k === expected) {
+    boxes[spellIdx].classList.add('correct');
+  } else {
+    boxes[spellIdx].classList.add('wrong');
+    document.getElementById('spell-hint').textContent = '❌ Thử lại!';
+    setTimeout(() => {
+      boxes[spellIdx].textContent = '';
+      boxes[spellIdx].classList.remove('wrong');
+      document.getElementById('spell-hint').textContent = 'Nhấn vào chữ cái bên dưới ↓';
+    }, 600);
+    return;
+  }
+  boxes[spellIdx].classList.add('filled');
+  spellIdx++;
+  if (spellIdx === TARGET.length) {
+    document.getElementById('spell-hint').textContent = '✅ Chính xác! +10 XP';
+    setTimeout(() => goScreen(3, document.querySelectorAll('.flow-tab')[3]), 900);
+  }
+}
+
+function backspace() {
+  if (spellIdx <= 0) return;
+  spellIdx--;
+  const boxes = document.querySelectorAll('#spell-boxes .spell-box');
+  boxes[spellIdx].textContent = '';
+  boxes[spellIdx].classList.remove('correct', 'filled', 'wrong');
+}
+
+function resetSpell() {
+  spellIdx = 0;
+  const boxes = document.querySelectorAll('#spell-boxes .spell-box');
+  boxes.forEach(b => { b.textContent=''; b.classList.remove('correct','filled','wrong'); });
+  const hint = document.getElementById('spell-hint');
+  if (hint) hint.textContent = 'Nhấn vào chữ cái bên dưới ↓';
+  buildKeyboard();
+}
+
+// ── Mic logic ──
+let micActive = false, micTimer = null;
+
+function toggleMic() {
+  const btn = document.getElementById('mic-btn');
+  const wf = document.getElementById('waveform');
+  const instr = document.getElementById('mic-instr');
+  const doneBtn = document.getElementById('pronounce-done');
+  if (!micActive) {
+    micActive = true;
+    btn.classList.add('recording');
+    wf.style.display = 'flex';
+    instr.textContent = 'Đang ghi âm...';
+    micTimer = setTimeout(() => {
+      micActive = false;
+      btn.classList.remove('recording');
+      wf.style.display = 'none';
+      instr.textContent = '✅ Phát âm tốt! (87% match)';
+      doneBtn.disabled = false;
+    }, 2200);
+  } else {
+    clearTimeout(micTimer);
+    micActive = false;
+    btn.classList.remove('recording');
+    wf.style.display = 'none';
+    instr.textContent = 'Nhấn giữ để phát âm';
+  }
+}
+
+function resetMic() {
+  const btn = document.getElementById('mic-btn');
+  const wf = document.getElementById('waveform');
+  const instr = document.getElementById('mic-instr');
+  const doneBtn = document.getElementById('pronounce-done');
+  if (!btn) return;
+  micActive = false;
+  if (micTimer) clearTimeout(micTimer);
+  btn.classList.remove('recording');
+  if (wf) wf.style.display = 'none';
+  if (instr) instr.textContent = 'Nhấn giữ để phát âm';
+  if (doneBtn) doneBtn.disabled = true;
+}
+
+// ── Quiz logic ──
+function answerQuiz(el, correct) {
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach(o => o.style.pointerEvents = 'none');
+  if (correct) {
+    el.classList.add('correct');
+    document.getElementById('quiz-done-btn').disabled = false;
+  } else {
+    el.classList.add('wrong');
+    opts.forEach(o => o.style.pointerEvents = o === el ? 'none' : 'auto');
+  }
+}
+
+function showSuccess() {
+  document.getElementById('success-overlay').classList.add('show');
+}
+
+function resetQuiz() {
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach(o => { o.classList.remove('correct','wrong'); o.style.pointerEvents='auto'; });
+  const btn = document.getElementById('quiz-done-btn');
+  if (btn) btn.disabled = true;
+  const overlay = document.getElementById('success-overlay');
+  if (overlay) overlay.classList.remove('show');
+}
+
+// ── PRD download ──
+function downloadPRD() {
+  const content = `# WordJail – Product Requirements Document
+
+**Version:** 1.0
+**Date:** 2026-05-22
+**Author:** Research & Design
+**Status:** Draft
+
+---
+
+## 1. Executive Summary
+
+WordJail là ứng dụng học từ vựng tiếng Anh sử dụng chiến lược "học bằng cách không có lựa chọn".
+Thay vì dựa vào motivation của user, app tạo ra friction có chủ đích: user phải trả lời đúng mới được
+tiếp tục dùng điện thoại bình thường.
+
+**Core insight:** Habit formation works best when the cost of NOT doing is higher than doing.
+
+---
+
+## 2. Problem Statement
+
+- User download app học tiếng Anh → dùng 3 ngày → bỏ.
+- Lý do: thiếu consistency, không có accountability mechanism.
+- Hiện tại: Duolingo dùng streak + notification nhưng dễ bị dismiss.
+- Gap: Không có app nào thực sự "force" user phải học.
+
+---
+
+## 3. Target Users
+
+| Segment | Đặc điểm | Nhu cầu |
+|---|---|---|
+| TOEIC preppers | Đang ôn thi, cần 700+ | Học đúng từ, track progress |
+| IELTS learners | Target band 6.5-7.5 | Academic vocab, consistency |
+| Self-learners | Muốn cải thiện tiếng Anh | Flexible, không boring |
+| Busy professionals | Ít thời gian, nhiều việc | Micro-learning, passive |
+
+---
+
+## 4. Core Features
+
+### 4.1 Lock Screen Widget
+- **iOS:** WidgetKit (iOS 16+), Live Activities
+- **Android:** Custom overlay, Always-on display support
+- Hiển thị: từ vựng, phiên âm, nghĩa ngắn gọn
+- Action: nút nghe audio, nút shortcut luyện tập
+
+### 4.2 Popup System (Force Complete)
+Popup xuất hiện theo lịch (mỗi 1h/2h/4h). User KHÔNG thể dismiss.
+
+**Bước 1 – Spelling**
+- Gõ lại từ vựng bằng bàn phím in-app
+- Sai → rung, highlight đỏ → retry
+- Sau 2 lần sai → hiện gợi ý chữ cái đầu
+- Đúng → chuyển bước 2 tự động
+
+**Bước 2 – Pronunciation**
+- Nhấn giữ mic, đọc to từ vựng
+- Speech recognition so sánh với phonetic chuẩn
+- Accept nếu >= 70% similarity score
+- Skip: tối đa 3 lần/ngày
+
+**Bước 3 – Quiz**
+- Multiple choice 4 đáp án
+- Chọn sai → lock đáp án đó, thử tiếp
+- Chọn đúng → completion animation + XP reward
+
+### 4.3 Vocabulary Library
+Built-in packages:
+- TOEIC 700 (theo topic: Business, HR, Finance, Logistics, Marketing)
+- IELTS Academic 3000 (Oxford Academic Word List + IELTS specific)
+- Slang & Idioms 200 (US/UK informal, phim, podcast)
+- Business English 500 (Email, meeting, presentation)
+- Oxford 5000 (phân cấp A1→C2 theo CEFR)
+
+Import:
+- CSV format: word, definition, example, phonetic, difficulty
+- Anki deck (.apkg)
+- JSON (custom format)
+- Share pack: export JSON → share với friends
+
+### 4.4 Spaced Repetition
+- Algorithm: SM-2 (SuperMemo 2)
+- Mỗi từ có interval (ngày) và easiness factor (EF)
+- Trả lời đúng → interval tăng (ít gặp lại hơn)
+- Trả lời sai → reset interval (gặp lại sớm hơn)
+- Word queue mỗi ngày dựa trên due date
+
+### 4.5 Gamification
+- **Streak:** Chuỗi ngày liên tiếp hoàn thành ít nhất 1 popup
+- **XP:** +10 spelling, +5 pronunciation, +15 quiz đúng lần đầu
+- **Word Debt:** Bỏ lỡ popup → nợ lại, trả trước khi mở tính năng
+- **Boss Mode:** Cuối tuần có mini-test 10 từ từ tuần qua
+- **Combo:** Trả lời nhanh + đúng → XP multiplier
+
+---
+
+## 5. Technical Architecture
+
+### 5.1 Platform
+- **Primary:** Flutter (cross-platform iOS + Android)
+- **Web mockup:** HTML/CSS/JS (prototype hiện tại)
+- **Minimum:** iOS 15+, Android 8+
+
+### 5.2 Tech Stack
+| Layer | Technology |
+|---|---|
+| UI | Flutter + Material 3 |
+| State | Riverpod / Bloc |
+| Local DB | SQLite (drift/isar) |
+| Speech | speech_to_text package |
+| Audio | audioplayers package |
+| Notifications | flutter_local_notifications |
+| Lock Screen (Android) | android_alarm_manager_plus + overlay |
+| Lock Screen (iOS) | WidgetKit via flutter_widgetkit |
+| Analytics | Firebase Analytics |
+| Crash | Firebase Crashlytics |
+
+### 5.3 Data Models
+\`\`\`
+Word {
+  id: UUID
+  term: String
+  phonetic: String
+  partOfSpeech: String
+  definition: String (VI)
+  example: String
+  audioUrl: String
+  packId: UUID
+  difficulty: 1-5
+}
+
+UserWordProgress {
+  wordId: UUID
+  interval: Int (days)
+  easinessFactor: Float
+  repetitions: Int
+  nextReviewDate: DateTime
+  totalCorrect: Int
+  totalAttempts: Int
+}
+
+PopupSession {
+  id: UUID
+  wordId: UUID
+  scheduledAt: DateTime
+  completedAt: DateTime?
+  spellCorrect: Bool
+  pronounceSkipped: Bool
+  quizCorrect: Bool
+  xpEarned: Int
+}
+\`\`\`
+
+---
+
+## 6. UX Principles
+
+1. **Unavoidable friction:** Popup không có nút X thật. User phải hoàn thành.
+2. **Progressive difficulty:** Từ dễ trước, tăng dần theo kết quả quiz.
+3. **Micro moments:** Mỗi popup mất <2 phút. Không chiếm quá nhiều thời gian.
+4. **Transparency:** User biết rõ lịch popup, có thể điều chỉnh.
+5. **Grace period:** Giờ nghỉ ngơi (22h-7h) không có popup.
+
+---
+
+## 7. MVP Scope
+
+### Phase 1 (2-3 tuần)
+- [x] CRUD từ vựng + SQLite
+- [x] Built-in pack TOEIC 700
+- [x] Popup 3 bước (spell + mic simulation + quiz)
+- [x] Local notification scheduler
+- [x] Streak counter
+
+### Phase 2 (2 tuần)
+- [ ] Speech recognition tích hợp thật
+- [ ] Spaced repetition SM-2
+- [ ] Stats & analytics screen
+- [ ] Import CSV
+
+### Phase 3
+- [ ] Lock screen widget (Android trước)
+- [ ] Lock screen widget (iOS WidgetKit)
+- [ ] Import Anki .apkg
+- [ ] Share vocabulary pack
+- [ ] Boss Mode weekend test
+
+---
+
+## 8. Success Metrics
+
+| Metric | Target (Month 1) | Target (Month 3) |
+|---|---|---|
+| D7 Retention | 40% | 55% |
+| Avg popup completion rate | 70% | 85% |
+| Words learned per user/day | 3 | 5 |
+| 7-day streak rate | 30% | 45% |
+| Avg session duration | 90s | 90s |
+
+---
+
+## 9. Risks & Mitigations
+
+| Risk | Likelihood | Mitigation |
+|---|---|---|
+| iOS lock screen restrictions | High | Android-first, iOS widget fallback |
+| User uninstall due to annoyance | Medium | Grace period, cooldown tuning |
+| Speech recognition accuracy | Medium | Allow skip, lower threshold |
+| Vocabulary copyright | Low | Use public domain (Oxford open lists) |
+
+---
+
+## 10. Open Questions
+
+1. Có nên có "gentle mode" cho user không muốn popup quá gắt?
+2. Có nên có subscription model cho built-in packs premium?
+3. Social features: leaderboard với friends?
+4. TTS (text-to-speech) audio tự tạo hay mua audio gốc?
+
+---
+
+*Generated by WordJail Research & Design Team · 2026-05-22*
+`;
+
+  const blob = new Blob([content], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'WordJail-PRD.md';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── Init ──
+renderDesc(0);
+buildKeyboard();
+</script>
+</body>
+</html>
+`;

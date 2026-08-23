@@ -1,0 +1,2344 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>US Market — Who Are We Building For?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:    #0a0a0a;
+      --card:  #111111;
+      --card2: #161616;
+      --bd:    rgba(246,242,233,.08);
+      --bd2:   rgba(246,242,233,.15);
+      --cr:    #f6f2e9;
+      --cr7:   rgba(246,242,233,.7);
+      --cr5:   rgba(246,242,233,.5);
+      --cr3:   rgba(246,242,233,.3);
+      --cr1:   rgba(246,242,233,.06);
+      --g:     #4ade80;
+      --gb:    rgba(74,222,128,.12);
+      --b:     #60a5fa;
+      --bb:    rgba(96,165,250,.12);
+      --o:     #fb923c;
+      --ob:    rgba(251,146,60,.12);
+      --p:     #c084fc;
+      --pb:    rgba(192,132,252,.12);
+      --y:     #facc15;
+      --r:     #f87171;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans:  'Inter', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--cr); font-family: var(--sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+    /* ── Orbs ── */
+    .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(120px); }
+    .orb-1 { width: 700px; height: 700px; top: -200px; left: -200px; background: radial-gradient(circle, rgba(74,222,128,.08), transparent 70%); }
+    .orb-2 { width: 500px; height: 500px; top: 50%; right: -200px; background: radial-gradient(circle, rgba(96,165,250,.07), transparent 70%); }
+    .orb-3 { width: 400px; height: 400px; bottom: 0; left: 25%; background: radial-gradient(circle, rgba(192,132,252,.06), transparent 70%); }
+
+    /* ── Layout ── */
+    .wrap { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Header ── */
+    .hd { border-bottom: 1px solid var(--bd); padding: 15px 0; position: sticky; top: 0; background: rgba(10,10,10,.9); backdrop-filter: blur(16px); z-index: 200; }
+    .hd .wrap { display: flex; align-items: center; justify-content: space-between; }
+    .hd-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--cr); font-family: var(--serif); font-size: 17px; }
+    .hd-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--g); box-shadow: 0 0 8px var(--g); animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.75)} }
+    .hd-meta { font-size: 11px; color: var(--cr3); letter-spacing: .06em; }
+
+    /* ── Hero ── */
+    .hero { padding: 76px 0 56px; text-align: center; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--g); border: 1px solid rgba(74,222,128,.2); border-radius: 100px; padding: 5px 16px; margin-bottom: 28px; }
+    .hero-h1 { font-family: var(--serif); font-size: clamp(2rem, 5.5vw, 3.6rem); font-weight: 400; line-height: 1.12; margin-bottom: 18px; }
+    .hero-h1 em { font-style: italic; color: var(--cr5); }
+    .hero-sub { font-size: 16px; color: var(--cr5); max-width: 540px; margin: 0 auto 40px; line-height: 1.75; }
+
+    /* ── Framework callout ── */
+    .framework { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 72px; flex-wrap: wrap; }
+    .fw-node { background: var(--card); border: 1px solid var(--bd); border-radius: 12px; padding: 14px 20px; text-align: center; min-width: 130px; }
+    .fw-node.active { border-color: rgba(74,222,128,.35); background: rgba(74,222,128,.06); }
+    .fw-icon { font-size: 22px; margin-bottom: 4px; }
+    .fw-label { font-size: 12px; font-weight: 600; color: var(--cr); }
+    .fw-sub { font-size: 10px; color: var(--cr3); margin-top: 2px; }
+    .fw-arrow { font-size: 20px; color: var(--cr3); padding: 0 10px; }
+
+    hr.dv { border: none; border-top: 1px solid var(--bd); margin: 64px 0; }
+
+    .sec-eye { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--cr3); margin-bottom: 10px; }
+    .sec-h2 { font-family: var(--serif); font-size: clamp(1.5rem,4vw,2.2rem); font-weight: 400; line-height: 1.2; margin-bottom: 8px; }
+    .sec-h2 em { font-style: italic; color: var(--cr5); }
+    .sec-lead { font-size: 14px; color: var(--cr5); max-width: 600px; margin-bottom: 32px; line-height: 1.7; }
+
+    /* ── Segment tabs ── */
+    .seg-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+    .seg-tab { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 12px; border: 1px solid var(--bd); background: var(--card); cursor: pointer; font-size: 13px; color: var(--cr5); transition: all .2s; user-select: none; }
+    .seg-tab:hover { border-color: var(--bd2); color: var(--cr); }
+    .seg-tab.active { border-color: rgba(74,222,128,.35); background: rgba(74,222,128,.07); color: var(--cr); }
+    .seg-tab .tab-icon { font-size: 18px; }
+    .seg-tab .tab-label { font-weight: 500; }
+
+    /* ── User detail panel ── */
+    .seg-panel { display: none; }
+    .seg-panel.active { display: block; }
+
+    /* ── Profile card ── */
+    .profile-row { display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: start; background: var(--card); border: 1px solid var(--bd2); border-radius: 20px; padding: 28px; margin-bottom: 12px; }
+    @media(max-width:680px){ .profile-row { grid-template-columns: 1fr; } }
+
+    .profile-avatar { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; flex-shrink: 0; border: 1px solid var(--bd); }
+    .profile-info { flex: 1; }
+    .profile-name { font-family: var(--serif); font-size: 1.4rem; margin-bottom: 4px; }
+    .profile-demo { font-size: 12px; color: var(--cr3); margin-bottom: 10px; letter-spacing: .02em; }
+    .profile-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .ptag { font-size: 11px; padding: 3px 10px; border-radius: 100px; background: var(--cr1); border: 1px solid var(--bd); color: var(--cr5); }
+    .profile-quote { font-family: var(--serif); font-style: italic; font-size: 0.95rem; color: var(--cr5); line-height: 1.6; max-width: 260px; border-left: 2px solid var(--bd2); padding-left: 14px; }
+
+    /* ── Tools they use ── */
+    .tools-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+    .tool-chip { display: flex; align-items: center; gap: 6px; font-size: 12px; padding: 5px 12px; border-radius: 100px; background: var(--card); border: 1px solid var(--bd); color: var(--cr5); text-decoration: none; transition: border-color .15s, color .15s; }
+    .tool-chip:hover { border-color: var(--bd2); color: var(--cr); }
+    .tool-chip-label { font-size: 10px; color: var(--cr3); margin-left: 2px; }
+
+    /* ── Top-down tree ── */
+    .tree { display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+    .tree-node-user { text-align: center; margin-bottom: 0; }
+    .user-bubble { display: inline-flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--bd2); border-radius: 100px; padding: 12px 24px; font-family: var(--serif); font-size: 1.05rem; }
+
+    .tree-connector { display: flex; flex-direction: column; align-items: center; }
+    .tc-line { width: 2px; height: 32px; background: linear-gradient(to bottom, var(--bd2), var(--bd)); }
+    .tc-label { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--cr3); background: var(--bg); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--bd); }
+
+    /* Pain branch level */
+    .pain-branches { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; width: 100%; margin-bottom: 0; }
+
+    .pain-node {
+      background: var(--card2); border: 1px solid rgba(248,113,113,.18);
+      border-radius: 14px; padding: 18px;
+      display: flex; flex-direction: column; gap: 8px;
+      position: relative;
+    }
+    .pain-num { position: absolute; top: -10px; left: 16px; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: rgba(248,113,113,.15); color: var(--r); border: 1px solid rgba(248,113,113,.25); border-radius: 100px; padding: 2px 10px; }
+    .pain-title { font-weight: 600; font-size: 13px; margin-top: 8px; }
+    .pain-story { font-size: 12px; color: var(--cr5); line-height: 1.6; }
+    .pain-quote { font-size: 11px; font-style: italic; color: var(--cr3); border-left: 2px solid rgba(248,113,113,.3); padding-left: 8px; margin-top: 4px; }
+
+    /* Gap level */
+    .gap-node {
+      width: 100%;
+      background: rgba(251,146,60,.05); border: 1px solid rgba(251,146,60,.2);
+      border-radius: 14px; padding: 18px 22px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .gap-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+    .gap-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--o); margin-bottom: 6px; }
+    .gap-desc { font-size: 13px; color: var(--cr5); line-height: 1.65; }
+    .gap-desc strong { color: var(--cr); }
+
+    /* Product match level */
+    .product-match {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(74,222,128,.07) 0%, rgba(96,165,250,.04) 100%);
+      border: 1px solid rgba(74,222,128,.28);
+      border-radius: 16px; padding: 24px;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 20px; align-items: center;
+    }
+    @media(max-width:580px){ .product-match { grid-template-columns: 1fr; } }
+    .pm-left {}
+    .pm-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--g); margin-bottom: 8px; }
+    .pm-name { font-family: var(--serif); font-size: 1.4rem; margin-bottom: 6px; }
+    .pm-why { font-size: 13px; color: var(--cr5); line-height: 1.65; margin-bottom: 14px; }
+    .pm-why strong { color: var(--cr); }
+    .pm-details { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pm-detail { font-size: 11px; padding: 4px 12px; border-radius: 100px; background: var(--cr1); border: 1px solid var(--bd); color: var(--cr5); }
+    .pm-detail.hi { background: rgba(74,222,128,.1); border-color: rgba(74,222,128,.25); color: var(--g); }
+    .pm-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+    .pm-mrr { font-family: var(--serif); font-size: 1.6rem; color: var(--g); white-space: nowrap; }
+    .pm-mrr-sub { font-size: 11px; color: var(--cr3); text-align: right; }
+
+    /* Competitor pills */
+    .comp-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .comp-pill { display: flex; align-items: center; gap: 5px; font-size: 11px; padding: 3px 10px; border-radius: 100px; background: var(--cr1); border: 1px solid var(--bd); color: var(--cr5); text-decoration: none; transition: all .15s; }
+    .comp-pill:hover { border-color: rgba(96,165,250,.3); color: var(--b); background: var(--bb); }
+    .comp-pill .cprice { color: var(--o); font-weight: 600; }
+    .comp-pill .crating { color: var(--y); }
+
+    /* ── BEST PICK section ── */
+    .best-pick-wrap { margin-bottom: 72px; }
+    .best-pick {
+      position: relative; overflow: hidden;
+      background: var(--card); border: 1px solid rgba(74,222,128,.3);
+      border-radius: 24px; padding: 40px;
+    }
+    .best-pick::before {
+      content: ''; position: absolute; inset: 0; border-radius: inherit;
+      background: linear-gradient(135deg, rgba(74,222,128,.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .bp-crown-row { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+    .bp-crown { font-size: 28px; }
+    .bp-eyebrow { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--g); font-weight: 600; }
+    .bp-title { font-family: var(--serif); font-size: clamp(1.6rem,4vw,2.4rem); margin-top: 2px; }
+
+    .bp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 32px; }
+    @media(max-width:700px){ .bp-grid { grid-template-columns: 1fr; } }
+
+    /* Mindmap inside best pick */
+    .mindmap { display: flex; flex-direction: column; gap: 16px; }
+    .mm-title { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--cr3); margin-bottom: 4px; }
+
+    .mm-root-node { display: inline-flex; align-items: center; gap: 10px; background: rgba(74,222,128,.1); border: 1px solid rgba(74,222,128,.3); border-radius: 100px; padding: 10px 20px; font-family: var(--serif); font-size: 1.05rem; margin-bottom: 4px; }
+
+    .mm-vline { width: 2px; height: 20px; background: var(--bd2); margin-left: 28px; }
+
+    .mm-branches-col { display: flex; flex-direction: column; gap: 10px; }
+    .mm-item { display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-items: start; }
+    .mm-connector { display: flex; flex-direction: column; align-items: center; padding-top: 6px; }
+    .mm-h-line { width: 24px; height: 2px; background: var(--bd2); margin-top: 6px; }
+    .mm-content { background: var(--card2); border: 1px solid var(--bd); border-radius: 10px; padding: 12px 14px; }
+    .mm-pain-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--r); margin-bottom: 4px; }
+    .mm-pain-text { font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+    .mm-sol { display: flex; flex-direction: column; gap: 3px; }
+    .mm-sol-item { display: flex; gap: 6px; font-size: 11px; color: var(--cr5); }
+    .mm-sol-item::before { content: '→'; color: var(--g); flex-shrink: 0; }
+    .mm-impact { font-size: 11px; font-weight: 600; color: var(--g); margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--bd); }
+
+    /* Roadmap inside best pick */
+    .roadmap { display: flex; flex-direction: column; gap: 0; }
+    .rm-title { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--cr3); margin-bottom: 16px; }
+    .rm-item { display: grid; grid-template-columns: 80px 2px 1fr; gap: 0 16px; }
+    .rm-time { font-size: 11px; color: var(--cr3); text-align: right; padding-top: 14px; line-height: 1.4; }
+    .rm-spine { display: flex; flex-direction: column; align-items: center; }
+    .rm-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 16px; }
+    .rm-dot.done { background: var(--cr3); }
+    .rm-dot.active { background: var(--g); box-shadow: 0 0 8px rgba(74,222,128,.5); }
+    .rm-dot.upcoming { background: transparent; border: 2px solid var(--bd2); }
+    .rm-line { width: 2px; flex: 1; background: var(--bd); margin-top: 4px; }
+    .rm-item:last-child .rm-line { display: none; }
+    .rm-body { background: var(--card2); border: 1px solid var(--bd); border-radius: 12px; padding: 14px 16px; margin: 8px 0; }
+    .rm-body.done-body { opacity: .6; }
+    .rm-phase-label { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 5px; }
+    .rm-phase-title { font-family: var(--serif); font-size: 1rem; margin-bottom: 6px; }
+    .rm-tasks { display: flex; flex-direction: column; gap: 4px; }
+    .rm-task { display: flex; gap: 8px; font-size: 12px; color: var(--cr5); }
+    .rm-task .tick { flex-shrink: 0; }
+    .rm-task.done-task { color: var(--cr3); text-decoration: line-through; }
+    .rm-goal-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 100px; margin-top: 8px; }
+
+    /* Financial chart */
+    .fin-chart { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; padding: 20px; background: var(--card2); border: 1px solid var(--bd); border-radius: 14px; }
+    .fin-title { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--cr3); margin-bottom: 8px; }
+    .fin-row { display: grid; grid-template-columns: 90px 1fr 80px; align-items: center; gap: 10px; }
+    .fin-phase { font-size: 11px; color: var(--cr3); }
+    .fin-track { height: 6px; background: var(--cr1); border-radius: 6px; overflow: hidden; }
+    .fin-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, var(--g), rgba(74,222,128,.4)); transition: width .8s ease; }
+    .fin-val { font-size: 12px; font-weight: 600; text-align: right; }
+
+    /* ── Summary matrix ── */
+    .matrix-wrap { background: var(--card); border: 1px solid var(--bd); border-radius: 16px; overflow-x: auto; }
+    .mtable { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
+    .mtable th { text-align: left; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--cr3); padding: 12px 16px; border-bottom: 1px solid var(--bd); font-weight: 500; }
+    .mtable td { padding: 14px 16px; border-bottom: 1px solid var(--bd); vertical-align: middle; }
+    .mtable tr:last-child td { border-bottom: none; }
+    .mtable tr:first-child td { background: rgba(74,222,128,.04); }
+    .mtable tr:hover td { background: rgba(246,242,233,.02); }
+    .user-cell { display: flex; align-items: center; gap: 10px; font-family: var(--serif); font-size: 14px; }
+    .dot-g { width: 8px; height: 8px; border-radius: 50%; background: var(--g); flex-shrink: 0; }
+    .dot-b { width: 8px; height: 8px; border-radius: 50%; background: var(--b); flex-shrink: 0; }
+    .dot-o { width: 8px; height: 8px; border-radius: 50%; background: var(--o); flex-shrink: 0; }
+    .dot-p { width: 8px; height: 8px; border-radius: 50%; background: var(--p); flex-shrink: 0; }
+    .dot-y { width: 8px; height: 8px; border-radius: 50%; background: var(--y); flex-shrink: 0; }
+    .tag-sm { font-size: 11px; padding: 2px 8px; border-radius: 100px; background: var(--cr1); color: var(--cr5); }
+
+    /* reveal */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    .ft { border-top: 1px solid var(--bd); padding: 28px 0 44px; text-align: center; font-size: 12px; color: var(--cr3); margin-top: 72px; }
+
+    /* ── Pricing mode toggle ── */
+    .mode-toggle { display: flex; background: var(--card2); border: 1px solid var(--bd); border-radius: 10px; padding: 3px; gap: 3px; }
+    .mt-btn { background: transparent; border: none; padding: 6px 16px; border-radius: 8px; font-size: 12px; font-weight: 500; color: var(--cr5); cursor: pointer; font-family: var(--sans); transition: all .15s; white-space: nowrap; }
+    .mt-btn.active { background: var(--card); color: var(--cr); box-shadow: 0 1px 4px rgba(0,0,0,.5); }
+    .mt-btn:hover:not(.active) { color: var(--cr7); }
+    body[data-mode="sub"] .for-ot, body[data-mode="sub"] .for-web { display: none !important; }
+    body[data-mode="ot"]  .for-sub, body[data-mode="ot"]  .for-web { display: none !important; }
+    body[data-mode="web"] .for-sub, body[data-mode="web"] .for-ot  { display: none !important; }
+    .ot-note { background: rgba(96,165,250,.06); border: 1px solid rgba(96,165,250,.15); border-radius: 10px; padding: 12px 16px; font-size: 12px; color: var(--cr5); margin-bottom: 28px; line-height: 1.65; }
+    .web-note { background: rgba(192,132,252,.06); border: 1px solid rgba(192,132,252,.18); border-radius: 10px; padding: 12px 16px; font-size: 12px; color: var(--cr5); margin-bottom: 28px; line-height: 1.65; }
+    body[data-mode="web"] .seg-tab.active { border-color: rgba(192,132,252,.4); background: rgba(192,132,252,.08); color: var(--cr); }
+    @media(max-width:600px){ .mode-toggle { scale: .85; } }
+
+    @media(max-width:640px){
+      .hero { padding: 48px 0 36px; }
+      .profile-quote { display: none; }
+      .best-pick { padding: 24px; }
+    }
+  </style>
+</head>
+<body data-mode="sub">
+
+<div class="bg-orbs" aria-hidden="true">
+  <span class="orb orb-1"></span><span class="orb orb-2"></span><span class="orb orb-3"></span>
+</div>
+
+<header class="hd">
+  <div class="wrap">
+    <a class="hd-brand" href="#"><span class="hd-dot"></span>Product Research 2026</a>
+    <div class="mode-toggle">
+      <button class="mt-btn active" onclick="setMode('sub',this)">📅 Subscription</button>
+      <button class="mt-btn" onclick="setMode('ot',this)">⚡ One-time</button>
+      <button class="mt-btn" onclick="setMode('web',this)">🌐 Web</button>
+    </div>
+    <span class="hd-meta">🇺🇸 US · USER-FIRST</span>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <!-- Hero -->
+  <div class="hero reveal">
+    <div class="pill">🇺🇸 US Market · User-First</div>
+    <h1 class="hero-h1">Build for <em>người thật,</em><br/>không phải product category</h1>
+    <p class="hero-sub">Xuất phát từ người dùng → hiểu pain journey của họ → mới quyết định build gì. Đây là cách đúng để tìm product-market fit.</p>
+  </div>
+
+  <!-- Framework visual -->
+  <div class="framework reveal">
+    <div class="fw-node active">
+      <div class="fw-icon">👤</div>
+      <div class="fw-label">User Segment</div>
+      <div class="fw-sub">Ai là họ?</div>
+    </div>
+    <div class="fw-arrow">→</div>
+    <div class="fw-node">
+      <div class="fw-icon">😤</div>
+      <div class="fw-label">Pain Journey</div>
+      <div class="fw-sub">Họ bị stuck ở đâu?</div>
+    </div>
+    <div class="fw-arrow">→</div>
+    <div class="fw-node">
+      <div class="fw-icon">🕳️</div>
+      <div class="fw-label">Market Gap</div>
+      <div class="fw-sub">Tại sao chưa ai giải?</div>
+    </div>
+    <div class="fw-arrow">→</div>
+    <div class="fw-node">
+      <div class="fw-icon">✅</div>
+      <div class="fw-label">Product Match</div>
+      <div class="fw-sub">Mình build gì?</div>
+    </div>
+  </div>
+
+  <!-- Segment navigator -->
+  <div class="reveal">
+    <p class="sec-eye for-sub">5 user segments · US market</p>
+    <p class="sec-eye for-ot">5 user archetypes · One-time purchase</p>
+    <p class="sec-eye for-web">4 web archetypes · SaaS &amp; browser-first</p>
+    <h2 class="sec-h2 for-sub">Chọn nhóm người dùng<br/><em>để xem pain journey</em></h2>
+    <h2 class="sec-h2 for-ot">Người dùng <em>trả 1 lần,</em><br/>dùng mãi mãi</h2>
+    <h2 class="sec-h2 for-web">Người dùng <em>sống trên browser,</em><br/>không phải App Store</h2>
+    <p class="sec-lead for-sub">Mỗi segment là một nhóm người thật tại Mỹ, với công cụ đang dùng, nỗi đau cụ thể, và khoảng trống thị trường rõ ràng.</p>
+    <p class="sec-lead for-ot">Những người này ghét subscription. Pain của họ khác, product phù hợp khác, cách tiếp cận thị trường cũng khác hoàn toàn.</p>
+    <p class="sec-lead for-web">Web users không tải app — họ Google, click, dùng ngay. Distribution là SEO + ProductHunt + word-of-mouth, không qua App Store gatekeeper. Pain & opportunity hoàn toàn khác.</p>
+
+    <div class="ot-note for-ot">⚡ <strong style="color:var(--cr)">One-time model:</strong> User trả 1 lần, dùng mãi — không có churn, không có subscription fatigue. Revenue = số purchase mới mỗi tháng × price (không compound như MRR). <strong style="color:var(--cr)">Phù hợp nhất:</strong> habit tracker, focus timer, journal app. <strong style="color:var(--r)">Ít phù hợp:</strong> analytics & invoicing (infrastructure-heavy, nên dùng sub hoặc hybrid). Các số dưới đây là ước tính monthly sales revenue, không phải MRR.</div>
+    <div class="web-note for-web">🌐 <strong style="color:var(--cr)">Web-first model:</strong> Không App Store review, không 30% Apple cut, không native build complexity. Distribution = SEO + organic + Product Hunt. <strong style="color:var(--cr)">Lợi thế:</strong> ship trong 1 ngày, AB test pricing nhanh, marker user qua URL share. <strong style="color:var(--cr)">Thách thức:</strong> không có "App Store ranking boost" — cần SEO + content + referral để grow. Số dưới đây là MRR estimate (web SaaS 70% là subscription).</div>
+
+    <div class="seg-tabs for-sub">
+      <div class="seg-tab active" onclick="showSeg('s1',this)">
+        <span class="tab-icon">🏃</span>
+        <div><div class="tab-label">The Habit-Seeker</div><div style="font-size:10px;color:var(--cr3)">25–35 · Multi-device</div></div>
+      </div>
+      <div class="seg-tab" onclick="showSeg('s2',this)">
+        <span class="tab-icon">✍️</span>
+        <div><div class="tab-label">The Digital Journaler</div><div style="font-size:10px;color:var(--cr3)">28–45 · Privacy first</div></div>
+      </div>
+      <div class="seg-tab" onclick="showSeg('s3',this)">
+        <span class="tab-icon">📊</span>
+        <div><div class="tab-label">The Indie Creator</div><div style="font-size:10px;color:var(--cr3)">22–40 · Blogger/newsletter</div></div>
+      </div>
+      <div class="seg-tab" onclick="showSeg('s4',this)">
+        <span class="tab-icon">💼</span>
+        <div><div class="tab-label">The Freelancer</div><div style="font-size:10px;color:var(--cr3)">25–50 · Solo business</div></div>
+      </div>
+      <div class="seg-tab" onclick="showSeg('s5',this)">
+        <span class="tab-icon">🧠</span>
+        <div><div class="tab-label">The Deep Worker</div><div style="font-size:10px;color:var(--cr3)">22–40 · Remote focus</div></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ SEGMENT 1 ══════════════════ -->
+    <div class="seg-panel active for-sub" id="s1">
+      <div class="profile-row">
+        <div class="profile-avatar" style="background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.2);">🏃</div>
+        <div class="profile-info">
+          <div class="profile-name">The Habit-Seeker</div>
+          <div class="profile-demo">25–35 tuổi · Knowledge worker · US · Multi-device (iPhone + MacBook + Android tablet)</div>
+          <div class="profile-tags">
+            <span class="ptag">71M người tại US</span>
+            <span class="ptag">$5.8B market 2025</span>
+            <span class="ptag">Sẵn sàng trả $3–5/tháng</span>
+            <span class="ptag">Dùng ≥ 2 thiết bị/ngày</span>
+          </div>
+        </div>
+        <div class="profile-quote">"Tôi yêu Streaks trên iPhone nhưng khi ngồi vào máy tính thì không dùng được — habit bị gián đoạn."</div>
+      </div>
+
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Công cụ đang dùng</div>
+      <div class="tools-row" style="margin-bottom:32px;">
+        <a class="tool-chip" href="https://streaksapp.com" target="_blank" rel="noopener">⚡ Streaks <span class="tool-chip-label">iOS only · $4.99 one-time</span></a>
+        <a class="tool-chip" href="https://www.habitify.me" target="_blank" rel="noopener">📋 Habitify <span class="tool-chip-label">$4.99/mo · Too complex</span></a>
+        <a class="tool-chip" href="https://productiveapp.io" target="_blank" rel="noopener">✅ Productive <span class="tool-chip-label">$4.99/mo · No web</span></a>
+        <a class="tool-chip" href="https://habitica.com" target="_blank" rel="noopener">🎮 Habitica <span class="tool-chip-label">Gamified · Not serious</span></a>
+      </div>
+
+      <div class="tree">
+        <div class="tree-node-user">
+          <div class="user-bubble"><span>🏃</span> The Habit-Seeker</div>
+        </div>
+        <div class="tree-connector">
+          <div class="tc-line"></div>
+          <div class="tc-label">gặp pain</div>
+          <div class="tc-line"></div>
+        </div>
+        <div class="pain-branches" style="margin-bottom:12px;">
+          <div class="pain-node">
+            <div class="pain-num">Pain #1</div>
+            <div class="pain-title">iOS-only, không dùng được trên web & Android</div>
+            <div class="pain-story">Download Streaks, yêu UI ngay. Nhưng khi mở laptop để làm việc → không có web app. Mua Android cho vợ/chồng → không sync được. Thất vọng, habit bị gián đoạn.</div>
+            <div class="pain-quote">"Why is there no web version?!" — r/habittracking, 847 upvotes</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #2</div>
+            <div class="pain-title">Churn sau 30 ngày — không có gì giữ lại</div>
+            <div class="pain-story">Tuần đầu motivated. Tuần 2–3 bắt đầu bỏ. Không có AI gợi ý, không có nudge đúng lúc, không có accountability. 80% users rời bỏ trước ngày 30.</div>
+            <div class="pain-quote">"I keep forgetting to check in — the reminders feel random."</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #3</div>
+            <div class="pain-title">$4.99/tháng cho 1 habit app cảm giác đắt</div>
+            <div class="pain-story">Habitify và Productive cùng charge $4.99/tháng. So sánh với Netflix $15, Spotify $11 — nhiều user cảm thấy không justify. Tìm option rẻ hơn nhưng không kém chất lượng.</div>
+            <div class="pain-quote">"It's just a habit tracker, $5/mo is too much for this."</div>
+          </div>
+        </div>
+        <div class="tree-connector">
+          <div class="tc-line"></div>
+          <div class="tc-label">dẫn đến gap</div>
+          <div class="tc-line"></div>
+        </div>
+        <div class="gap-node" style="margin-bottom:12px;">
+          <div class="gap-icon">🕳️</div>
+          <div>
+            <div class="gap-title">Tại sao thị trường chưa giải quyết?</div>
+            <div class="gap-desc">Streaks (top player, 4.8★) chỉ là iOS indie app — 1 dev, không muốn tackle Android/web complexity. Habitify có cross-platform nhưng UX phức tạp, không differentiate on simplicity. Không có player nào vừa <strong>đơn giản + cross-platform + giá hợp lý + AI retention</strong> cùng lúc. Đây là khoảng trắng thực sự.</div>
+          </div>
+        </div>
+        <div class="tree-connector">
+          <div class="tc-line"></div>
+          <div class="tc-label">product match</div>
+          <div class="tc-line"></div>
+        </div>
+        <div class="product-match">
+          <div class="pm-left">
+            <div class="pm-eyebrow">✅ Sản phẩm phù hợp</div>
+            <div class="pm-name">Streak — Habit Tracker (bạn đang build)</div>
+            <div class="pm-why">Đây là lý do bạn nên <strong>all-in vào sản phẩm này</strong>: foundation đã có (iOS app), gap rõ ràng (web + Android), AI nudge có thể tăng retention 2×. Chỉ cần extend, không cần start từ đầu.</div>
+            <div class="pm-details">
+              <span class="pm-detail hi for-sub">$2.99/mo — 40% rẻ hơn đối thủ</span>
+              <span class="pm-detail hi for-ot">$8.99 one-time — 2× rẻ hơn Habitify</span>
+              <span class="pm-detail">Web + iOS + Android sync</span>
+              <span class="pm-detail">AI weekly insight</span>
+              <span class="pm-detail">Build time: đang có rồi</span>
+            </div>
+            <div class="comp-row" style="margin-top:12px;">
+              <a class="comp-pill" href="https://apps.apple.com/us/app/streaks/id963034692" target="_blank" rel="noopener"><span class="crating">★</span>4.8 Streaks <span class="cprice">$4.99 one-time</span></a>
+              <a class="comp-pill" href="https://apps.apple.com/us/app/habitify-habit-tracker/id1111447047" target="_blank" rel="noopener"><span class="crating">★</span>4.6 Habitify <span class="cprice">$4.99/mo</span></a>
+              <a class="comp-pill" href="https://apps.apple.com/us/app/productive-habit-tracker/id983826477" target="_blank" rel="noopener"><span class="crating">★</span>4.7 Productive <span class="cprice">$4.99/mo</span></a>
+            </div>
+          </div>
+          <div class="pm-right">
+            <div class="pm-mrr for-sub">$5–8K</div>
+            <div class="pm-mrr-sub for-sub">MRR potential<br/>2,000 users × $2.99</div>
+            <div class="pm-mrr for-ot">$2K/mo</div>
+            <div class="pm-mrr-sub for-ot">Monthly sales<br/>~220 purchases × $8.99</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ SEGMENT 2 ══════════════════ -->
+    <div class="seg-panel for-sub" id="s2">
+      <div class="profile-row">
+        <div class="profile-avatar" style="background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.2);">✍️</div>
+        <div class="profile-info">
+          <div class="profile-name">The Digital Journaler</div>
+          <div class="profile-demo">28–45 tuổi · Viết nhật ký hàng ngày · US · Dùng cả iOS và Android · Rất coi trọng privacy</div>
+          <div class="profile-tags">
+            <span class="ptag">~40M người tại US</span>
+            <span class="ptag">$14.7B wellness market</span>
+            <span class="ptag">Day One 92K reviews iOS</span>
+            <span class="ptag">Android users bị bỏ rơi</span>
+          </div>
+        </div>
+        <div class="profile-quote">"Tôi đã tin tưởng Day One với 3 năm ký ức — và một ngày tôi mở app, tất cả entries đã biến mất."</div>
+      </div>
+
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Công cụ đang dùng</div>
+      <div class="tools-row" style="margin-bottom:32px;">
+        <a class="tool-chip" href="https://dayoneapp.com" target="_blank" rel="noopener">📔 Day One <span class="tool-chip-label">$34.99/yr · Data loss incident</span></a>
+        <a class="tool-chip" href="https://reflectly.app" target="_blank" rel="noopener">💭 Reflectly <span class="tool-chip-label">$49.99/yr · No export</span></a>
+        <a class="tool-chip" href="https://penzu.com" target="_blank" rel="noopener">🔒 Penzu <span class="tool-chip-label">$19.99/yr · UI từ 2019</span></a>
+        <a class="tool-chip" href="https://play.google.com/store/apps/details?id=com.dayoneapp.dayone" target="_blank" rel="noopener">🤖 Day One Android <span class="tool-chip-label">4.5★ · Thiếu nhiều features</span></a>
+      </div>
+
+      <div class="tree">
+        <div class="tree-node-user">
+          <div class="user-bubble"><span>✍️</span> The Digital Journaler</div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+        <div class="pain-branches" style="margin-bottom:12px;">
+          <div class="pain-node">
+            <div class="pain-num">Pain #1</div>
+            <div class="pain-title">Data loss — mất ký ức nhiều năm</div>
+            <div class="pain-story">Sau khi Automattic mua Day One: entries biến mất sau 2+ năm dùng, không báo trước. Journal là tài sản cá nhân nhất — mất data = mất trust mãi mãi.</div>
+            <div class="pain-quote">"Entries suddenly disappeared. Support took weeks to respond." — Day One Forum</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #2</div>
+            <div class="pain-title">Android bị bỏ rơi sau acquisition</div>
+            <div class="pain-story">Day One iOS: 92K reviews, 4.8★. Day One Android: 24.7K reviews, 4.5★ — thiếu templates, drawing, Instagram importer. Android users là công dân hạng 2.</div>
+            <div class="pain-quote">"Android version is basically abandoned compared to iOS."</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #3</div>
+            <div class="pain-title">$35–50/năm, không export được data</div>
+            <div class="pain-story">Reflectly charge $50/năm và không có export. Day One free tier: chỉ 1 journal + 1 photo/entry. Users cảm thấy bị trap và bị overcharged. Lock-in = mất trust.</div>
+            <div class="pain-quote">"I can't even export my own journal without paying $35/year."</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">dẫn đến gap</div><div class="tc-line"></div></div>
+        <div class="gap-node" style="margin-bottom:12px;">
+          <div class="gap-icon">🕳️</div>
+          <div>
+            <div class="gap-title">Tại sao thị trường chưa giải quyết?</div>
+            <div class="gap-desc">Day One đang "coast" sau Automattic acquisition — doanh thu ổn định, không có urgency để fix Android hay improve data safety. Penzu không được update từ 2019. <strong>Không có player nào positioning rõ ràng trên "data safety + cross-platform parity + giá hợp lý"</strong> — đây là white space.</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">product match</div><div class="tc-line"></div></div>
+        <div class="product-match">
+          <div class="pm-left">
+            <div class="pm-eyebrow">✅ Sản phẩm phù hợp</div>
+            <div class="pm-name">Micro-Journal — "Your journal, always yours"</div>
+            <div class="pm-why">Positioning: <strong>anti-lock-in, same iOS = Android, export anytime</strong>. Angle thắng không phải feature — mà là trust. SEO "Day One alternative" = 3,600 searches/tháng tại US.</div>
+            <div class="pm-details">
+              <span class="pm-detail hi for-sub">$19/năm — 46% rẻ hơn Day One</span>
+              <span class="pm-detail hi for-ot">$12.99 one-time — 30% rẻ hơn Diarium</span>
+              <span class="pm-detail">iOS = Android, không phân biệt</span>
+              <span class="pm-detail">Export CSV/PDF/JSON anytime</span>
+              <span class="pm-detail">AI weekly summary</span>
+            </div>
+            <div class="comp-row" style="margin-top:12px;">
+              <a class="comp-pill" href="https://apps.apple.com/us/app/day-one-journal-private-diary/id1044867788" target="_blank" rel="noopener"><span class="crating">★</span>4.8 Day One <span class="cprice">$34.99/yr</span></a>
+              <a class="comp-pill" href="https://apps.apple.com/us/app/reflectly-journal-ai-diary/id1241229134" target="_blank" rel="noopener"><span class="crating">★</span>4.5 Reflectly <span class="cprice">$49.99/yr</span></a>
+              <a class="comp-pill" href="https://penzu.com" target="_blank" rel="noopener"><span class="crating">★</span>4.3 Penzu <span class="cprice">$19.99/yr</span></a>
+            </div>
+          </div>
+          <div class="pm-right">
+            <div class="pm-mrr for-sub">$2–4K</div>
+            <div class="pm-mrr-sub for-sub">MRR potential<br/>1,500 users × $1.6/mo</div>
+            <div class="pm-mrr for-ot">$1.5K/mo</div>
+            <div class="pm-mrr-sub for-ot">Monthly sales<br/>~115 purchases × $12.99</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ SEGMENT 3 ══════════════════ -->
+    <div class="seg-panel for-sub" id="s3">
+      <div class="profile-row">
+        <div class="profile-avatar" style="background:rgba(251,146,60,.08);border-color:rgba(251,146,60,.2);">📊</div>
+        <div class="profile-info">
+          <div class="profile-name">The Indie Creator</div>
+          <div class="profile-demo">22–40 tuổi · Substack writer, Ghost blogger, YouTube creator · US · Small audience đang grow</div>
+          <div class="profile-tags">
+            <span class="ptag">~15M bloggers tại US</span>
+            <span class="ptag">3M+ Substack writers</span>
+            <span class="ptag">Cần biết: ai đọc, từ đâu</span>
+            <span class="ptag">Không muốn deal với GDPR/GA4</span>
+          </div>
+        </div>
+        <div class="profile-quote">"Plausible khoá dashboard của tôi 3 tháng vì vượt 10K pageviews — tôi bị phạt vì content của tôi tốt lên."</div>
+      </div>
+
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Công cụ đang dùng</div>
+      <div class="tools-row" style="margin-bottom:32px;">
+        <a class="tool-chip" href="https://analytics.google.com" target="_blank" rel="noopener">📈 Google Analytics <span class="tool-chip-label">Free · Quá phức tạp</span></a>
+        <a class="tool-chip" href="https://plausible.io" target="_blank" rel="noopener">🔒 Plausible <span class="tool-chip-label">$9/mo · Pageview cap</span></a>
+        <a class="tool-chip" href="https://usefathom.com" target="_blank" rel="noopener">👁️ Fathom <span class="tool-chip-label">$14/mo · Closed source</span></a>
+      </div>
+
+      <div class="tree">
+        <div class="tree-node-user">
+          <div class="user-bubble"><span>📊</span> The Indie Creator</div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+        <div class="pain-branches" style="margin-bottom:12px;">
+          <div class="pain-node">
+            <div class="pain-num">Pain #1</div>
+            <div class="pain-title">Bị phạt khi traffic tăng trưởng</div>
+            <div class="pain-story">Plausible base plan: 10K pageviews/tháng. Vượt qua → dashboard bị lock, phải upgrade lên $19/mo. User bị punished vì thành công. Cảm giác bị trap.</div>
+            <div class="pain-quote">"Dashboard was locked for 3+ months. I exceeded 10K pageviews." — Capterra review</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #2</div>
+            <div class="pain-title">Google Analytics quá phức tạp để setup</div>
+            <div class="pain-story">GA4 migration confusing, event tracking cần code, reports không intuitive. Small creators mất cả buổi chiều setup GA mà vẫn không hiểu data. Nhiều người bỏ luôn.</div>
+            <div class="pain-quote">"I gave up on Google Analytics after 3 hours of setup."</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #3</div>
+            <div class="pain-title">$9–14/tháng cho 1 counter đơn giản</div>
+            <div class="pain-story">Substack writers chỉ muốn biết: bài nào nhiều người đọc nhất, traffic từ đâu, hôm nay bao nhiêu visitors. Trả $14/tháng cho Fathom chỉ cho 3 con số = overpriced.</div>
+            <div class="pain-quote">"I just need a simple pageview counter, not $9/month."</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">dẫn đến gap</div><div class="tc-line"></div></div>
+        <div class="gap-node" style="margin-bottom:12px;">
+          <div class="gap-icon">🕳️</div>
+          <div>
+            <div class="gap-title">Tại sao thị trường chưa giải quyết?</div>
+            <div class="gap-desc">Plausible và Fathom target developers và businesses — pricing model của họ built around traffic tiers, vì đó là cách họ scale revenue. <strong>Không ai target specifically small creators với flat-rate "unlimited pageviews"</strong>. Substack community (3M+ writers) chưa có tool designed cho họ.</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">product match</div><div class="tc-line"></div></div>
+        <div class="product-match">
+          <div class="pm-left">
+            <div class="pm-eyebrow">✅ Sản phẩm phù hợp</div>
+            <div class="pm-name">Simple Analytics — "Unlimited pageviews, $4/month, always"</div>
+            <div class="pm-why">Positioning đơn giản nhất: <strong>flat rate, không cap, không surprise</strong>. 1 script tag → dashboard live. Target Substack + Ghost community. SEO "Plausible alternative" = 2,400 searches/tháng.</div>
+            <div class="pm-details">
+              <span class="pm-detail hi for-sub">$4/mo — 56% rẻ hơn Plausible</span>
+              <span class="pm-detail hi for-ot">$39 lifetime deal — vs Fathom $165</span>
+              <span class="pm-detail">Unlimited pageviews</span>
+              <span class="pm-detail">1 script tag setup</span>
+              <span class="pm-detail">GDPR-safe, no cookies</span>
+            </div>
+            <div class="comp-row" style="margin-top:12px;">
+              <a class="comp-pill" href="https://plausible.io" target="_blank" rel="noopener"><span class="crating">★</span>4.9 Plausible <span class="cprice">$9/mo (10K cap)</span></a>
+              <a class="comp-pill" href="https://usefathom.com" target="_blank" rel="noopener"><span class="crating">★</span>4.7 Fathom <span class="cprice">$14/mo</span></a>
+              <a class="comp-pill" href="https://analytics.google.com" target="_blank" rel="noopener">Google Analytics <span class="cprice">Free · Complex</span></a>
+            </div>
+          </div>
+          <div class="pm-right">
+            <div class="pm-mrr for-sub">$3–5K</div>
+            <div class="pm-mrr-sub for-sub">MRR potential<br/>800 sites × $4/mo</div>
+            <div class="pm-mrr for-ot">$2K/mo</div>
+            <div class="pm-mrr-sub for-ot">Monthly sales<br/>~50 lifetime deals × $39</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ SEGMENT 4 ══════════════════ -->
+    <div class="seg-panel for-sub" id="s4">
+      <div class="profile-row">
+        <div class="profile-avatar" style="background:rgba(192,132,252,.08);border-color:rgba(192,132,252,.2);">💼</div>
+        <div class="profile-info">
+          <div class="profile-name">The Struggling Freelancer</div>
+          <div class="profile-demo">25–50 tuổi · Designer, developer, consultant · US · 1-person business · Doanh thu $3K–15K/tháng</div>
+          <div class="profile-tags">
+            <span class="ptag">76M freelancers tại US</span>
+            <span class="ptag">HoneyBook +89% Feb 2025</span>
+            <span class="ptag">Average invoice: $2,400</span>
+            <span class="ptag">30% invoice trả trễ &gt; 30 ngày</span>
+          </div>
+        </div>
+        <div class="profile-quote">"HoneyBook báo giá tăng từ $19 lên $36/tháng — overnight, không báo trước. Tôi đang tìm alternative ngay lúc này."</div>
+      </div>
+
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Công cụ đang dùng</div>
+      <div class="tools-row" style="margin-bottom:32px;">
+        <a class="tool-chip" href="https://www.honeybook.com" target="_blank" rel="noopener">🍯 HoneyBook <span class="tool-chip-label">$36/mo (+89%) · Tháng 2/2025</span></a>
+        <a class="tool-chip" href="https://www.freshbooks.com" target="_blank" rel="noopener">📚 FreshBooks <span class="tool-chip-label">$23/mo · Tăng 3 lần năm 2025</span></a>
+        <a class="tool-chip" href="https://www.wave.com" target="_blank" rel="noopener">🌊 Wave <span class="tool-chip-label">Free · Reminders behind paywall</span></a>
+        <a class="tool-chip" href="https://invoice.ninja" target="_blank" rel="noopener">🥷 Invoice Ninja <span class="tool-chip-label">Self-host · Complex setup</span></a>
+      </div>
+
+      <div class="tree">
+        <div class="tree-node-user">
+          <div class="user-bubble"><span>💼</span> The Struggling Freelancer</div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+        <div class="pain-branches" style="margin-bottom:12px;">
+          <div class="pain-node">
+            <div class="pain-num">Pain #1</div>
+            <div class="pain-title">HoneyBook tăng giá 89% overnight tháng 2/2025</div>
+            <div class="pain-story">Email đến: "Starting next month, your plan goes from $19 to $36." Không negotiation. Freelancers Reddit tràn ngập bài "HoneyBook refugees looking for alternative." Window đang mở RIGHT NOW.</div>
+            <div class="pain-quote">"HoneyBook just raised prices 89% with barely any notice. Time to move." — r/freelance, 2,400 upvotes</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #2</div>
+            <div class="pain-title">Khách không trả tiền đúng hạn — mất cash flow</div>
+            <div class="pain-story">30% invoices trả trễ hơn 30 ngày. Freelancer phải tự viết email nhắc — awkward và mất thời gian. Muốn hệ thống tự nhắc, chuyên nghiệp, không cần làm tay.</div>
+            <div class="pain-quote">"I hate chasing clients for money. It feels unprofessional."</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #3</div>
+            <div class="pain-title">Tool quá nhiều feature không dùng</div>
+            <div class="pain-story">HoneyBook có contracts, scheduling, CRM, pipeline... Freelancer chỉ cần: gửi invoice + nhắc khách trả. Trả $36/tháng cho 90% feature thừa = không hợp lý.</div>
+            <div class="pain-quote">"I'm paying for 20 features but only use 2: invoice and reminders."</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">dẫn đến gap</div><div class="tc-line"></div></div>
+        <div class="gap-node" style="margin-bottom:12px;">
+          <div class="gap-icon">🕳️</div>
+          <div>
+            <div class="gap-title">Tại sao thị trường chưa giải quyết?</div>
+            <div class="gap-desc">FreshBooks và HoneyBook đang race to the top — thêm features, tăng giá, target SMBs lớn hơn. Họ <strong>đang chủ động bỏ rơi solo freelancers</strong> để theo đuổi higher ARPU customers. Wave "free" nhưng auto-reminders behind paywall. Khoảng trống: $5–9/tháng, chỉ làm invoice + auto follow-up, nothing else.</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">product match</div><div class="tc-line"></div></div>
+        <div class="product-match">
+          <div class="pm-left">
+            <div class="pm-eyebrow">✅ Sản phẩm phù hợp</div>
+            <div class="pm-name">Invoice Nudge — "Send invoice. We chase for you."</div>
+            <div class="pm-why">Timing là lợi thế lớn nhất: HoneyBook refugees đang tìm alternative <strong>ngay lúc này</strong>. Chỉ cần làm 1 thứ thật tốt: gửi invoice → tự động email nhắc theo lịch → báo cáo đơn giản. Serverless + Resend API = $0 cost.</div>
+            <div class="pm-details">
+              <span class="pm-detail hi for-sub">$7/mo — 80% rẻ hơn HoneyBook</span>
+              <span class="pm-detail hi for-ot">$24 one-time — "pay once, done"</span>
+              <span class="pm-detail">Auto-reminder theo lịch</span>
+              <span class="pm-detail">Setup 5 phút</span>
+              <span class="pm-detail">Export CSV anytime, no lock-in</span>
+            </div>
+            <div class="comp-row" style="margin-top:12px;">
+              <a class="comp-pill" href="https://www.honeybook.com" target="_blank" rel="noopener"><span class="crating">★</span>4.8 HoneyBook <span class="cprice">$36/mo ↑89%</span></a>
+              <a class="comp-pill" href="https://www.capterra.com/p/142390/FreshBooks/reviews/" target="_blank" rel="noopener"><span class="crating">★</span>4.5 FreshBooks <span class="cprice">$23/mo ↑3×</span></a>
+              <a class="comp-pill" href="https://www.capterra.com/p/159654/Wave-Accounting/reviews/" target="_blank" rel="noopener"><span class="crating">★</span>4.4 Wave <span class="cprice">Free (limited)</span></a>
+            </div>
+          </div>
+          <div class="pm-right">
+            <div class="pm-mrr for-sub">$3.5K</div>
+            <div class="pm-mrr-sub for-sub">MRR potential<br/>500 freelancers × $7</div>
+            <div class="pm-mrr for-ot">$1.5K/mo</div>
+            <div class="pm-mrr-sub for-ot">Monthly sales<br/>~65 purchases × $24</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ SEGMENT 5 ══════════════════ -->
+    <div class="seg-panel for-sub" id="s5">
+      <div class="profile-row">
+        <div class="profile-avatar" style="background:rgba(250,204,21,.06);border-color:rgba(250,204,21,.15);">🧠</div>
+        <div class="profile-info">
+          <div class="profile-name">The Remote Deep Worker</div>
+          <div class="profile-demo">22–40 tuổi · Remote worker, student, freelancer · US · Windows/Mac/Web · Cần focus blocks để làm deep work</div>
+          <div class="profile-tags">
+            <span class="ptag">~30M remote workers US</span>
+            <span class="ptag">"pomodoro timer web" 18K searches/mo</span>
+            <span class="ptag">Forest 300K+ reviews</span>
+            <span class="ptag">Windows users bị bỏ rơi</span>
+          </div>
+        </div>
+        <div class="profile-quote">"Forest không có desktop app, Session chỉ trên Mac — tôi dùng Windows và chỉ cần 1 timer chạy trên browser."</div>
+      </div>
+
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Công cụ đang dùng</div>
+      <div class="tools-row" style="margin-bottom:32px;">
+        <a class="tool-chip" href="https://www.forestapp.cc" target="_blank" rel="noopener">🌲 Forest <span class="tool-chip-label">$2.99/mo · Mobile only</span></a>
+        <a class="tool-chip" href="https://www.focusmate.com" target="_blank" rel="noopener">👥 Focusmate <span class="tool-chip-label">$10/mo · Cần book partner</span></a>
+        <a class="tool-chip" href="https://www.stayinsession.com" target="_blank" rel="noopener">⏱️ Session <span class="tool-chip-label">$30/yr · Mac only</span></a>
+        <a class="tool-chip" href="https://pomofocus.io" target="_blank" rel="noopener">🍅 Pomofocus <span class="tool-chip-label">Free web · No stats, no sync</span></a>
+      </div>
+
+      <div class="tree">
+        <div class="tree-node-user">
+          <div class="user-bubble"><span>🧠</span> The Remote Deep Worker</div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+        <div class="pain-branches" style="margin-bottom:12px;">
+          <div class="pain-node">
+            <div class="pain-num">Pain #1</div>
+            <div class="pain-title">Forest không có web/desktop — bị loại hoàn toàn</div>
+            <div class="pain-story">Ngồi vào MacBook hoặc Windows để làm việc → Forest không chạy trên browser. Phải nhìn vào điện thoại để track timer trong khi làm việc trên máy tính = awkward, dễ bị distract.</div>
+            <div class="pain-quote">"Forest is great on phone but there's no desktop version. Defeats the purpose." — App Store review</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #2</div>
+            <div class="pain-title">Không auto-cycle — phải tap lại sau mỗi 25 phút</div>
+            <div class="pain-story">Sau mỗi Pomodoro session, phải manually start lại. Interrupts flow. Users muốn: start once → app tự cycle work/break. Forest cần tap lại mỗi session — nhiều reviews complain điều này.</div>
+            <div class="pain-quote">"Doesn't automatically start the next session. You have to manually restart every time." — App Store</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #3</div>
+            <div class="pain-title">"Subscription slop" — Forest đổi sang sub model mà không cải thiện</div>
+            <div class="pain-story">Forest từng $3.99 one-time. Nay đổi sang $2.99/tháng subscription. Users outrage: "turned from nice zen timer to subscription slop." Nhiều 1-star reviews mới trên App Store.</div>
+            <div class="pain-quote">"Turned from a nice zen app into subscription slop like every other app." — App Store 2025</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">dẫn đến gap</div><div class="tc-line"></div></div>
+        <div class="gap-node" style="margin-bottom:12px;">
+          <div class="gap-icon">🕳️</div>
+          <div>
+            <div class="gap-title">Tại sao thị trường chưa giải quyết?</div>
+            <div class="gap-desc">Forest là mobile-native, không có incentive để build web. Session là indie Mac app, cũng không expand. Pomofocus.io là free web timer nhưng <strong>không có stats, không sync, không subscription model</strong>. Khoảng trống: web-first Pomodoro với auto-cycle + weekly stats + $3/tháng.</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">product match</div><div class="tc-line"></div></div>
+        <div class="product-match">
+          <div class="pm-left">
+            <div class="pm-eyebrow">✅ Sản phẩm phù hợp</div>
+            <div class="pm-name">Focus Timer Pro — Web-first, auto-cycle, weekly stats</div>
+            <div class="pm-why">Web-first = không cần install, chạy ngay trên browser. <strong>Auto-cycle là killer feature</strong> Forest không có. SEO "pomodoro timer web" = 18,000 searches/tháng. Build trong 2–3 tuần — quick win nhất.</div>
+            <div class="pm-details">
+              <span class="pm-detail hi for-sub">$3/mo — same Forest, nhiều hơn nhiều</span>
+              <span class="pm-detail hi for-ot">$5.99 one-time — Forest legacy model</span>
+              <span class="pm-detail">Web-first, mọi platform</span>
+              <span class="pm-detail">Auto-cycle work/break</span>
+              <span class="pm-detail">Weekly focus stats</span>
+            </div>
+            <div class="comp-row" style="margin-top:12px;">
+              <a class="comp-pill" href="https://apps.apple.com/us/app/forest-focus-for-productivity/id866450515" target="_blank" rel="noopener"><span class="crating">★</span>4.8 Forest <span class="cprice">$2.99/mo (mobile only)</span></a>
+              <a class="comp-pill" href="https://www.focusmate.com" target="_blank" rel="noopener"><span class="crating">★</span>4.6 Focusmate <span class="cprice">$10/mo</span></a>
+              <a class="comp-pill" href="https://apps.apple.com/us/app/session-pomodoro-focus-timer/id1521432881" target="_blank" rel="noopener"><span class="crating">★</span>4.8 Session <span class="cprice">$30/yr (Mac only)</span></a>
+            </div>
+          </div>
+          <div class="pm-right">
+            <div class="pm-mrr for-sub">$1.8K</div>
+            <div class="pm-mrr-sub for-sub">MRR potential<br/>600 users × $3/mo</div>
+            <div class="pm-mrr for-ot">$1.2K/mo</div>
+            <div class="pm-mrr-sub for-ot">Monthly sales<br/>~200 purchases × $5.99</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ══ WEB TABS ══ -->
+    <div class="seg-tabs for-web">
+      <div class="seg-tab active" onclick="showWebSeg('w1',this)">
+        <span class="tab-icon">🧰</span>
+        <div><div class="tab-label">The SaaS Switcher</div><div style="font-size:10px;color:var(--cr3)">28–45 · Notion refugee</div></div>
+      </div>
+      <div class="seg-tab" onclick="showWebSeg('w2',this)">
+        <span class="tab-icon">📝</span>
+        <div><div class="tab-label">The Substack Creator</div><div style="font-size:10px;color:var(--cr3)">26–42 · 10% cut hater</div></div>
+      </div>
+      <div class="seg-tab" onclick="showWebSeg('w3',this)">
+        <span class="tab-icon">🎨</span>
+        <div><div class="tab-label">The Webflow Refugee</div><div style="font-size:10px;color:var(--cr3)">24–40 · Per-site fatigue</div></div>
+      </div>
+      <div class="seg-tab" onclick="showWebSeg('w4',this)">
+        <span class="tab-icon">🔍</span>
+        <div><div class="tab-label">The Solo SEO Operator</div><div style="font-size:10px;color:var(--cr3)">28–48 · Ahrefs too expensive</div></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ WEB SEGMENT 1: SaaS Switcher ══════════════════ -->
+    <div class="seg-panel active for-web" id="w1">
+      <div class="profile-row">
+        <div class="profile-avatar" style="background:rgba(192,132,252,.08);border-color:rgba(192,132,252,.22);">🧰</div>
+        <div class="profile-info">
+          <div class="profile-name">The SaaS Switcher</div>
+          <div class="profile-demo">28–45 tuổi · Solo founder, small-team lead · US · Browser-first · Pays for 8–12 SaaS tools · Looking to cut $200+/mo</div>
+          <div class="profile-tags">
+            <span class="ptag">~28M SMB owners US</span>
+            <span class="ptag">Notion +25% giá 2024–25</span>
+            <span class="ptag">Avg $264/mo on SaaS</span>
+            <span class="ptag">SaaS sprawl = top complaint</span>
+          </div>
+        </div>
+        <div class="profile-quote">"Notion vừa tăng từ $8 lên $10/seat. Tôi có 5 seats — tính ra mất $120/năm chỉ vì họ thêm AI tôi không dùng."</div>
+      </div>
+
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Công cụ đang dùng</div>
+      <div class="tools-row" style="margin-bottom:32px;">
+        <a class="tool-chip" href="https://www.notion.so" target="_blank" rel="noopener">📓 Notion <span class="tool-chip-label">$10/seat/mo · Vừa tăng giá</span></a>
+        <a class="tool-chip" href="https://linear.app" target="_blank" rel="noopener">🟦 Linear <span class="tool-chip-label">$8/user/mo · Dev only</span></a>
+        <a class="tool-chip" href="https://airtable.com" target="_blank" rel="noopener">🗂️ Airtable <span class="tool-chip-label">$20/seat/mo · Pro lock</span></a>
+        <a class="tool-chip" href="https://coda.io" target="_blank" rel="noopener">📋 Coda <span class="tool-chip-label">$10/Maker/mo · Confusing</span></a>
+      </div>
+
+      <div class="tree">
+        <div class="tree-node-user"><div class="user-bubble"><span>🧰</span> The SaaS Switcher</div></div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+        <div class="pain-branches" style="margin-bottom:12px;">
+          <div class="pain-node">
+            <div class="pain-num">Pain #1</div>
+            <div class="pain-title">Per-seat pricing explode khi team grow</div>
+            <div class="pain-story">3 người = $30/mo. 8 người = $80/mo. Add freelancers/contractors = paid seats luôn. Người muốn share docs với client → phải mua extra seat. Pricing scale linearly với headcount mà value không scale theo.</div>
+            <div class="pain-quote">"We hit $400/mo on Notion alone. We're 9 people. This is insane." — r/SaaS, 1.4K upvotes</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #2</div>
+            <div class="pain-title">AI features tăng giá nhưng không dùng</div>
+            <div class="pain-story">Notion AI: +$10/seat. Linear AI: +$8/user. Mỗi SaaS push AI features và charge thêm. Solo founders chỉ cần docs + tasks — không cần AI auto-summarize. Bị forced upgrade.</div>
+            <div class="pain-quote">"I just want to write docs. Why am I paying $20/mo for AI I don't use?"</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #3</div>
+            <div class="pain-title">Tool sprawl — 12 tabs, 12 logins, 12 invoices</div>
+            <div class="pain-story">Notion (docs) + Linear (tasks) + Slack (chat) + Figma (design) + Vercel (deploy) + Stripe (billing)... Solo founder phải maintain 12 subscriptions, mỗi cái auto-renew, mỗi cái tăng giá đột ngột.</div>
+            <div class="pain-quote">"I just spent 2 hours canceling subscriptions I forgot I had."</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">dẫn đến gap</div><div class="tc-line"></div></div>
+        <div class="gap-node" style="margin-bottom:12px;">
+          <div class="gap-icon">🕳️</div>
+          <div>
+            <div class="gap-title">Tại sao thị trường chưa giải quyết?</div>
+            <div class="gap-desc">Notion/Linear/Asana target enterprise — pricing built for HR-onboarded teams 50+ người. <strong>Không ai positioning rõ ràng cho "solo + small team với flat-rate, unlimited seats"</strong>. Coda thử nhưng pricing confusing. Anytype và Affine open-source nhưng UX rough. White space: $15–25/mo flat, all-in-one, unlimited seats.</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">product match</div><div class="tc-line"></div></div>
+        <div class="product-match" style="border-color:rgba(192,132,252,.3);background:linear-gradient(135deg,rgba(192,132,252,.07) 0%,rgba(96,165,250,.04) 100%);">
+          <div class="pm-left">
+            <div class="pm-eyebrow" style="color:var(--p);">✅ Sản phẩm phù hợp</div>
+            <div class="pm-name">Solo Workspace — "Notion + Linear in one tab, flat $19/mo"</div>
+            <div class="pm-why">Docs + tasks + simple CRM trong 1 app. <strong>Flat $19/mo unlimited seats</strong> — không charge per-user, không có "Pro tier surprise". Target: solo founders & ≤10-person teams. SEO "Notion alternative" = 14,800 searches/tháng tại US.</div>
+            <div class="pm-details">
+              <span class="pm-detail hi" style="background:rgba(192,132,252,.1);border-color:rgba(192,132,252,.25);color:var(--p);">$19/mo flat — vs Notion $80/team</span>
+              <span class="pm-detail">Unlimited seats, không per-seat</span>
+              <span class="pm-detail">Docs + Tasks + CRM</span>
+              <span class="pm-detail">Self-host option (đắt hơn lock-in)</span>
+              <span class="pm-detail">Build time: 8–12 tuần MVP</span>
+            </div>
+            <div class="comp-row" style="margin-top:12px;">
+              <a class="comp-pill" href="https://www.notion.so/pricing" target="_blank" rel="noopener"><span class="crating">★</span>4.7 Notion <span class="cprice">$10/seat/mo</span></a>
+              <a class="comp-pill" href="https://linear.app/pricing" target="_blank" rel="noopener"><span class="crating">★</span>4.8 Linear <span class="cprice">$8/user/mo</span></a>
+              <a class="comp-pill" href="https://anytype.io" target="_blank" rel="noopener"><span class="crating">★</span>4.5 Anytype <span class="cprice">Free · OSS rough</span></a>
+            </div>
+          </div>
+          <div class="pm-right">
+            <div class="pm-mrr" style="color:var(--p);">$8–14K</div>
+            <div class="pm-mrr-sub">MRR potential<br/>500 teams × $19/mo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ WEB SEGMENT 2: Substack Creator ══════════════════ -->
+    <div class="seg-panel for-web" id="w2">
+      <div class="profile-row">
+        <div class="profile-avatar" style="background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.22);">📝</div>
+        <div class="profile-info">
+          <div class="profile-name">The Substack Creator</div>
+          <div class="profile-demo">26–42 tuổi · Newsletter writer · US · 1K–20K subscribers · $500–8K/mo revenue · Frustrated by 10% fee</div>
+          <div class="profile-tags">
+            <span class="ptag">~3M Substack writers</span>
+            <span class="ptag">Substack lấy 10% revenue</span>
+            <span class="ptag">$45M+/năm fee Substack thu</span>
+            <span class="ptag">beehiiv +200% YoY 2024</span>
+          </div>
+        </div>
+        <div class="profile-quote">"Tôi kiếm $4K/tháng từ paid subs. Substack lấy $400. Stripe lấy $120. Mất $520/mo cho 1 form gửi email."</div>
+      </div>
+
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Công cụ đang dùng</div>
+      <div class="tools-row" style="margin-bottom:32px;">
+        <a class="tool-chip" href="https://substack.com" target="_blank" rel="noopener">📰 Substack <span class="tool-chip-label">10% revenue cut · Forever</span></a>
+        <a class="tool-chip" href="https://www.beehiiv.com" target="_blank" rel="noopener">🐝 beehiiv <span class="tool-chip-label">$39–99/mo · Scale tier</span></a>
+        <a class="tool-chip" href="https://ghost.org" target="_blank" rel="noopener">👻 Ghost <span class="tool-chip-label">$9/mo + tech setup</span></a>
+        <a class="tool-chip" href="https://convertkit.com" target="_blank" rel="noopener">📬 Kit (ConvertKit) <span class="tool-chip-label">$25–66/mo · List size based</span></a>
+      </div>
+
+      <div class="tree">
+        <div class="tree-node-user"><div class="user-bubble"><span>📝</span> The Substack Creator</div></div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+        <div class="pain-branches" style="margin-bottom:12px;">
+          <div class="pain-node">
+            <div class="pain-num">Pain #1</div>
+            <div class="pain-title">10% Substack cut là vĩnh viễn — không giảm khi grow</div>
+            <div class="pain-story">Hot writer kiếm $20K/mo → Substack lấy $2K/mo, mỗi tháng. Mãi mãi. Không có pricing tier "$99/mo flat khi over $X revenue". Càng grow càng đau. Bottleneck cảm xúc cực lớn.</div>
+            <div class="pain-quote">"I'm giving Substack $24,000/year for what is essentially Mailchimp + Stripe." — r/Substack 2025</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #2</div>
+            <div class="pain-title">Không own subscribers — Substack có thể "deplatform"</div>
+            <div class="pain-story">2024: Substack ban một số political writers, refund subs. Writers mất 5 năm xây list trong 1 ngày. <strong>Subscribers technically là của Substack</strong>, không phải của bạn. Export CSV được nhưng deliverability drop khi move.</div>
+            <div class="pain-quote">"My 18K-subscriber list was suspended overnight. No appeal."</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #3</div>
+            <div class="pain-title">beehiiv & Kit charge by list size — overshooting</div>
+            <div class="pain-story">beehiiv $39/mo lên $99/mo khi pass 10K subs. ConvertKit $25 → $66 → $200+ theo list size. Writer cảm thấy bị "tax" vì grow audience. Nhiều người cap list để không phải upgrade.</div>
+            <div class="pain-quote">"I had to remove inactive subscribers just to stay in my tier."</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">dẫn đến gap</div><div class="tc-line"></div></div>
+        <div class="gap-node" style="margin-bottom:12px;">
+          <div class="gap-icon">🕳️</div>
+          <div>
+            <div class="gap-title">Tại sao thị trường chưa giải quyết?</div>
+            <div class="gap-desc">Substack lock-in strong vì discovery (Notes, recommendations) — leaving means losing growth. Ghost open-source nhưng cần tech setup. <strong>Không ai positioning thẳng "0% cut, you own subs, flat $29/mo unlimited"</strong>. beehiiv close nhưng vẫn list-size pricing. Window mở rộng khi Substack drama lặp lại.</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">product match</div><div class="tc-line"></div></div>
+        <div class="product-match" style="border-color:rgba(96,165,250,.3);background:linear-gradient(135deg,rgba(96,165,250,.07) 0%,rgba(74,222,128,.04) 100%);">
+          <div class="pm-left">
+            <div class="pm-eyebrow" style="color:var(--b);">✅ Sản phẩm phù hợp</div>
+            <div class="pm-name">PaperTrail — "Your newsletter, 0% cut, you own it"</div>
+            <div class="pm-why">Flat $29/mo bất kể list size. <strong>0% revenue cut</strong> — chỉ Stripe fee (2.9%). Auto-import từ Substack với deliverability preservation. Target Substack refugees & growing writers. SEO "Substack alternative" = 9,400 searches/tháng.</div>
+            <div class="pm-details">
+              <span class="pm-detail hi" style="background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.25);color:var(--b);">$29/mo flat — vs 10% cut</span>
+              <span class="pm-detail">0% revenue fee</span>
+              <span class="pm-detail">Unlimited subscribers</span>
+              <span class="pm-detail">1-click Substack import</span>
+              <span class="pm-detail">Build time: 6–10 tuần</span>
+            </div>
+            <div class="comp-row" style="margin-top:12px;">
+              <a class="comp-pill" href="https://substack.com" target="_blank" rel="noopener"><span class="crating">★</span>4.5 Substack <span class="cprice">10% revenue</span></a>
+              <a class="comp-pill" href="https://www.beehiiv.com/pricing" target="_blank" rel="noopener"><span class="crating">★</span>4.6 beehiiv <span class="cprice">$39–99/mo</span></a>
+              <a class="comp-pill" href="https://ghost.org/pricing/" target="_blank" rel="noopener"><span class="crating">★</span>4.4 Ghost <span class="cprice">$9–249/mo</span></a>
+            </div>
+          </div>
+          <div class="pm-right">
+            <div class="pm-mrr" style="color:var(--b);">$11–18K</div>
+            <div class="pm-mrr-sub">MRR potential<br/>500 writers × $29/mo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ WEB SEGMENT 3: Webflow Refugee ══════════════════ -->
+    <div class="seg-panel for-web" id="w3">
+      <div class="profile-row">
+        <div class="profile-avatar" style="background:rgba(251,146,60,.08);border-color:rgba(251,146,60,.22);">🎨</div>
+        <div class="profile-info">
+          <div class="profile-name">The Webflow Refugee</div>
+          <div class="profile-demo">24–40 tuổi · Freelance designer, agency · US · Builds 3–10 client sites/năm · Hates per-site billing</div>
+          <div class="profile-tags">
+            <span class="ptag">~6M freelance designers US</span>
+            <span class="ptag">Webflow $23/site/mo</span>
+            <span class="ptag">Framer +120% 2024 growth</span>
+            <span class="ptag">"No-code agency" tăng 3×</span>
+          </div>
+        </div>
+        <div class="profile-quote">"Webflow charge $23/mo per site. Tôi có 8 client sites — đó là $2,200/năm chỉ để keep them live."</div>
+      </div>
+
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Công cụ đang dùng</div>
+      <div class="tools-row" style="margin-bottom:32px;">
+        <a class="tool-chip" href="https://webflow.com" target="_blank" rel="noopener">🌊 Webflow <span class="tool-chip-label">$23/site/mo · CMS lock</span></a>
+        <a class="tool-chip" href="https://www.framer.com" target="_blank" rel="noopener">🅰️ Framer <span class="tool-chip-label">$15/site/mo · CMS limited</span></a>
+        <a class="tool-chip" href="https://carrd.co" target="_blank" rel="noopener">📄 Carrd <span class="tool-chip-label">$19/yr · Single page only</span></a>
+        <a class="tool-chip" href="https://www.squarespace.com" target="_blank" rel="noopener">⬛ Squarespace <span class="tool-chip-label">$23–65/mo · Outdated UX</span></a>
+      </div>
+
+      <div class="tree">
+        <div class="tree-node-user"><div class="user-bubble"><span>🎨</span> The Webflow Refugee</div></div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+        <div class="pain-branches" style="margin-bottom:12px;">
+          <div class="pain-node">
+            <div class="pain-num">Pain #1</div>
+            <div class="pain-title">Per-site billing kill agency margin</div>
+            <div class="pain-story">Agency build 10 client sites/năm. Mỗi site = $23 Webflow + $20 CMS = $516/site/năm. Client refuse "host fee" nên agency eat cost. Margin shrink. Designer phải dùng cheap dev hosting nhưng lose Webflow editor.</div>
+            <div class="pain-quote">"Webflow pricing is impossible for agencies with 10+ sites." — Designer Twitter</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #2</div>
+            <div class="pain-title">CMS limits — 2K items, 100 collection types</div>
+            <div class="pain-story">Webflow CMS plan: 2,000 items. Client blog grow → hit cap → forced upgrade to Business ($49/mo). Framer CMS thậm chí limit nghiêm hơn. Designer phải explain cho client tại sao "blog of yours hit ceiling."</div>
+            <div class="pain-quote">"Hit 2000 CMS items, can't post until I upgrade. Awkward client convo."</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #3</div>
+            <div class="pain-title">Vendor lock-in — không export được code real</div>
+            <div class="pain-story">Webflow export code = static HTML, không có CMS. Framer cũng vậy. Khi client muốn move khỏi platform → designer phải rebuild from scratch. Lock-in cảm giác như "Webflow owns your business."</div>
+            <div class="pain-quote">"Tried to export — code is so messy and CMS gone. We're trapped."</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">dẫn đến gap</div><div class="tc-line"></div></div>
+        <div class="gap-node" style="margin-bottom:12px;">
+          <div class="gap-icon">🕳️</div>
+          <div>
+            <div class="gap-title">Tại sao thị trường chưa giải quyết?</div>
+            <div class="gap-desc">Webflow VC-backed, raise pressure to grow ARR via per-site pricing. Framer follow same model. <strong>Open-source builders (Plasmic, Builder.io) target devs</strong>, không phải designers. Khoảng trống: designer-friendly no-code với <strong>flat $49/mo unlimited sites + real code export</strong>. Agency market chưa có hero.</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">product match</div><div class="tc-line"></div></div>
+        <div class="product-match" style="border-color:rgba(251,146,60,.3);background:linear-gradient(135deg,rgba(251,146,60,.07) 0%,rgba(250,204,21,.04) 100%);">
+          <div class="pm-left">
+            <div class="pm-eyebrow" style="color:var(--o);">✅ Sản phẩm phù hợp</div>
+            <div class="pm-name">SitePack — "Unlimited sites, $49/mo, real code export"</div>
+            <div class="pm-why">Visual builder + headless CMS + Cloudflare hosting. <strong>Flat $49/mo unlimited sites</strong> — designed for agencies & freelancers với 5+ client projects. Export real Next.js code = no lock-in. SEO "Webflow alternative" = 6,600 searches/tháng.</div>
+            <div class="pm-details">
+              <span class="pm-detail hi" style="background:rgba(251,146,60,.1);border-color:rgba(251,146,60,.25);color:var(--o);">$49/mo unlimited — vs $230 for 10 sites</span>
+              <span class="pm-detail">No CMS item cap</span>
+              <span class="pm-detail">Next.js code export</span>
+              <span class="pm-detail">White-label cho agency</span>
+              <span class="pm-detail">Build time: 12–16 tuần MVP</span>
+            </div>
+            <div class="comp-row" style="margin-top:12px;">
+              <a class="comp-pill" href="https://webflow.com/pricing" target="_blank" rel="noopener"><span class="crating">★</span>4.5 Webflow <span class="cprice">$23/site/mo</span></a>
+              <a class="comp-pill" href="https://www.framer.com/pricing/" target="_blank" rel="noopener"><span class="crating">★</span>4.7 Framer <span class="cprice">$15/site/mo</span></a>
+              <a class="comp-pill" href="https://www.plasmic.app/pricing" target="_blank" rel="noopener"><span class="crating">★</span>4.4 Plasmic <span class="cprice">Free–$99/mo (devs)</span></a>
+            </div>
+          </div>
+          <div class="pm-right">
+            <div class="pm-mrr" style="color:var(--o);">$6–10K</div>
+            <div class="pm-mrr-sub">MRR potential<br/>150 agencies × $49/mo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ WEB SEGMENT 4: Solo SEO Operator ══════════════════ -->
+    <div class="seg-panel for-web" id="w4">
+      <div class="profile-row">
+        <div class="profile-avatar" style="background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.22);">🔍</div>
+        <div class="profile-info">
+          <div class="profile-name">The Solo SEO Operator</div>
+          <div class="profile-demo">28–48 tuổi · Indie blogger, affiliate marketer, content agency · US · Manages 1–5 sites · Revenue $2K–25K/mo from organic</div>
+          <div class="profile-tags">
+            <span class="ptag">~8M content sites US</span>
+            <span class="ptag">Ahrefs $129/mo entry</span>
+            <span class="ptag">Semrush $129/mo + addons</span>
+            <span class="ptag">"AI SEO" niche tăng 4×</span>
+          </div>
+        </div>
+        <div class="profile-quote">"Ahrefs là $129/tháng. Tôi check keyword 3 lần/tuần. Tính ra $11/keyword research. Too much for a solo operator."</div>
+      </div>
+
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Công cụ đang dùng</div>
+      <div class="tools-row" style="margin-bottom:32px;">
+        <a class="tool-chip" href="https://ahrefs.com" target="_blank" rel="noopener">🅰️ Ahrefs <span class="tool-chip-label">$129/mo · Lite tier</span></a>
+        <a class="tool-chip" href="https://www.semrush.com" target="_blank" rel="noopener">🅂 Semrush <span class="tool-chip-label">$129/mo · Project caps</span></a>
+        <a class="tool-chip" href="https://surferseo.com" target="_blank" rel="noopener">🌊 Surfer SEO <span class="tool-chip-label">$89/mo · Content only</span></a>
+        <a class="tool-chip" href="https://ubersuggest.com" target="_blank" rel="noopener">🅿️ Ubersuggest <span class="tool-chip-label">$29/mo · Data shallow</span></a>
+      </div>
+
+      <div class="tree">
+        <div class="tree-node-user"><div class="user-bubble"><span>🔍</span> The Solo SEO Operator</div></div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+        <div class="pain-branches" style="margin-bottom:12px;">
+          <div class="pain-node">
+            <div class="pain-num">Pain #1</div>
+            <div class="pain-title">$129/mo cho 1 keyword tool — enterprise pricing</div>
+            <div class="pain-story">Ahrefs Lite: $129/mo. Standard: $249/mo. Solo blogger kiếm $3K/mo từ affiliate phải chi $129 cho 1 tool = 4% revenue. Plus Semrush, plus AI tool = $400+/mo trước khi viết content. Margin chết.</div>
+            <div class="pain-quote">"Ahrefs Lite went from $99 to $129 with no warning. Standard is $249 now." — r/SEO 2024</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #2</div>
+            <div class="pain-title">Project caps + credit system confusing</div>
+            <div class="pain-story">Ahrefs Lite: 1 project, 100 credits/day. Semrush: 5 projects, 3K reports/mo. Solo operator có 3 client sites + own site → vượt limit luôn. Phải upgrade $200+/mo dù chỉ dùng 20% feature.</div>
+            <div class="pain-quote">"I burn through Ahrefs credits in 2 days. Forced to upgrade for more."</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #3</div>
+            <div class="pain-title">AI SEO tools đắt và chỉ làm 1 thứ</div>
+            <div class="pain-story">Surfer SEO $89/mo (chỉ content optimization). Frase $45/mo (chỉ AI brief). NeuronWriter, MarketMuse, Clearscope... mỗi tool $50–200/mo. Stack thành $400+/mo cho features lẽ ra nên trong 1 app.</div>
+            <div class="pain-quote">"Why do I need 5 tools that do half of one thing each?"</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">dẫn đến gap</div><div class="tc-line"></div></div>
+        <div class="gap-node" style="margin-bottom:12px;">
+          <div class="gap-icon">🕳️</div>
+          <div>
+            <div class="gap-title">Tại sao thị trường chưa giải quyết?</div>
+            <div class="gap-desc">Ahrefs/Semrush built infrastructure (crawler farms, billions URLs) — high fixed cost forces them target agencies & enterprise. <strong>Không ai positioning "solo SEO operator, $29/mo, AI-assisted, unlimited projects under 100K traffic"</strong>. Indie SaaS ($30K MRR average) thường skip SEO tools vì chi phí. Bottom 80% market unserved.</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">product match</div><div class="tc-line"></div></div>
+        <div class="product-match">
+          <div class="pm-left">
+            <div class="pm-eyebrow">✅ Sản phẩm phù hợp</div>
+            <div class="pm-name">SoloRank — "AI-SEO toolkit for indie operators, $29/mo"</div>
+            <div class="pm-why">Keyword research + AI content brief + rank tracker + competitor analysis trong 1 app. <strong>$29/mo, unlimited projects under 100K monthly traffic</strong>. Use DataForSEO API (~$0.001/keyword) + Claude API cho briefs. Margin 80%+. SEO "Ahrefs alternative" = 4,400 searches/tháng.</div>
+            <div class="pm-details">
+              <span class="pm-detail hi">$29/mo — vs Ahrefs $129</span>
+              <span class="pm-detail">Unlimited projects (≤100K traffic)</span>
+              <span class="pm-detail">AI content brief built-in</span>
+              <span class="pm-detail">Rank tracker daily</span>
+              <span class="pm-detail">Build time: 10–14 tuần MVP</span>
+            </div>
+            <div class="comp-row" style="margin-top:12px;">
+              <a class="comp-pill" href="https://ahrefs.com/pricing" target="_blank" rel="noopener"><span class="crating">★</span>4.7 Ahrefs <span class="cprice">$129/mo (1 project)</span></a>
+              <a class="comp-pill" href="https://www.semrush.com/pricing/" target="_blank" rel="noopener"><span class="crating">★</span>4.6 Semrush <span class="cprice">$129/mo (5 projects)</span></a>
+              <a class="comp-pill" href="https://surferseo.com/pricing/" target="_blank" rel="noopener"><span class="crating">★</span>4.5 Surfer SEO <span class="cprice">$89/mo</span></a>
+            </div>
+          </div>
+          <div class="pm-right">
+            <div class="pm-mrr">$5–9K</div>
+            <div class="pm-mrr-sub">MRR potential<br/>250 operators × $29/mo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ OTP TABS ══ -->
+    <div class="seg-tabs for-ot">
+      <div class="seg-tab active" onclick="showOTSeg('ot1',this)">
+        <span class="tab-icon">📱</span>
+        <div><div class="tab-label">Premium App Buyer</div><div style="font-size:10px;color:var(--cr3)">27–45 · "Buy once"</div></div>
+      </div>
+      <div class="seg-tab" onclick="showOTSeg('ot2',this)">
+        <span class="tab-icon">🖥️</span>
+        <div><div class="tab-label">Mac Utility Collector</div><div style="font-size:10px;color:var(--cr3)">28–45 · Power user</div></div>
+      </div>
+      <div class="seg-tab" onclick="showOTSeg('ot3',this)">
+        <span class="tab-icon">🎨</span>
+        <div><div class="tab-label">Design Asset Hunter</div><div style="font-size:10px;color:var(--cr3)">23–38 · Designer/dev</div></div>
+      </div>
+      <div class="seg-tab" onclick="showOTSeg('ot4',this)">
+        <span class="tab-icon">🚀</span>
+        <div><div class="tab-label">The Bootstrapper</div><div style="font-size:10px;color:var(--cr3)">25–40 · Indie dev</div></div>
+      </div>
+      <div class="seg-tab" onclick="showOTSeg('ot5',this)">
+        <span class="tab-icon">📦</span>
+        <div><div class="tab-label">Digital Product Buyer</div><div style="font-size:10px;color:var(--cr3)">20–38 · Template seeker</div></div>
+      </div>
+    </div>
+
+    <!-- ══ OTP SEGMENT 1: Premium App Buyer ══ -->
+    <div class="seg-panel active for-ot" id="ot1">
+      <div class="profile-row">
+        <div class="profile-avatar" style="background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.2);">📱</div>
+        <div class="profile-info">
+          <div class="profile-name">The Premium App Buyer</div>
+          <div class="profile-demo">27–45 tuổi · Knowledge worker · US · iPhone power user · Curates app library carefully, values ownership over renting</div>
+          <div class="profile-tags">
+            <span class="ptag">~45M paid app buyers US</span>
+            <span class="ptag">Avg $18/yr on paid apps</span>
+            <span class="ptag">"Own forever" mindset</span>
+            <span class="ptag">Subscription fatigue real</span>
+          </div>
+        </div>
+        <div class="profile-quote">"I'd rather pay $7 once than $2/month forever. The best apps used to be paid. Now everything is subscription slop."</div>
+      </div>
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Apps họ đang mua (paid)</div>
+      <div class="tools-row" style="margin-bottom:32px;">
+        <a class="tool-chip" href="https://reeder.app" target="_blank" rel="noopener">📰 Reeder 5 <span class="tool-chip-label">$4.99 OTP · RSS reader</span></a>
+        <a class="tool-chip" href="https://ia.net/writer" target="_blank" rel="noopener">✍️ iA Writer <span class="tool-chip-label">$29.99 Mac OTP · Timeless</span></a>
+        <a class="tool-chip" href="https://apps.apple.com/us/app/streaks/id963034692" target="_blank" rel="noopener">⚡ Streaks <span class="tool-chip-label">$4.99 OTP · Best habit OTP</span></a>
+        <a class="tool-chip" href="https://apps.apple.com/us/app/grocery-smart-shopping-list/id1195676848" target="_blank" rel="noopener">🛒 Grocery <span class="tool-chip-label">$4.99 OTP · No sub ever</span></a>
+      </div>
+      <div class="tree">
+        <div class="tree-node-user"><div class="user-bubble"><span>📱</span> The Premium App Buyer</div></div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+        <div class="pain-branches" style="margin-bottom:12px;">
+          <div class="pain-node">
+            <div class="pain-num">Pain #1</div>
+            <div class="pain-title">"Subscription slop" — app yêu thích đổi từ OTP sang sub</div>
+            <div class="pain-story">Forest: $3.99 one-time → $2.99/mo. Carrot Weather: $4.99 → $4.99/mo. Dark Sky bị Apple mua và kill. Mỗi app switch model = thêm 1 subscription phải track. Cảm giác bị phản bội.</div>
+            <div class="pain-quote">"Forest turned from a great one-time app into subscription slop." — App Store 2025, 2.3K upvotes</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #2</div>
+            <div class="pain-title">App Store "Paid" section đang chết — không discovery</div>
+            <div class="pain-story">Apple algorithm ưu tiên free apps vì downloads nhiều hơn. Top Charts toàn free + freemium. Người muốn mua app tốt không biết tìm ở đâu. r/iosgaming "what paid apps are worth it" được 12K upvotes — pent-up demand.</div>
+            <div class="pain-quote">"I can't find good paid apps anymore. The App Store buried them."</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #3</div>
+            <div class="pain-title">$3/mo cho app dùng 3x/tuần không justify</div>
+            <div class="pain-story">$36/năm habit app + $48/năm focus timer + $60/năm journal = $144/năm chỉ cho 3 apps. Với người có budget tight, trả $10 once rõ ràng hơn nhiều. "I don't even use it every day."</div>
+            <div class="pain-quote">"I don't want another subscription. I want to BUY the app."</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">dẫn đến gap</div><div class="tc-line"></div></div>
+        <div class="gap-node" style="margin-bottom:12px;">
+          <div class="gap-icon">🕳️</div>
+          <div>
+            <div class="gap-title">Tại sao thị trường chưa giải quyết?</div>
+            <div class="gap-desc">VCs và investors pressure teams phải có predictable MRR. Solo devs follow trend vì "đó là cách modern apps work." <strong>Không ai đang actively positioning đến nhóm "paid app advocate"</strong> — 45M users sẵn sàng trả $7-10 one-time cho app thực sự tốt. Streaks ($4.99 OTP) là proof: top-rated, profitable, 1 dev.</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">product match</div><div class="tc-line"></div></div>
+        <div class="product-match">
+          <div class="pm-left">
+            <div class="pm-eyebrow">✅ Sản phẩm phù hợp</div>
+            <div class="pm-name">Streak — "Buy once, build habits forever"</div>
+            <div class="pm-why">Positioning rõ ràng: <strong>"The last habit app you'll ever buy."</strong> No subscription. No renewal. Lifetime updates. SEO "one-time habit tracker" = untapped. ASO "paid habit app" — almost zero competition. Cross-sells: iOS buyers upgrade to web companion.</div>
+            <div class="pm-details">
+              <span class="pm-detail hi">$7.99 one-time — 2× rẻ hơn 1 tháng sub</span>
+              <span class="pm-detail">Lifetime updates included</span>
+              <span class="pm-detail">No account required</span>
+              <span class="pm-detail">iOS + free web PWA companion</span>
+            </div>
+            <div class="comp-row" style="margin-top:12px;">
+              <a class="comp-pill" href="https://apps.apple.com/us/app/streaks/id963034692" target="_blank" rel="noopener"><span class="crating">★</span>4.8 Streaks <span class="cprice">$4.99 OTP (competitor)</span></a>
+              <a class="comp-pill" href="https://apps.apple.com/us/app/habitify-habit-tracker/id1111447047" target="_blank" rel="noopener"><span class="crating">★</span>4.6 Habitify <span class="cprice">$4.99/mo (sub)</span></a>
+              <a class="comp-pill" href="https://apps.apple.com/us/app/forest-focus-for-productivity/id866450515" target="_blank" rel="noopener"><span class="crating">★</span>4.8 Forest <span class="cprice">$2.99/mo (was $3.99 OTP)</span></a>
+            </div>
+          </div>
+          <div class="pm-right">
+            <div class="pm-mrr">$1.6K/mo</div>
+            <div class="pm-mrr-sub">Monthly sales<br/>~200 purchases × $7.99</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ OTP SEGMENT 2: Mac Utility Collector ══ -->
+    <div class="seg-panel for-ot" id="ot2">
+      <div class="profile-row">
+        <div class="profile-avatar" style="background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.2);">🖥️</div>
+        <div class="profile-info">
+          <div class="profile-name">The Mac Utility Collector</div>
+          <div class="profile-demo">28–45 tuổi · Developer / designer / power user · US · Mac là main machine · Mua specialized tools theo nhu cầu</div>
+          <div class="profile-tags">
+            <span class="ptag">~35M Mac users US</span>
+            <span class="ptag">Avg $50-100/yr on Mac apps</span>
+            <span class="ptag">Setapp ($9.99/mo) alternative seekers</span>
+            <span class="ptag">8+ menu bar icons</span>
+          </div>
+        </div>
+        <div class="profile-quote">"CleanShot used to be $29 one-time. Now it's $8/month. That's $96/year for a screenshot tool. I'm done with this model."</div>
+      </div>
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Apps đang dùng</div>
+      <div class="tools-row" style="margin-bottom:32px;">
+        <a class="tool-chip" href="https://cleanshot.com" target="_blank" rel="noopener">📸 CleanShot X <span class="tool-chip-label">$29 legacy / $7.99/mo now</span></a>
+        <a class="tool-chip" href="https://www.macbartender.com" target="_blank" rel="noopener">🍹 Bartender <span class="tool-chip-label">$16 one-time · Menu mgr</span></a>
+        <a class="tool-chip" href="https://www.alfredapp.com" target="_blank" rel="noopener">🦅 Alfred <span class="tool-chip-label">$34 Powerpack · Launcher</span></a>
+        <a class="tool-chip" href="https://popclip.app" target="_blank" rel="noopener">✂️ PopClip <span class="tool-chip-label">$9.99 one-time</span></a>
+      </div>
+      <div class="tree">
+        <div class="tree-node-user"><div class="user-bubble"><span>🖥️</span> The Mac Utility Collector</div></div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+        <div class="pain-branches" style="margin-bottom:12px;">
+          <div class="pain-node">
+            <div class="pain-num">Pain #1</div>
+            <div class="pain-title">Best Mac tools chuyển sang sub — $96/năm cho screenshot</div>
+            <div class="pain-story">CleanShot X: $29 OTP → $7.99/mo. Proxyman: one-time → sub. Sketch: $9/mo. Menu bar có 8 icons, 5 cái đang billing monthly. "Death by a thousand subscriptions."</div>
+            <div class="pain-quote">"CleanShot used to be $29 and now it's a subscription. I'm done." — r/MacApps, 1.4K upvotes</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #2</div>
+            <div class="pain-title">Simple utility → $9.99/mo quá overkill</div>
+            <div class="pain-story">Window snapping, clipboard history, color picker — những thứ đơn giản này đang charge $5-10/mo. Setapp ($9.99/mo) là bundle option nhưng vẫn là subscription và có nhiều apps họ không cần.</div>
+            <div class="pain-quote">"I just need a simple clipboard manager, not a $120/year subscription."</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #3</div>
+            <div class="pain-title">Discovering quality OTP Mac apps ngày càng khó</div>
+            <div class="pain-story">Mac App Store algorithm kém cho paid apps. r/MacApps là best discovery nhưng noisy. Setapp catalog không searchable tốt. Chưa có curation layer cho "quality OTP Mac apps" — nhu cầu discovery chưa được đáp ứng.</div>
+            <div class="pain-quote">"How do people even find good paid Mac apps anymore?"</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">dẫn đến gap</div><div class="tc-line"></div></div>
+        <div class="gap-node" style="margin-bottom:12px;">
+          <div class="gap-icon">🕳️</div>
+          <div>
+            <div class="gap-title">Tại sao thị trường chưa giải quyết?</div>
+            <div class="gap-desc">CleanShot's success ($29 OTP, loved by everyone) proves quality OTP Mac apps sell well. Nhưng hầu hết devs follow subscription trend. <strong>Simple, focused Mac menu bar utilities ở $9.99–$19.99 OTP đang undersupplied.</strong> Streak habit tracker + Mac companion app = natural cross-sell cho iOS users.</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">product match</div><div class="tc-line"></div></div>
+        <div class="product-match">
+          <div class="pm-left">
+            <div class="pm-eyebrow">✅ Sản phẩm phù hợp</div>
+            <div class="pm-name">Streak for Mac — Menu bar habit companion</div>
+            <div class="pm-why">Native macOS menu bar app, 1-click daily check-in, syncs với iOS Streak app. <strong>Cross-sells tự nhiên:</strong> iOS users muốn Mac companion. Distribution: Product Hunt + r/MacApps + Setapp (catalog for recurring exposure). $14.99 = impulse buy.</div>
+            <div class="pm-details">
+              <span class="pm-detail hi">$14.99 one-time — vs $96/yr competitors</span>
+              <span class="pm-detail">Native macOS menu bar</span>
+              <span class="pm-detail">Syncs với iOS Streak app</span>
+              <span class="pm-detail">Works offline, no account needed</span>
+            </div>
+            <div class="comp-row" style="margin-top:12px;">
+              <a class="comp-pill" href="https://cleanshot.com" target="_blank" rel="noopener"><span class="crating">★</span>4.9 CleanShot <span class="cprice">$29 OTP (was); $7.99/mo now</span></a>
+              <a class="comp-pill" href="https://www.alfredapp.com" target="_blank" rel="noopener"><span class="crating">★</span>4.8 Alfred <span class="cprice">$34 Powerpack OTP</span></a>
+              <a class="comp-pill" href="https://setapp.com" target="_blank" rel="noopener">🟧 Setapp <span class="cprice">$9.99/mo bundle</span></a>
+            </div>
+          </div>
+          <div class="pm-right">
+            <div class="pm-mrr">$1.2K/mo</div>
+            <div class="pm-mrr-sub">Monthly sales<br/>~80 purchases × $14.99</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ OTP SEGMENT 3: Design Asset Hunter ══ -->
+    <div class="seg-panel for-ot" id="ot3">
+      <div class="profile-row">
+        <div class="profile-avatar" style="background:rgba(251,146,60,.08);border-color:rgba(251,146,60,.2);">🎨</div>
+        <div class="profile-info">
+          <div class="profile-name">The Design Asset Hunter</div>
+          <div class="profile-demo">23–38 tuổi · UI/UX designer hoặc front-end dev · US · Figma daily user · Mua icon packs và UI kits theo từng project</div>
+          <div class="profile-tags">
+            <span class="ptag">4M+ Figma users worldwide</span>
+            <span class="ptag">Creative Market $150M+ revenue/yr</span>
+            <span class="ptag">Icon pack: $19–49 per purchase</span>
+            <span class="ptag">1 project cần 50–200 icons</span>
+          </div>
+        </div>
+        <div class="profile-quote">"Iconfinder charges $15/month for icons I'll use for 2 weeks on one project. I just want to buy the pack once and be done."</div>
+      </div>
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Nguồn assets đang dùng</div>
+      <div class="tools-row" style="margin-bottom:32px;">
+        <a class="tool-chip" href="https://phosphoricons.com" target="_blank" rel="noopener">🧪 Phosphor Icons <span class="tool-chip-label">Free · Generic style</span></a>
+        <a class="tool-chip" href="https://craftwork.design" target="_blank" rel="noopener">🖼️ Craftwork <span class="tool-chip-label">$29–49/pack · Premium</span></a>
+        <a class="tool-chip" href="https://www.iconfinder.com" target="_blank" rel="noopener">🔍 Iconfinder <span class="tool-chip-label">$15/mo · Overkill for 1 project</span></a>
+        <a class="tool-chip" href="https://thenounproject.com" target="_blank" rel="noopener">🔤 Noun Project <span class="tool-chip-label">$9.99/mo · Low quality mix</span></a>
+      </div>
+      <div class="tree">
+        <div class="tree-node-user"><div class="user-bubble"><span>🎨</span> The Design Asset Hunter</div></div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+        <div class="pain-branches" style="margin-bottom:12px;">
+          <div class="pain-node">
+            <div class="pain-num">Pain #1</div>
+            <div class="pain-title">Sub cho icon khi chỉ cần 1 pack cho 1 project</div>
+            <div class="pain-story">Client project cần 80 icons cùng style. Iconfinder/Noun Project charge $10-15/mo. Dùng 2 tuần xong project → cancel subscription. Nhưng licenses đã dùng bị revoke nếu cancel. Phải pay forever.</div>
+            <div class="pain-quote">"I need 80 icons for a 2-week project. Why do I need a monthly subscription?"</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #2</div>
+            <div class="pain-title">Free packs quá generic — không fit premium product UI</div>
+            <div class="pain-story">Heroicons, Feather, Phosphor — tất cả clean nhưng quá phổ biến. Client nhận ra ngay "đây là boilerplate icons." Premium SaaS cần icons không ai khác dùng, nhưng bespoke icon set từ freelancer = $3K-5K+.</div>
+            <div class="pain-quote">"Every SaaS uses Heroicons now. My client said 'this looks like every other app.'"</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #3</div>
+            <div class="pain-title">Hard to find consistent style across 200+ icons</div>
+            <div class="pain-story">Figma Community files inconsistent — mix từ nhiều designers với stroke width khác nhau. Creative Market SEO kém, khó compare. Thường mua 3 packs rồi mix-match = inconsistent final product.</div>
+            <div class="pain-quote">"Bought 3 icon packs and none of them match each other."</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">dẫn đến gap</div><div class="tc-line"></div></div>
+        <div class="gap-node" style="margin-bottom:12px;">
+          <div class="gap-icon">🕳️</div>
+          <div>
+            <div class="gap-title">Tại sao thị trường chưa giải quyết?</div>
+            <div class="gap-desc">Craftwork làm tốt ở illustrations nhưng không có pack nào <strong>designed specifically cho iOS/SaaS utility UI</strong> (habit tracking, productivity, data viz icons). Niche icon sets ($29-49 OTP) với Figma variables + dark/light support = white space. Credibility cao nếu icons đến từ real shipped product.</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">product match</div><div class="tc-line"></div></div>
+        <div class="product-match">
+          <div class="pm-left">
+            <div class="pm-eyebrow">✅ Sản phẩm phù hợp</div>
+            <div class="pm-name">Streak Icon System — 300+ icons cho iOS & SaaS apps</div>
+            <div class="pm-why">Icons designed từ việc build Streak app — authentic, consistent, battle-tested. Figma file + SVG + dark/light variants. <strong>Built-in credibility: "icons đang có trong real iOS app."</strong> Sell: Gumroad + own site + Figma Community. Zero ongoing support needed.</div>
+            <div class="pm-details">
+              <span class="pm-detail hi">$34.99 one-time — 300+ icons, 2 weight styles</span>
+              <span class="pm-detail">Figma library + SVG + PNG</span>
+              <span class="pm-detail">Dark & light mode variants</span>
+              <span class="pm-detail">Commercial license, free updates</span>
+            </div>
+            <div class="comp-row" style="margin-top:12px;">
+              <a class="comp-pill" href="https://craftwork.design" target="_blank" rel="noopener"><span class="crating">★</span>4.9 Craftwork <span class="cprice">$29–49/pack OTP</span></a>
+              <a class="comp-pill" href="https://www.iconfinder.com" target="_blank" rel="noopener"><span class="crating">★</span>4.5 Iconfinder <span class="cprice">$15/mo sub</span></a>
+              <a class="comp-pill" href="https://phosphoricons.com" target="_blank" rel="noopener">Phosphor Icons <span class="cprice">Free (generic)</span></a>
+            </div>
+          </div>
+          <div class="pm-right">
+            <div class="pm-mrr">$2.1K/mo</div>
+            <div class="pm-mrr-sub">Monthly sales<br/>~60 purchases × $34.99</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ OTP SEGMENT 4: The Bootstrapper ══ -->
+    <div class="seg-panel for-ot" id="ot4">
+      <div class="profile-row">
+        <div class="profile-avatar" style="background:rgba(192,132,252,.08);border-color:rgba(192,132,252,.2);">🚀</div>
+        <div class="profile-info">
+          <div class="profile-name">The Bootstrapper</div>
+          <div class="profile-demo">25–40 tuổi · Indie developer · US · Builds side projects evenings & weekends · Wants to ship fast without reinventing the wheel</div>
+          <div class="profile-tags">
+            <span class="ptag">3M+ indie developers US</span>
+            <span class="ptag">Shipfast $249 · Supastarter $149</span>
+            <span class="ptag">Time-to-ship: 3–6 months avg</span>
+            <span class="ptag">Budget $50–150 for tools</span>
+          </div>
+        </div>
+        <div class="profile-quote">"Shipfast is $249 and includes Lemon Squeezy, Prisma, Mailgun — none of which I use. I need Supabase + Stripe in a clean Next.js template."</div>
+      </div>
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Templates đang dùng</div>
+      <div class="tools-row" style="margin-bottom:32px;">
+        <a class="tool-chip" href="https://shipfa.st" target="_blank" rel="noopener">🚢 Shipfast <span class="tool-chip-label">$249 OTP · Feature-heavy</span></a>
+        <a class="tool-chip" href="https://supastarter.dev" target="_blank" rel="noopener">⚡ Supastarter <span class="tool-chip-label">$149 OTP · Supabase + Next</span></a>
+        <a class="tool-chip" href="https://create.t3.gg" target="_blank" rel="noopener">🔺 T3 Stack <span class="tool-chip-label">Free · No billing/auth UI</span></a>
+        <a class="tool-chip" href="https://makerkit.dev" target="_blank" rel="noopener">🛠️ MakerKit <span class="tool-chip-label">$149–299 · Enterprise feel</span></a>
+      </div>
+      <div class="tree">
+        <div class="tree-node-user"><div class="user-bubble"><span>🚀</span> The Bootstrapper</div></div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+        <div class="pain-branches" style="margin-bottom:12px;">
+          <div class="pain-node">
+            <div class="pain-num">Pain #1</div>
+            <div class="pain-title">Premium boilerplates quá đắt cho side projects có thể không work</div>
+            <div class="pain-story">Shipfast $249, Bedrock $349, SaaS Pegasus $249. Side project có thể fail sau 2 tháng — spending $249 upfront là rủi ro lớn. Nhiều indie devs dùng free starter và waste 3 tuần setup auth + billing.</div>
+            <div class="pain-quote">"I spent 3 weeks setting up auth and Stripe. Shipfast would've saved me that, but $249 for a side project?"</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #2</div>
+            <div class="pain-title">Templates dùng stack khác với của mình</div>
+            <div class="pain-story">Shipfast dùng Mongoose/MongoDB, họ dùng Supabase. Supastarter dùng tRPC, họ muốn simple API routes. Migrate template = mất thêm 1 tuần. Cảm giác "faster to start from scratch."</div>
+            <div class="pain-quote">"Every boilerplate uses a different stack. None match exactly what I need."</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #3</div>
+            <div class="pain-title">Too many features — complex codebase hard to onboard</div>
+            <div class="pain-story">Shipfast có: waitlist, blog, i18n, teams, Lemon Squeezy, Mailgun, Crisp chat... Indie dev build simple SaaS chỉ cần 20% của cái này. 80% còn lại là bloat làm mất 1 tuần chỉ để đọc hiểu codebase.</div>
+            <div class="pain-quote">"I bought Shipfast and spent a week just understanding the codebase before writing one line."</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">dẫn đến gap</div><div class="tc-line"></div></div>
+        <div class="gap-node" style="margin-bottom:12px;">
+          <div class="gap-icon">🕳️</div>
+          <div>
+            <div class="gap-title">Tại sao thị trường chưa giải quyết?</div>
+            <div class="gap-desc">Shipfast và MakerKit target "ship fast and charge premium." Free alternatives (T3, create-next-app) lack auth UI + billing. <strong>Khoảng trống $79–99 cho "lean indie starter" — Next.js + Supabase + Stripe only, ~800 clean lines, no bloat</strong> là white space thực sự giữa $0 và $149+.</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">product match</div><div class="tc-line"></div></div>
+        <div class="product-match">
+          <div class="pm-left">
+            <div class="pm-eyebrow">✅ Sản phẩm phù hợp</div>
+            <div class="pm-name">Indie Starter — Next.js + Supabase + Stripe, nothing else</div>
+            <div class="pm-why">Extract từ Streak web app — auth, Stripe billing, minimal UI đã tested in production. <strong>"This is the exact stack Streak was built with."</strong> Đó là credibility tốt nhất. Gumroad + own site. Không cần ongoing support — code là code.</div>
+            <div class="pm-details">
+              <span class="pm-detail hi">$89 one-time — 64% rẻ hơn Shipfast</span>
+              <span class="pm-detail">Next.js + Supabase + Stripe only</span>
+              <span class="pm-detail">~800 lines, readable codebase</span>
+              <span class="pm-detail">MIT license, keep forever</span>
+            </div>
+            <div class="comp-row" style="margin-top:12px;">
+              <a class="comp-pill" href="https://shipfa.st" target="_blank" rel="noopener"><span class="crating">★</span>4.8 Shipfast <span class="cprice">$249 OTP</span></a>
+              <a class="comp-pill" href="https://supastarter.dev" target="_blank" rel="noopener"><span class="crating">★</span>4.7 Supastarter <span class="cprice">$149 OTP</span></a>
+              <a class="comp-pill" href="https://create.t3.gg" target="_blank" rel="noopener">T3 Stack <span class="cprice">Free (no billing/UI)</span></a>
+            </div>
+          </div>
+          <div class="pm-right">
+            <div class="pm-mrr">$2.7K/mo</div>
+            <div class="pm-mrr-sub">Monthly sales<br/>~30 purchases × $89</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ OTP SEGMENT 5: Digital Product Buyer ══ -->
+    <div class="seg-panel for-ot" id="ot5">
+      <div class="profile-row">
+        <div class="profile-avatar" style="background:rgba(250,204,21,.06);border-color:rgba(250,204,21,.15);">📦</div>
+        <div class="profile-info">
+          <div class="profile-name">The Digital Product Buyer</div>
+          <div class="profile-demo">20–38 tuổi · Creator, marketer, knowledge worker · US · Mua Notion templates, PDF guides, checklists trên Gumroad để work smarter</div>
+          <div class="profile-tags">
+            <span class="ptag">Gumroad $200M+ creator payouts</span>
+            <span class="ptag">Notion 30M+ users</span>
+            <span class="ptag">Digital product market $300M+ US</span>
+            <span class="ptag">Repeat buyer nếu trust brand</span>
+          </div>
+        </div>
+        <div class="profile-quote">"I've bought 20 Notion templates. Half were $5 garbage. I wish there was a creator I could trust to consistently deliver quality."</div>
+      </div>
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Nơi họ mua digital products</div>
+      <div class="tools-row" style="margin-bottom:32px;">
+        <a class="tool-chip" href="https://gumroad.com" target="_blank" rel="noopener">💚 Gumroad <span class="tool-chip-label">$5–49/item · Low signal/noise</span></a>
+        <a class="tool-chip" href="https://thomasjfrank.com/templates" target="_blank" rel="noopener">🧠 Thomas Frank <span class="tool-chip-label">$49–99 · Trusted creator</span></a>
+        <a class="tool-chip" href="https://www.easlo.co" target="_blank" rel="noopener">📋 Easlo <span class="tool-chip-label">$19–49 · Popular Notion</span></a>
+        <a class="tool-chip" href="https://creativemarket.com" target="_blank" rel="noopener">🛒 Creative Market <span class="tool-chip-label">$15–79 · Broad, not niche</span></a>
+      </div>
+      <div class="tree">
+        <div class="tree-node-user"><div class="user-bubble"><span>📦</span> The Digital Product Buyer</div></div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+        <div class="pain-branches" style="margin-bottom:12px;">
+          <div class="pain-node">
+            <div class="pain-num">Pain #1</div>
+            <div class="pain-title">Low signal-to-noise trên Gumroad — mostly garbage</div>
+            <div class="pain-story">Search "productivity Notion template" → 500 results, 80% là $5 low-effort copies của nhau. Genuine reviews khó phân biệt với fake. Spending $15 cảm giác như gambling. "Bought 5, found 1 good one" là very common experience.</div>
+            <div class="pain-quote">"Gumroad is like a garage sale. You dig through junk to find treasure."</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #2</div>
+            <div class="pain-title">Expensive templates không match workflow cụ thể</div>
+            <div class="pain-story">Thomas Frank's templates ($49-99) polished nhưng overbuilt. August Bradley's Notion system ($149) là a full-time study. They want something specific, not a whole "life OS." Mismatch = $49 wasted money.</div>
+            <div class="pain-quote">"I bought a $49 template and only used 20% of it. The rest felt like bloat."</div>
+          </div>
+          <div class="pain-node">
+            <div class="pain-num">Pain #3</div>
+            <div class="pain-title">Không có trusted brand để reorder từ</div>
+            <div class="pain-story">Gumroad creators thường là anonymous, 1 product. Nếu tìm được template tốt, không thể easily find more cùng quality từ cùng creator. No loyalty loop. No brand they can "follow and buy everything from."</div>
+            <div class="pain-quote">"I wish I could find one creator I trust and just buy everything they make."</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">dẫn đến gap</div><div class="tc-line"></div></div>
+        <div class="gap-node" style="margin-bottom:12px;">
+          <div class="gap-icon">🕳️</div>
+          <div>
+            <div class="gap-title">Tại sao thị trường chưa giải quyết?</div>
+            <div class="gap-desc">Gumroad platform incentivize volume over quality. Most creators make 1 product and move on. <strong>Focused creator brand với 3–5 high-quality products trong 1 niche</strong> (e.g., "tools for indie app builders") + newsletter = repeat buyer loyalty. Thomas Frank chứng minh model này work — nhưng không ai làm ở niche "app creator toolkit."</div>
+          </div>
+        </div>
+        <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">product match</div><div class="tc-line"></div></div>
+        <div class="product-match">
+          <div class="pm-left">
+            <div class="pm-eyebrow">✅ Sản phẩm phù hợp</div>
+            <div class="pm-name">Indie Maker's Kit — Notion tracker + App Launch Checklist</div>
+            <div class="pm-why">Bundle: Notion project tracker + app store launch checklist + market research template. <strong>Bán experience bạn đã có từ building Streak.</strong> Gumroad + newsletter = repeat buyer flywheel. $19 = instant impulse buy, no hesitation barrier.</div>
+            <div class="pm-details">
+              <span class="pm-detail hi">$19 one-time — instant download</span>
+              <span class="pm-detail">Notion template + PDF checklist</span>
+              <span class="pm-detail">App launch workflow từ real indie dev</span>
+              <span class="pm-detail">Newsletter → repeat buyer loop</span>
+            </div>
+            <div class="comp-row" style="margin-top:12px;">
+              <a class="comp-pill" href="https://www.easlo.co" target="_blank" rel="noopener"><span class="crating">★</span>4.8 Easlo <span class="cprice">$19–49 OTP</span></a>
+              <a class="comp-pill" href="https://thomasjfrank.com/templates" target="_blank" rel="noopener"><span class="crating">★</span>4.9 Thomas Frank <span class="cprice">$49–99 OTP</span></a>
+              <a class="comp-pill" href="https://gumroad.com" target="_blank" rel="noopener">Gumroad random <span class="cprice">$5–15 (low quality)</span></a>
+            </div>
+          </div>
+          <div class="pm-right">
+            <div class="pm-mrr">$1.9K/mo</div>
+            <div class="pm-mrr-sub">Monthly sales<br/>~100 purchases × $19</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /reveal -->
+
+  <hr class="dv" />
+
+  <!-- ══════════════════ BEST PICK ══════════════════ -->
+  <div class="best-pick-wrap reveal for-sub">
+    <p class="sec-eye">Đề xuất đầu tư</p>
+    <h2 class="sec-h2" style="margin-bottom:24px;">Sản phẩm <em>đáng đầu tư nhất</em></h2>
+
+    <div class="best-pick">
+      <div class="bp-crown-row">
+        <div class="bp-crown">★</div>
+        <div>
+          <div class="bp-eyebrow">Best Investment Pick</div>
+          <div class="bp-title">Habit / Streak Tracker</div>
+        </div>
+      </div>
+
+      <p style="font-size:14px;color:var(--cr5);line-height:1.75;max-width:680px;margin-bottom:32px;">
+        Bạn đang build cái này rồi. Thị trường $13B, CAGR 14.4%, đối thủ lớn nhất iOS-only. Đây không phải lúc để build sản phẩm mới — đây là lúc để <strong style="color:var(--cr)">extend cái đã có và win</strong>.
+      </p>
+
+      <div class="bp-grid">
+        <!-- Mindmap -->
+        <div>
+          <div class="mindmap">
+            <div class="mm-title">🗺️ Pain → Solution Map</div>
+            <div class="mm-root-node"><span>⚡</span> Streak App — Your Product</div>
+            <div class="mm-vline"></div>
+            <div class="mm-branches-col">
+
+              <div class="mm-item">
+                <div style="width:20px;height:2px;background:var(--bd2);margin-top:18px;flex-shrink:0;"></div>
+                <div class="mm-content">
+                  <div class="mm-pain-label">Pain #1</div>
+                  <div class="mm-pain-text">iOS-only — 40% users mất</div>
+                  <div class="mm-sol">
+                    <div class="mm-sol-item">Web PWA (Next.js + Supabase)</div>
+                    <div class="mm-sol-item">Android app (Expo, code share 80%)</div>
+                    <div class="mm-sol-item">Real-time sync cross-device</div>
+                  </div>
+                  <div class="mm-impact">→ 2.5× addressable market</div>
+                </div>
+              </div>
+
+              <div class="mm-item">
+                <div style="width:20px;height:2px;background:var(--bd2);margin-top:18px;flex-shrink:0;"></div>
+                <div class="mm-content">
+                  <div class="mm-pain-label">Pain #2</div>
+                  <div class="mm-pain-text">80% churn trong 30 ngày</div>
+                  <div class="mm-sol">
+                    <div class="mm-sol-item">AI nudge đúng lúc (behavior timing)</div>
+                    <div class="mm-sol-item">Streak rescue alert (T-1 day)</div>
+                    <div class="mm-sol-item">Weekly AI insight report</div>
+                  </div>
+                  <div class="mm-impact">→ Retention 8% → 20% (proven)</div>
+                </div>
+              </div>
+
+              <div class="mm-item">
+                <div style="width:20px;height:2px;background:var(--bd2);margin-top:18px;flex-shrink:0;"></div>
+                <div class="mm-content">
+                  <div class="mm-pain-label">Pain #3</div>
+                  <div class="mm-pain-text">$4.99/mo quá đắt với nhiều users</div>
+                  <div class="mm-sol">
+                    <div class="mm-sol-item">Free tier: 1 habit mãi mãi</div>
+                    <div class="mm-sol-item">Pro: $2.99/mo (40% rẻ hơn)</div>
+                    <div class="mm-sol-item">Annual: $19.99/năm (save $16)</div>
+                  </div>
+                  <div class="mm-impact">→ 3× conversion rate vs competitors</div>
+                </div>
+              </div>
+
+              <div class="mm-item">
+                <div style="width:20px;height:2px;background:var(--bd2);margin-top:18px;flex-shrink:0;"></div>
+                <div class="mm-content">
+                  <div class="mm-pain-label">Pain #4</div>
+                  <div class="mm-pain-text">Solo habit, 44% bỏ vì không có ai cùng</div>
+                  <div class="mm-sol">
+                    <div class="mm-sol-item">Friend streaks (1:1 accountability)</div>
+                    <div class="mm-sol-item">Shareable milestone cards (viral)</div>
+                    <div class="mm-sol-item">Team plan $6/user (B2B upsell)</div>
+                  </div>
+                  <div class="mm-impact">→ CLV +40%, K-factor &gt; 0.3</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Roadmap -->
+        <div>
+          <div class="rm-title">🛣️ Roadmap — 0 đến $5K MRR</div>
+          <div class="roadmap">
+
+            <div class="rm-item">
+              <div class="rm-time">Now</div>
+              <div class="rm-spine"><div class="rm-dot done"></div><div class="rm-line"></div></div>
+              <div class="rm-body done-body">
+                <div class="rm-phase-label" style="color:var(--cr3);">✓ Phase 0</div>
+                <div class="rm-phase-title">iOS App + Firebase Live</div>
+                <div class="rm-tasks">
+                  <div class="rm-task done-task"><span class="tick">✓</span>Core concept "1 dot a day" validated</div>
+                  <div class="rm-task done-task"><span class="tick">✓</span>Visual identity + UX đã có</div>
+                  <div class="rm-task done-task"><span class="tick">✓</span>Deployment pipeline ready</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rm-item">
+              <div class="rm-time">Tuần<br/>1–4</div>
+              <div class="rm-spine"><div class="rm-dot active"></div><div class="rm-line"></div></div>
+              <div class="rm-body">
+                <div class="rm-phase-label" style="color:var(--g);">→ Phase 1</div>
+                <div class="rm-phase-title">Web App + Stripe Billing</div>
+                <div class="rm-tasks">
+                  <div class="rm-task"><span class="tick">○</span>PWA web app (Next.js + Supabase sync)</div>
+                  <div class="rm-task"><span class="tick">○</span>Free + Pro $2.99/mo (Stripe)</div>
+                  <div class="rm-task"><span class="tick">○</span>SEO landing: "Streaks app web version"</div>
+                </div>
+                <div class="rm-goal-tag" style="background:var(--gb);color:var(--g);">🎯 $150 MRR (50 paid users)</div>
+              </div>
+            </div>
+
+            <div class="rm-item">
+              <div class="rm-time">Tuần<br/>5–8</div>
+              <div class="rm-spine"><div class="rm-dot upcoming"></div><div class="rm-line"></div></div>
+              <div class="rm-body">
+                <div class="rm-phase-label" style="color:var(--b);">Phase 2</div>
+                <div class="rm-phase-title">Android + Product Hunt Launch</div>
+                <div class="rm-tasks">
+                  <div class="rm-task"><span class="tick">○</span>Android app (Expo, 80% code share)</div>
+                  <div class="rm-task"><span class="tick">○</span>Smart push notifications</div>
+                  <div class="rm-task"><span class="tick">○</span>Product Hunt launch day</div>
+                </div>
+                <div class="rm-goal-tag" style="background:var(--bb);color:var(--b);">🎯 $800 MRR (270 users)</div>
+              </div>
+            </div>
+
+            <div class="rm-item">
+              <div class="rm-time">Tuần<br/>9–12</div>
+              <div class="rm-spine"><div class="rm-dot upcoming"></div><div class="rm-line"></div></div>
+              <div class="rm-body">
+                <div class="rm-phase-label" style="color:var(--o);">Phase 3</div>
+                <div class="rm-phase-title">AI Nudge Engine</div>
+                <div class="rm-tasks">
+                  <div class="rm-task"><span class="tick">○</span>Weekly AI insight (Claude API + Resend)</div>
+                  <div class="rm-task"><span class="tick">○</span>Streak rescue alert (midnight cron)</div>
+                  <div class="rm-task"><span class="tick">○</span>Annual plan upsell tại 30-day milestone</div>
+                </div>
+                <div class="rm-goal-tag" style="background:var(--ob);color:var(--o);">🎯 $2,000 MRR (670 users)</div>
+              </div>
+            </div>
+
+            <div class="rm-item">
+              <div class="rm-time">Tháng<br/>4–6</div>
+              <div class="rm-spine"><div class="rm-dot upcoming"></div><div class="rm-line"></div></div>
+              <div class="rm-body">
+                <div class="rm-phase-label" style="color:var(--p);">Phase 4</div>
+                <div class="rm-phase-title">Social + Referral Loop</div>
+                <div class="rm-tasks">
+                  <div class="rm-task"><span class="tick">○</span>Friend streaks + milestone share cards</div>
+                  <div class="rm-task"><span class="tick">○</span>Referral: 1 tháng free khi invite bạn</div>
+                  <div class="rm-task"><span class="tick">○</span>Team plan $6/user/mo (B2B upsell)</div>
+                </div>
+                <div class="rm-goal-tag" style="background:var(--pb);color:var(--p);">🎯 $3,500 MRR (1,170 users)</div>
+              </div>
+            </div>
+
+            <div class="rm-item">
+              <div class="rm-time">Tháng<br/>7–12</div>
+              <div class="rm-spine"><div class="rm-dot upcoming"></div><div class="rm-line"></div></div>
+              <div class="rm-body">
+                <div class="rm-phase-label" style="color:var(--g);">Phase 5</div>
+                <div class="rm-phase-title">Scale to $5K MRR</div>
+                <div class="rm-tasks">
+                  <div class="rm-task"><span class="tick">○</span>SEO compound: 2 bài/tháng long-tail</div>
+                  <div class="rm-task"><span class="tick">○</span>ASO optimization (App Store keywords)</div>
+                  <div class="rm-task"><span class="tick">○</span>Team plan growth + B2B partnerships</div>
+                </div>
+                <div class="rm-goal-tag" style="background:var(--gb);color:var(--g);font-weight:700;">🎯 $5,000+ MRR = $60K ARR</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Financial projection -->
+          <div class="fin-chart" style="margin-top:20px;">
+            <div class="fin-title for-sub">📈 MRR Projection (subscription)</div>
+            <div class="fin-title for-ot">📈 Revenue Projection (monthly sales)</div>
+            <div class="for-sub">
+              <div class="fin-row"><span class="fin-phase">Phase 1 · T4</span><div class="fin-track"><div class="fin-fill" style="width:3%"></div></div><span class="fin-val">$150</span></div>
+              <div class="fin-row"><span class="fin-phase">Phase 2 · T8</span><div class="fin-track"><div class="fin-fill" style="width:16%"></div></div><span class="fin-val">$800</span></div>
+              <div class="fin-row"><span class="fin-phase">Phase 3 · T12</span><div class="fin-track"><div class="fin-fill" style="width:40%"></div></div><span class="fin-val">$2,000</span></div>
+              <div class="fin-row"><span class="fin-phase">Phase 4 · T5mo</span><div class="fin-track"><div class="fin-fill" style="width:70%"></div></div><span class="fin-val">$3,500</span></div>
+              <div class="fin-row"><span class="fin-phase">Phase 5 · T12mo</span><div class="fin-track"><div class="fin-fill" style="width:100%;background:linear-gradient(90deg,var(--g),#86efac)"></div></div><span class="fin-val" style="color:var(--g);font-weight:700;">$5,000+</span></div>
+            </div>
+            <div class="for-ot">
+              <div class="fin-row"><span class="fin-phase">Launch · T4</span><div class="fin-track"><div class="fin-fill" style="width:8%;background:linear-gradient(90deg,var(--b),rgba(96,165,250,.4))"></div></div><span class="fin-val">$400</span></div>
+              <div class="fin-row"><span class="fin-phase">PH spike · T8</span><div class="fin-track"><div class="fin-fill" style="width:40%;background:linear-gradient(90deg,var(--b),rgba(96,165,250,.4))"></div></div><span class="fin-val">$2,000</span></div>
+              <div class="fin-row"><span class="fin-phase">Organic · T12</span><div class="fin-track"><div class="fin-fill" style="width:90%;background:linear-gradient(90deg,var(--b),rgba(96,165,250,.4))"></div></div><span class="fin-val">$4,500</span></div>
+              <div class="fin-row"><span class="fin-phase">Steady · T5mo</span><div class="fin-track"><div class="fin-fill" style="width:100%;background:linear-gradient(90deg,var(--b),rgba(96,165,250,.4))"></div></div><span class="fin-val">$6,000</span></div>
+              <div class="fin-row"><span class="fin-phase">Scale · T12mo</span><div class="fin-track"><div class="fin-fill" style="width:100%;background:linear-gradient(90deg,var(--b),#93c5fd)"></div></div><span class="fin-val" style="color:var(--b);font-weight:700;">$8,000+</span></div>
+            </div>
+            <div class="for-sub" style="font-size:11px;color:var(--cr3);margin-top:8px;">Server cost ≈ $20–50/mo (serverless). Net margin &gt; 99%.</div>
+            <div class="for-ot" style="font-size:11px;color:var(--cr3);margin-top:8px;">Revenue = monthly new purchases × $8.99. Không compound như MRR — cần duy trì acquisition liên tục. Nên paired với v2 upgrade pricing để tăng LTV.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OTP Best Pick -->
+  <div class="best-pick-wrap reveal for-ot">
+    <p class="sec-eye">Đề xuất đầu tư · One-time</p>
+    <h2 class="sec-h2" style="margin-bottom:24px;">Sản phẩm <em>đáng build nhất</em></h2>
+
+    <div class="best-pick" style="border-color:rgba(96,165,250,.3);background:rgba(96,165,250,.04);">
+      <div class="bp-crown-row">
+        <div class="bp-crown" style="background:rgba(96,165,250,.15);color:var(--b);">★</div>
+        <div>
+          <div class="bp-eyebrow" style="color:var(--b);">Best OTP Pick</div>
+          <div class="bp-title">Indie Starter — Boilerplate Template</div>
+        </div>
+      </div>
+
+      <p style="font-size:14px;color:var(--cr5);line-height:1.75;max-width:680px;margin-bottom:32px;">
+        The Bootstrapper segment chi $89–$149 mà không do dự. Đây là nhóm có willingness-to-pay cao nhất trong OTP market — họ tính ROI bằng giờ dev tiết kiệm, không phải price. <strong style="color:var(--cr)">Một boilerplate tốt bán được 30 copies/tháng ngay từ launch.</strong>
+      </p>
+
+      <div class="bp-grid">
+        <div>
+          <div class="mindmap" style="border-color:rgba(96,165,250,.2);">
+            <div class="mm-title">🗺️ Pain → Solution Map</div>
+            <div class="mm-root-node" style="background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.3);"><span>⚡</span> Indie Starter — $89 OTP</div>
+            <div class="mm-vline"></div>
+            <div class="mm-branches-col">
+
+              <div class="mm-item">
+                <div style="width:20px;height:2px;background:var(--bd2);margin-top:18px;flex-shrink:0;"></div>
+                <div class="mm-content">
+                  <div class="mm-pain-label" style="background:rgba(96,165,250,.08);color:var(--b);">Pain #1</div>
+                  <div class="mm-pain-text">Setup hell — 40+ hours mỗi project mới</div>
+                  <div class="mm-sol">
+                    <div class="mm-sol-item">Next.js 14 + Supabase + Stripe pre-wired</div>
+                    <div class="mm-sol-item">Auth, billing, email in 1 command</div>
+                    <div class="mm-sol-item">TypeScript + Tailwind boilerplate</div>
+                  </div>
+                  <div class="mm-impact">→ Từ 40h setup → 30 phút deploy</div>
+                </div>
+              </div>
+
+              <div class="mm-item">
+                <div style="width:20px;height:2px;background:var(--bd2);margin-top:18px;flex-shrink:0;"></div>
+                <div class="mm-content">
+                  <div class="mm-pain-label" style="background:rgba(96,165,250,.08);color:var(--b);">Pain #2</div>
+                  <div class="mm-pain-text">Existing boilerplates outdated hoặc $300+</div>
+                  <div class="mm-sol">
+                    <div class="mm-sol-item">$89 one-time (ShipFast là $199)</div>
+                    <div class="mm-sol-item">Updates miễn phí 1 năm</div>
+                    <div class="mm-sol-item">Discord community included</div>
+                  </div>
+                  <div class="mm-impact">→ 55% rẻ hơn đối thủ trực tiếp</div>
+                </div>
+              </div>
+
+              <div class="mm-item">
+                <div style="width:20px;height:2px;background:var(--bd2);margin-top:18px;flex-shrink:0;"></div>
+                <div class="mm-content">
+                  <div class="mm-pain-label" style="background:rgba(96,165,250,.08);color:var(--b);">Pain #3</div>
+                  <div class="mm-pain-text">Code chất lượng thấp, không production-ready</div>
+                  <div class="mm-sol">
+                    <div class="mm-sol-item">Built với real Indie Hacker products</div>
+                    <div class="mm-sol-item">Tests + CI/CD pipeline included</div>
+                    <div class="mm-sol-item">Deploy to Vercel in 1 click</div>
+                  </div>
+                  <div class="mm-impact">→ Production-ready từ ngày 1</div>
+                </div>
+              </div>
+
+              <div class="mm-item">
+                <div style="width:20px;height:2px;background:var(--bd2);margin-top:18px;flex-shrink:0;"></div>
+                <div class="mm-content">
+                  <div class="mm-pain-label" style="background:rgba(96,165,250,.08);color:var(--b);">Pain #4</div>
+                  <div class="mm-pain-text">Không biết tích hợp AI tools mới nhất</div>
+                  <div class="mm-sol">
+                    <div class="mm-sol-item">Claude API integration pre-built</div>
+                    <div class="mm-sol-item">OpenAI fallback + streaming</div>
+                    <div class="mm-sol-item">AI feature toggle pattern</div>
+                  </div>
+                  <div class="mm-impact">→ AI-ready từ dòng code đầu tiên</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="rm-title">🛣️ Launch Plan — 0 đến $3K/tháng</div>
+          <div class="roadmap">
+
+            <div class="rm-item">
+              <div class="rm-time">Tuần<br/>1–2</div>
+              <div class="rm-spine"><div class="rm-dot active" style="background:var(--b);box-shadow:0 0 10px var(--b);"></div><div class="rm-line"></div></div>
+              <div class="rm-body">
+                <div class="rm-phase-label" style="color:var(--b);">→ Phase 1</div>
+                <div class="rm-phase-title">Build MVP boilerplate</div>
+                <div class="rm-tasks">
+                  <div class="rm-task"><span class="tick">○</span>Next.js + Supabase + Stripe scaffold</div>
+                  <div class="rm-task"><span class="tick">○</span>Auth flows + billing portal</div>
+                  <div class="rm-task"><span class="tick">○</span>Docs + README</div>
+                </div>
+                <div class="rm-goal-tag" style="background:var(--bb);color:var(--b);">🎯 5 beta users (free)</div>
+              </div>
+            </div>
+
+            <div class="rm-item">
+              <div class="rm-time">Tuần<br/>3–4</div>
+              <div class="rm-spine"><div class="rm-dot upcoming"></div><div class="rm-line"></div></div>
+              <div class="rm-body">
+                <div class="rm-phase-label" style="color:var(--b);">Phase 2</div>
+                <div class="rm-phase-title">Gumroad Launch ($89)</div>
+                <div class="rm-tasks">
+                  <div class="rm-task"><span class="tick">○</span>Landing page + demo video</div>
+                  <div class="rm-task"><span class="tick">○</span>Post: IndieHackers, r/SaaS, X</div>
+                  <div class="rm-task"><span class="tick">○</span>Early bird 10 copies: $59</div>
+                </div>
+                <div class="rm-goal-tag" style="background:var(--bb);color:var(--b);">🎯 10 copies = $590</div>
+              </div>
+            </div>
+
+            <div class="rm-item">
+              <div class="rm-time">Tuần<br/>5–8</div>
+              <div class="rm-spine"><div class="rm-dot upcoming"></div><div class="rm-line"></div></div>
+              <div class="rm-body">
+                <div class="rm-phase-label" style="color:var(--b);">Phase 3</div>
+                <div class="rm-phase-title">Product Hunt + Organic</div>
+                <div class="rm-tasks">
+                  <div class="rm-task"><span class="tick">○</span>Product Hunt launch (Tuesday AM)</div>
+                  <div class="rm-task"><span class="tick">○</span>YouTube tutorial (SEO keywords)</div>
+                  <div class="rm-task"><span class="tick">○</span>Affiliate: 30% cho Indie HackerYouTubers</div>
+                </div>
+                <div class="rm-goal-tag" style="background:var(--bb);color:var(--b);">🎯 30 copies/mo = $2,670</div>
+              </div>
+            </div>
+
+            <div class="rm-item">
+              <div class="rm-time">Tháng<br/>3–6</div>
+              <div class="rm-spine"><div class="rm-dot upcoming"></div><div class="rm-line"></div></div>
+              <div class="rm-body">
+                <div class="rm-phase-label" style="color:var(--b);">Phase 4</div>
+                <div class="rm-phase-title">v2 + Bundle Upsell</div>
+                <div class="rm-tasks">
+                  <div class="rm-task"><span class="tick">○</span>Add: Admin dashboard + analytics template</div>
+                  <div class="rm-task"><span class="tick">○</span>Bundle: Starter + Icons = $119</div>
+                  <div class="rm-task"><span class="tick">○</span>Upgrade pricing: v1→v2 = $29</div>
+                </div>
+                <div class="rm-goal-tag" style="background:var(--bb);color:var(--b);font-weight:700;">🎯 $3,000+/tháng</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="fin-chart" style="margin-top:20px;">
+            <div class="fin-title">📈 Monthly Revenue (OTP)</div>
+            <div class="fin-row"><span class="fin-phase">Early bird · T2</span><div class="fin-track"><div class="fin-fill" style="width:20%;background:linear-gradient(90deg,var(--b),rgba(96,165,250,.4))"></div></div><span class="fin-val">$590</span></div>
+            <div class="fin-row"><span class="fin-phase">Launch · T4</span><div class="fin-track"><div class="fin-fill" style="width:40%;background:linear-gradient(90deg,var(--b),rgba(96,165,250,.4))"></div></div><span class="fin-val">$1,600</span></div>
+            <div class="fin-row"><span class="fin-phase">PH spike · T6</span><div class="fin-track"><div class="fin-fill" style="width:75%;background:linear-gradient(90deg,var(--b),rgba(96,165,250,.4))"></div></div><span class="fin-val">$2,670</span></div>
+            <div class="fin-row"><span class="fin-phase">Steady · T5mo</span><div class="fin-track"><div class="fin-fill" style="width:90%;background:linear-gradient(90deg,var(--b),rgba(96,165,250,.4))"></div></div><span class="fin-val">$3,000</span></div>
+            <div class="fin-row"><span class="fin-phase">Bundle · T6mo</span><div class="fin-track"><div class="fin-fill" style="width:100%;background:linear-gradient(90deg,var(--b),#93c5fd)"></div></div><span class="fin-val" style="color:var(--b);font-weight:700;">$3,500+</span></div>
+            <div style="font-size:11px;color:var(--cr3);margin-top:8px;">Revenue = new purchases/mo. Nên thêm v2 upgrade pricing để có recurring component.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Web Best Pick -->
+  <div class="best-pick-wrap reveal for-web">
+    <p class="sec-eye">Đề xuất đầu tư · Web</p>
+    <h2 class="sec-h2" style="margin-bottom:24px;">Sản phẩm web <em>đáng build nhất</em></h2>
+
+    <div class="best-pick" style="border-color:rgba(192,132,252,.3);background:rgba(192,132,252,.04);">
+      <div class="bp-crown-row">
+        <div class="bp-crown" style="background:rgba(192,132,252,.15);color:var(--p);border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;">★</div>
+        <div>
+          <div class="bp-eyebrow" style="color:var(--p);">Best Web Pick</div>
+          <div class="bp-title">PaperTrail — Substack Alternative</div>
+        </div>
+      </div>
+
+      <p style="font-size:14px;color:var(--cr5);line-height:1.75;max-width:680px;margin-bottom:32px;">
+        Substack lấy 10% revenue forever — đây là pain dollar-quantified rõ nhất trong web market. <strong style="color:var(--cr)">Top writer kiếm $20K/mo trả Substack $2K/mo</strong>. Switch sang flat $29/mo = save $1,971. Window đang mở: 2024 Substack deplatforming + beehiiv chỉ giải quyết partially. Niche: serious writers $2K+/mo revenue.
+      </p>
+
+      <div class="bp-grid">
+        <div>
+          <div class="mindmap" style="border-color:rgba(192,132,252,.2);">
+            <div class="mm-title">🗺️ Pain → Solution Map</div>
+            <div class="mm-root-node" style="background:rgba(192,132,252,.1);border-color:rgba(192,132,252,.3);"><span>📝</span> PaperTrail — $29/mo flat</div>
+            <div class="mm-vline"></div>
+            <div class="mm-branches-col">
+
+              <div class="mm-item">
+                <div style="width:20px;height:2px;background:var(--bd2);margin-top:18px;flex-shrink:0;"></div>
+                <div class="mm-content">
+                  <div class="mm-pain-label" style="background:rgba(192,132,252,.08);color:var(--p);">Pain #1</div>
+                  <div class="mm-pain-text">10% revenue cut forever</div>
+                  <div class="mm-sol">
+                    <div class="mm-sol-item">Flat $29/mo — 0% revenue fee</div>
+                    <div class="mm-sol-item">Chỉ Stripe fee 2.9% (pass-through)</div>
+                    <div class="mm-sol-item">Save $1,971/mo cho $20K writer</div>
+                  </div>
+                  <div class="mm-impact">→ Writer kiếm $20K trả $29, không $2K</div>
+                </div>
+              </div>
+
+              <div class="mm-item">
+                <div style="width:20px;height:2px;background:var(--bd2);margin-top:18px;flex-shrink:0;"></div>
+                <div class="mm-content">
+                  <div class="mm-pain-label" style="background:rgba(192,132,252,.08);color:var(--p);">Pain #2</div>
+                  <div class="mm-pain-text">Substack deplatform risk</div>
+                  <div class="mm-sol">
+                    <div class="mm-sol-item">Subscriber list = writer's property</div>
+                    <div class="mm-sol-item">Export CSV/Stripe portable anytime</div>
+                    <div class="mm-sol-item">Custom domain, branded email</div>
+                  </div>
+                  <div class="mm-impact">→ Eliminate platform risk hoàn toàn</div>
+                </div>
+              </div>
+
+              <div class="mm-item">
+                <div style="width:20px;height:2px;background:var(--bd2);margin-top:18px;flex-shrink:0;"></div>
+                <div class="mm-content">
+                  <div class="mm-pain-label" style="background:rgba(192,132,252,.08);color:var(--p);">Pain #3</div>
+                  <div class="mm-pain-text">Migration friction từ Substack</div>
+                  <div class="mm-sol">
+                    <div class="mm-sol-item">1-click Substack import API</div>
+                    <div class="mm-sol-item">Auto preserve sender reputation</div>
+                    <div class="mm-sol-item">Concierge migration cho top writers</div>
+                  </div>
+                  <div class="mm-impact">→ Lower switching cost = higher conversion</div>
+                </div>
+              </div>
+
+              <div class="mm-item">
+                <div style="width:20px;height:2px;background:var(--bd2);margin-top:18px;flex-shrink:0;"></div>
+                <div class="mm-content">
+                  <div class="mm-pain-label" style="background:rgba(192,132,252,.08);color:var(--p);">Pain #4</div>
+                  <div class="mm-pain-text">Substack growth tools weak</div>
+                  <div class="mm-sol">
+                    <div class="mm-sol-item">Referral program built-in</div>
+                    <div class="mm-sol-item">AI subject line + send-time optimizer</div>
+                    <div class="mm-sol-item">Cross-newsletter recommendation graph</div>
+                  </div>
+                  <div class="mm-impact">→ Growth toolkit + ownership = win</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="rm-title">🛣️ Web Roadmap — 0 đến $11K MRR</div>
+          <div class="roadmap">
+
+            <div class="rm-item">
+              <div class="rm-time">Tuần<br/>1–3</div>
+              <div class="rm-spine"><div class="rm-dot active" style="background:var(--p);box-shadow:0 0 10px var(--p);"></div><div class="rm-line"></div></div>
+              <div class="rm-body">
+                <div class="rm-phase-label" style="color:var(--p);">→ Phase 1</div>
+                <div class="rm-phase-title">MVP — Send + Subscribe</div>
+                <div class="rm-tasks">
+                  <div class="rm-task"><span class="tick">○</span>Next.js + Supabase + Resend (email)</div>
+                  <div class="rm-task"><span class="tick">○</span>Stripe billing portal (subscriber-side)</div>
+                  <div class="rm-task"><span class="tick">○</span>Substack CSV import + sender DNS setup</div>
+                </div>
+                <div class="rm-goal-tag" style="background:rgba(192,132,252,.1);color:var(--p);">🎯 10 beta writers (free)</div>
+              </div>
+            </div>
+
+            <div class="rm-item">
+              <div class="rm-time">Tuần<br/>4–6</div>
+              <div class="rm-spine"><div class="rm-dot upcoming"></div><div class="rm-line"></div></div>
+              <div class="rm-body">
+                <div class="rm-phase-label" style="color:var(--p);">Phase 2</div>
+                <div class="rm-phase-title">Public Launch + SEO</div>
+                <div class="rm-tasks">
+                  <div class="rm-task"><span class="tick">○</span>Landing: "Substack alternative, 0% cut"</div>
+                  <div class="rm-task"><span class="tick">○</span>Blog: "$24K/year I gave Substack"</div>
+                  <div class="rm-task"><span class="tick">○</span>Product Hunt launch (Tuesday)</div>
+                </div>
+                <div class="rm-goal-tag" style="background:rgba(192,132,252,.1);color:var(--p);">🎯 30 paid = $870 MRR</div>
+              </div>
+            </div>
+
+            <div class="rm-item">
+              <div class="rm-time">Tuần<br/>7–12</div>
+              <div class="rm-spine"><div class="rm-dot upcoming"></div><div class="rm-line"></div></div>
+              <div class="rm-body">
+                <div class="rm-phase-label" style="color:var(--p);">Phase 3</div>
+                <div class="rm-phase-title">Growth Toolkit</div>
+                <div class="rm-tasks">
+                  <div class="rm-task"><span class="tick">○</span>Referral program + tipping</div>
+                  <div class="rm-task"><span class="tick">○</span>AI subject line A/B test (Claude API)</div>
+                  <div class="rm-task"><span class="tick">○</span>Top-50 writer concierge migration</div>
+                </div>
+                <div class="rm-goal-tag" style="background:rgba(192,132,252,.1);color:var(--p);">🎯 150 paid = $4.3K MRR</div>
+              </div>
+            </div>
+
+            <div class="rm-item">
+              <div class="rm-time">Tháng<br/>4–6</div>
+              <div class="rm-spine"><div class="rm-dot upcoming"></div><div class="rm-line"></div></div>
+              <div class="rm-body">
+                <div class="rm-phase-label" style="color:var(--p);">Phase 4</div>
+                <div class="rm-phase-title">Network Effects</div>
+                <div class="rm-tasks">
+                  <div class="rm-task"><span class="tick">○</span>Cross-newsletter recommendation graph</div>
+                  <div class="rm-task"><span class="tick">○</span>Custom domain + branded email auto</div>
+                  <div class="rm-task"><span class="tick">○</span>Annual plan $290/yr (save $58)</div>
+                </div>
+                <div class="rm-goal-tag" style="background:rgba(192,132,252,.1);color:var(--p);">🎯 400 paid = $11.6K MRR</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="fin-chart" style="margin-top:20px;">
+            <div class="fin-title">📈 MRR Projection (Web SaaS)</div>
+            <div class="fin-row"><span class="fin-phase">Beta · T3</span><div class="fin-track"><div class="fin-fill" style="width:1%;background:linear-gradient(90deg,var(--p),rgba(192,132,252,.4))"></div></div><span class="fin-val">$0</span></div>
+            <div class="fin-row"><span class="fin-phase">Launch · T6</span><div class="fin-track"><div class="fin-fill" style="width:8%;background:linear-gradient(90deg,var(--p),rgba(192,132,252,.4))"></div></div><span class="fin-val">$870</span></div>
+            <div class="fin-row"><span class="fin-phase">Phase 3 · T12</span><div class="fin-track"><div class="fin-fill" style="width:37%;background:linear-gradient(90deg,var(--p),rgba(192,132,252,.4))"></div></div><span class="fin-val">$4,350</span></div>
+            <div class="fin-row"><span class="fin-phase">Network · T6mo</span><div class="fin-track"><div class="fin-fill" style="width:100%;background:linear-gradient(90deg,var(--p),#d8b4fe)"></div></div><span class="fin-val" style="color:var(--p);font-weight:700;">$11,600+</span></div>
+            <div style="font-size:11px;color:var(--cr3);margin-top:8px;">Email cost via Resend: ~$0.001/email. 400 writers × avg 5K subs × 4 sends/mo = $8K/mo email cost. Margin ~30% sau infra. SEO + word-of-mouth = cheap acquisition.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Summary matrix -->
+  <div class="reveal" style="margin-bottom:72px;">
+    <p class="sec-eye">Tổng hợp</p>
+    <h2 class="sec-h2 for-sub" style="margin-bottom:24px;">User → Pain → <em>Product match</em></h2>
+    <h2 class="sec-h2 for-ot" style="margin-bottom:24px;">Archetype → Pain → <em>OTP product</em></h2>
+    <h2 class="sec-h2 for-web" style="margin-bottom:24px;">Web archetype → Pain → <em>SaaS product</em></h2>
+
+    <!-- Subscription matrix -->
+    <div class="matrix-wrap for-sub">
+      <table class="mtable">
+        <thead>
+          <tr>
+            <th>User Segment</th>
+            <th>Pain chính</th>
+            <th>Sản phẩm</th>
+            <th>Price gap</th>
+            <th>MRR potential</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="user-cell"><div class="dot-g"></div>🏃 Habit-Seeker</div></td>
+            <td style="font-size:12px;color:var(--cr5);">iOS-only, 80% churn, overpriced</td>
+            <td><span class="tag-sm" style="background:var(--gb);color:var(--g);border-color:rgba(74,222,128,.2);">Streak App ★</span></td>
+            <td style="font-size:12px;color:var(--g);">$2.99/mo vs $4.99</td>
+            <td style="font-weight:600;color:var(--g);">$5–8K MRR</td>
+          </tr>
+          <tr>
+            <td><div class="user-cell"><div class="dot-b"></div>✍️ Digital Journaler</div></td>
+            <td style="font-size:12px;color:var(--cr5);">Data loss, Android abandoned</td>
+            <td><span class="tag-sm">Micro-Journal</span></td>
+            <td style="font-size:12px;color:var(--b);">$19/yr vs $35</td>
+            <td style="font-weight:600;">$2–4K MRR</td>
+          </tr>
+          <tr>
+            <td><div class="user-cell"><div class="dot-o"></div>📊 Indie Creator</div></td>
+            <td style="font-size:12px;color:var(--cr5);">Pageview cap, GA too complex</td>
+            <td><span class="tag-sm">Simple Analytics</span></td>
+            <td style="font-size:12px;color:var(--o);">$4/mo vs $9</td>
+            <td style="font-weight:600;">$3–5K MRR</td>
+          </tr>
+          <tr>
+            <td><div class="user-cell"><div class="dot-p"></div>💼 Freelancer</div></td>
+            <td style="font-size:12px;color:var(--cr5);">HoneyBook +89%, feature bloat</td>
+            <td><span class="tag-sm">Invoice Nudge</span></td>
+            <td style="font-size:12px;color:var(--p);">$7/mo vs $36</td>
+            <td style="font-weight:600;">$3.5K MRR</td>
+          </tr>
+          <tr>
+            <td><div class="user-cell"><div class="dot-y"></div>🧠 Deep Worker</div></td>
+            <td style="font-size:12px;color:var(--cr5);">No web, no auto-cycle</td>
+            <td><span class="tag-sm">Focus Timer</span></td>
+            <td style="font-size:12px;color:var(--y);">$3/mo vs $10</td>
+            <td style="font-weight:600;">$1.8K MRR</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Web matrix -->
+    <div class="matrix-wrap for-web" style="border-color:rgba(192,132,252,.18);">
+      <table class="mtable">
+        <thead>
+          <tr>
+            <th>Web Archetype</th>
+            <th>Pain chính</th>
+            <th>SaaS Product</th>
+            <th>Price gap</th>
+            <th>MRR potential</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="user-cell"><div class="dot-p"></div>🧰 SaaS Switcher</div></td>
+            <td style="font-size:12px;color:var(--cr5);">Per-seat explode, AI tax, sprawl</td>
+            <td><span class="tag-sm" style="background:rgba(192,132,252,.1);color:var(--p);border-color:rgba(192,132,252,.25);">Solo Workspace</span></td>
+            <td style="font-size:12px;color:var(--p);">$19/mo flat vs $80/team</td>
+            <td style="font-weight:600;">$8–14K MRR</td>
+          </tr>
+          <tr>
+            <td><div class="user-cell"><div class="dot-b"></div>📝 Substack Creator</div></td>
+            <td style="font-size:12px;color:var(--cr5);">10% revenue cut, deplatform risk</td>
+            <td><span class="tag-sm" style="background:rgba(192,132,252,.1);color:var(--p);border-color:rgba(192,132,252,.25);">PaperTrail ★</span></td>
+            <td style="font-size:12px;color:var(--b);">$29/mo flat vs 10% forever</td>
+            <td style="font-weight:600;color:var(--p);">$11–18K MRR</td>
+          </tr>
+          <tr>
+            <td><div class="user-cell"><div class="dot-o"></div>🎨 Webflow Refugee</div></td>
+            <td style="font-size:12px;color:var(--cr5);">$23/site, CMS caps, lock-in</td>
+            <td><span class="tag-sm">SitePack</span></td>
+            <td style="font-size:12px;color:var(--o);">$49/mo unlimited vs $230 for 10</td>
+            <td style="font-weight:600;">$6–10K MRR</td>
+          </tr>
+          <tr>
+            <td><div class="user-cell"><div class="dot-g"></div>🔍 Solo SEO Operator</div></td>
+            <td style="font-size:12px;color:var(--cr5);">$129/mo enterprise, credit caps</td>
+            <td><span class="tag-sm">SoloRank</span></td>
+            <td style="font-size:12px;color:var(--g);">$29/mo vs $129 Ahrefs</td>
+            <td style="font-weight:600;">$5–9K MRR</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- OTP matrix -->
+    <div class="matrix-wrap for-ot" style="border-color:rgba(96,165,250,.15);">
+      <table class="mtable">
+        <thead>
+          <tr>
+            <th>User Archetype</th>
+            <th>Pain chính</th>
+            <th>OTP Product</th>
+            <th>Price</th>
+            <th>Revenue/mo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="user-cell"><div class="dot-g"></div>📱 Premium App Buyer</div></td>
+            <td style="font-size:12px;color:var(--cr5);">Ghét subscription trap, muốn own app</td>
+            <td><span class="tag-sm" style="background:var(--gb);color:var(--g);border-color:rgba(74,222,128,.2);">Streak iOS OTP ★</span></td>
+            <td style="font-size:12px;color:var(--g);">$7.99 OTP (buy once)</td>
+            <td style="font-weight:600;color:var(--g);">~$1.6K/mo</td>
+          </tr>
+          <tr>
+            <td><div class="user-cell"><div class="dot-b"></div>🖥️ Mac Utility Collector</div></td>
+            <td style="font-size:12px;color:var(--cr5);">Menu bar bloat, needs always-on tracker</td>
+            <td><span class="tag-sm">Streak for Mac</span></td>
+            <td style="font-size:12px;color:var(--b);">$14.99 OTP</td>
+            <td style="font-weight:600;">~$1.2K/mo</td>
+          </tr>
+          <tr>
+            <td><div class="user-cell"><div class="dot-p"></div>🎨 Design Asset Hunter</div></td>
+            <td style="font-size:12px;color:var(--cr5);">Icon inconsistency across apps/brands</td>
+            <td><span class="tag-sm">Streak Icon System</span></td>
+            <td style="font-size:12px;color:var(--p);">$34.99 OTP (350 icons)</td>
+            <td style="font-weight:600;">~$2.1K/mo</td>
+          </tr>
+          <tr>
+            <td><div class="user-cell"><div class="dot-o"></div>🚀 The Bootstrapper</div></td>
+            <td style="font-size:12px;color:var(--cr5);">40h setup hell mỗi project mới</td>
+            <td><span class="tag-sm" style="background:rgba(251,146,60,.1);color:var(--o);border-color:rgba(251,146,60,.25);">Indie Starter ★</span></td>
+            <td style="font-size:12px;color:var(--o);">$89 OTP (boilerplate)</td>
+            <td style="font-weight:600;color:var(--o);">~$2.7K/mo</td>
+          </tr>
+          <tr>
+            <td><div class="user-cell"><div class="dot-y"></div>📦 Digital Product Buyer</div></td>
+            <td style="font-size:12px;color:var(--cr5);">Curation fatigue, scattered tools</td>
+            <td><span class="tag-sm">Indie Maker's Kit</span></td>
+            <td style="font-size:12px;color:var(--y);">$19 OTP (toolkit bundle)</td>
+            <td style="font-weight:600;">~$1.9K/mo</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="ft">
+  <div class="wrap">Product Research 2026 · US Market · User-First Approach · May 2026</div>
+</footer>
+
+<script>
+  function setMode(mode, btn) {
+    document.body.dataset.mode = mode;
+    document.querySelectorAll('.mt-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  function showSeg(id, tab) {
+    document.querySelectorAll('.seg-panel.for-sub').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.seg-tabs.for-sub .seg-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    tab.classList.add('active');
+  }
+  function showOTSeg(id, tab) {
+    document.querySelectorAll('.seg-panel.for-ot').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.seg-tabs.for-ot .seg-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    tab.classList.add('active');
+  }
+  function showWebSeg(id, tab) {
+    document.querySelectorAll('.seg-panel.for-web').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.seg-tabs.for-web .seg-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    tab.classList.add('active');
+  }
+  const io = new IntersectionObserver(
+    es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.05, rootMargin: '0px 0px -30px 0px' }
+  );
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

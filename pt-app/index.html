@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoachLink – PT & Client Connection App Mockup</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0d0d0f;
+    --surface: #161619;
+    --surface2: #1e1e23;
+    --accent: #3b82f6;
+    --accent2: #93c5fd;
+    --success: #4ade80;
+    --danger: #f87171;
+    --warning: #fbbf24;
+    --orange: #fb923c;
+    --text: #f2f2f4;
+    --muted: #7a7a8a;
+    --border: #2a2a33;
+  }
+
+  body {
+    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── Top bar ── */
+  .topbar {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 12px;
+  }
+  .topbar .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+  .topbar .logo span { color: var(--accent); }
+  .topbar .badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .prd-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: opacity .2s;
+  }
+  .prd-btn:hover { opacity: .85; }
+
+  /* ── View toggle ── */
+  .view-toggle {
+    display: flex;
+    gap: 6px;
+    padding: 0 24px 10px;
+    max-width: 900px;
+    width: 100%;
+    align-items: center;
+  }
+  .view-label { font-size: 11px; color: var(--muted); margin-right: 4px; }
+  .view-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .view-btn.active { background: var(--surface2); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+
+  /* ── Flow nav ── */
+  .flow-nav {
+    display: flex;
+    gap: 6px;
+    padding: 0 24px 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 900px;
+  }
+  .flow-tab {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .flow-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  .flow-tab:hover:not(.active) { border-color: var(--accent2); color: var(--text); }
+  .tab-group-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* ── Phone frame ── */
+  .stage {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    padding: 16px 24px 40px;
+    max-width: 900px;
+    width: 100%;
+  }
+  .phone-wrap { flex-shrink: 0; }
+  .phone {
+    width: 320px;
+    height: 640px;
+    background: #000;
+    border-radius: 44px;
+    border: 6px solid #252530;
+    box-shadow: 0 0 0 1px #111, 0 32px 80px rgba(0,0,0,.7), inset 0 0 0 1px #333;
+    position: relative;
+    overflow: hidden;
+  }
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100px; height: 28px;
+    background: #000;
+    border-radius: 0 0 18px 18px;
+    z-index: 100;
+  }
+
+  /* ── Screens ── */
+  .screens { position: absolute; inset: 0; overflow: hidden; }
+  .screen {
+    position: absolute; inset: 0;
+    opacity: 0; pointer-events: none;
+    transition: opacity .35s ease;
+    overflow: hidden;
+  }
+  .screen.active { opacity: 1; pointer-events: all; }
+
+  /* ─────────────────────────────────────
+     CLIENT SCREENS
+  ───────────────────────────────────── */
+
+  /* SCREEN 0: Discover PTs */
+  .s-discover {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    padding: 44px 0 0;
+    overflow: hidden;
+  }
+  .discover-head { padding: 8px 16px 12px; }
+  .discover-title { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+  .search-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .search-bar .search-icon { font-size: 14px; }
+  .filter-row { display: flex; gap: 6px; padding: 0 16px 12px; overflow-x: auto; }
+  .filter-chip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all .2s;
+    flex-shrink: 0;
+  }
+  .filter-chip.active { background: rgba(59,130,246,.15); border-color: var(--accent); color: var(--accent); }
+  .pt-list { flex: 1; overflow-y: auto; padding: 0 16px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .pt-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+    display: flex;
+    gap: 12px;
+    cursor: pointer;
+    transition: border-color .2s;
+  }
+  .pt-card:hover { border-color: var(--accent); }
+  .pt-avatar {
+    width: 54px; height: 54px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .pt-online-dot {
+    position: absolute;
+    bottom: 2px; right: 2px;
+    width: 10px; height: 10px;
+    background: var(--success);
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+  }
+  .pt-info { flex: 1; min-width: 0; }
+  .pt-name { font-size: 14px; font-weight: 700; }
+  .pt-specialty { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .pt-tags { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+  .pt-tag { background: var(--surface2); border-radius: 6px; padding: 2px 7px; font-size: 9px; color: var(--muted); }
+  .pt-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .pt-rating { font-size: 11px; color: var(--warning); font-weight: 600; }
+  .pt-reviews { font-size: 10px; color: var(--muted); }
+  .pt-free-badge {
+    margin-left: auto;
+    background: rgba(74,222,128,.15);
+    border: 1px solid rgba(74,222,128,.3);
+    border-radius: 8px;
+    padding: 3px 8px;
+    font-size: 10px;
+    color: var(--success);
+    font-weight: 700;
+  }
+
+  /* SCREEN 1: PT Profile */
+  .s-profile-view {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .profile-cover {
+    height: 140px;
+    background: linear-gradient(135deg, #1e3a5f, #1e40af, #1d4ed8);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .profile-cover-avatar {
+    position: absolute;
+    bottom: -28px; left: 16px;
+    width: 60px; height: 60px;
+    border-radius: 16px;
+    background: var(--surface2);
+    border: 3px solid var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+  }
+  .profile-cover-back {
+    position: absolute;
+    top: 44px; left: 12px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(0,0,0,.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .profile-body { padding: 36px 16px 16px; display: flex; flex-direction: column; gap: 12px; }
+  .profile-name-row { display: flex; align-items: flex-start; justify-content: space-between; }
+  .profile-name { font-size: 18px; font-weight: 800; }
+  .profile-cert { font-size: 10px; color: var(--accent); background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.3); border-radius: 6px; padding: 3px 8px; margin-top: 3px; display: inline-block; }
+  .profile-verified { font-size: 18px; }
+  .profile-stats-row { display: flex; gap: 0; }
+  .profile-stat { flex: 1; text-align: center; border-right: 1px solid var(--border); }
+  .profile-stat:last-child { border-right: none; }
+  .profile-stat-num { font-size: 17px; font-weight: 800; }
+  .profile-stat-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .profile-bio { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .profile-specialties { display: flex; flex-wrap: wrap; gap: 6px; }
+  .spec-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 11px;
+    color: var(--text);
+  }
+  .profile-avail {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px;
+  }
+  .avail-title { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+  .avail-slots { display: flex; gap: 6px; flex-wrap: wrap; }
+  .avail-slot { background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.3); border-radius: 8px; padding: 4px 10px; font-size: 10px; color: var(--accent); }
+  .profile-reviews { }
+  .review-title { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+  .review-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 11px 13px; margin-bottom: 6px; }
+  .review-header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .reviewer-avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 12px; }
+  .reviewer-name { font-size: 12px; font-weight: 600; }
+  .review-stars { font-size: 10px; color: var(--warning); margin-left: auto; }
+  .review-text { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .profile-actions { display: flex; gap: 8px; position: sticky; bottom: 0; background: var(--bg); padding: 10px 0 0; }
+  .action-chat-btn {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 13px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+    color: var(--text);
+  }
+  .action-chat-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .action-connect-btn {
+    flex: 2;
+    background: var(--accent);
+    border: none;
+    border-radius: 14px;
+    padding: 13px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    color: #fff;
+    transition: opacity .2s;
+  }
+  .action-connect-btn:hover { opacity: .9; }
+
+  /* SCREEN 2: Chat */
+  .s-chat {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    padding: 44px 0 0;
+    height: 100%;
+  }
+  .chat-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .chat-back { font-size: 18px; cursor: pointer; color: var(--muted); }
+  .chat-pt-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg,#1e40af,#3b82f6); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .chat-pt-name { font-size: 13px; font-weight: 700; }
+  .chat-pt-status { font-size: 10px; color: var(--success); }
+  .chat-actions-right { margin-left: auto; display: flex; gap: 14px; font-size: 18px; cursor: pointer; color: var(--muted); }
+  .chat-messages { flex: 1; padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+  .msg { max-width: 82%; }
+  .msg.pt { align-self: flex-start; }
+  .msg.me { align-self: flex-end; }
+  .msg-bubble { padding: 10px 13px; border-radius: 16px; font-size: 12px; line-height: 1.5; }
+  .msg.pt .msg-bubble { background: var(--surface); border: 1px solid var(--border); border-radius: 4px 16px 16px 16px; }
+  .msg.me .msg-bubble { background: var(--accent); color: #fff; border-radius: 16px 16px 4px 16px; }
+  .msg-time { font-size: 9px; color: var(--muted); margin-top: 3px; }
+  .msg.me .msg-time { text-align: right; }
+  .scheduled-msg {
+    align-self: flex-start;
+    max-width: 82%;
+    border: 1px dashed rgba(251,191,36,.4);
+    border-radius: 4px 16px 16px 16px;
+    padding: 10px 13px;
+    background: rgba(251,191,36,.05);
+  }
+  .scheduled-label { font-size: 9px; color: var(--warning); margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+  .scheduled-text { font-size: 12px; color: var(--text); line-height: 1.5; }
+  .chat-input-row {
+    display: flex; gap: 8px; padding: 8px 16px 16px;
+    border-top: 1px solid var(--border); flex-shrink: 0;
+  }
+  .chat-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--text);
+    outline: none;
+  }
+  .chat-input:focus { border-color: var(--accent); }
+  .send-btn {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  /* SCREEN 3: Video Call */
+  .s-video {
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .video-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, #0d1a2e 0%, #0a1628 50%, #050d1a 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .video-pt-big {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1e3a5f, #2563eb);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px;
+    border: 3px solid rgba(59,130,246,.3);
+    box-shadow: 0 0 40px rgba(59,130,246,.2);
+  }
+  .video-pt-name-big {
+    position: absolute;
+    bottom: 200px; left: 0; right: 0;
+    text-align: center;
+    font-size: 16px; font-weight: 700;
+  }
+  .video-duration {
+    position: absolute;
+    top: 56px; left: 0; right: 0;
+    text-align: center;
+    font-size: 13px; color: rgba(255,255,255,.6);
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .video-duration .rec-dot { width: 7px; height: 7px; background: var(--danger); border-radius: 50%; animation: blink 1s infinite; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .2; } }
+  .video-self {
+    position: absolute;
+    top: 56px; right: 12px;
+    width: 80px; height: 110px;
+    border-radius: 14px;
+    background: linear-gradient(160deg, #1a1a2e, #252540);
+    border: 2px solid rgba(255,255,255,.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    overflow: hidden;
+  }
+  .video-controls {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 20px 24px 32px;
+    background: linear-gradient(to top, rgba(0,0,0,.8), transparent);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .vc-btn {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background .2s;
+    color: #fff;
+  }
+  .vc-btn:hover { background: rgba(255,255,255,.2); }
+  .vc-btn.end { background: var(--danger); border-color: var(--danger); font-size: 22px; width: 60px; height: 60px; }
+  .vc-note {
+    position: absolute;
+    bottom: 110px; left: 16px; right: 16px;
+    background: rgba(255,255,255,.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 12px;
+    padding: 10px 13px;
+    font-size: 11px;
+    color: rgba(255,255,255,.7);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .vc-note-icon { font-size: 16px; flex-shrink: 0; }
+
+  /* ─────────────────────────────────────
+     PT SCREENS
+  ───────────────────────────────────── */
+
+  /* SCREEN 7: PT Verification */
+  .s-verify {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    padding: 44px 0 0;
+    overflow-y: auto;
+  }
+  .verify-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 16px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .verify-back { font-size: 18px; color: var(--muted); cursor: pointer; }
+  .verify-title { font-size: 14px; font-weight: 800; }
+  .verify-steps {
+    display: flex; gap: 0;
+    padding: 14px 16px 0;
+  }
+  .vstep {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    position: relative;
+  }
+  .vstep:not(:last-child)::after {
+    content: '';
+    position: absolute; top: 11px; left: 50%; width: 100%; height: 2px;
+    background: var(--border);
+  }
+  .vstep.done::after { background: var(--success); }
+  .vstep-dot {
+    width: 22px; height: 22px; border-radius: 50%; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800;
+    border: 2px solid var(--border);
+    background: var(--bg); color: var(--muted);
+  }
+  .vstep.active .vstep-dot { border-color: var(--accent); color: var(--accent); background: rgba(59,130,246,.1); }
+  .vstep.done .vstep-dot { border-color: var(--success); background: rgba(74,222,128,.1); color: var(--success); }
+  .vstep-lbl { font-size: 9px; color: var(--muted); text-align: center; }
+  .vstep.active .vstep-lbl { color: var(--accent); }
+  .vstep.done .vstep-lbl { color: var(--success); }
+
+  .verify-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .verify-section-title {
+    font-size: 12px; font-weight: 800; margin-bottom: 2px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .verify-req {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 9px 12px;
+    display: flex; flex-direction: column; gap: 4px;
+    margin-bottom: 6px;
+  }
+  .verify-req-item {
+    font-size: 11px; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .verify-req-item::before { content: '·'; color: var(--accent2); }
+  .upload-zone {
+    background: var(--surface);
+    border: 2px dashed var(--border);
+    border-radius: 14px;
+    padding: 20px 16px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all .2s;
+    text-align: center;
+  }
+  .upload-zone:hover { border-color: var(--accent); background: rgba(59,130,246,.04); }
+  .upload-zone.uploaded { border-style: solid; border-color: var(--success); background: rgba(74,222,128,.04); }
+  .upload-icon { font-size: 28px; }
+  .upload-label { font-size: 12px; font-weight: 700; }
+  .upload-sub { font-size: 10px; color: var(--muted); }
+  .upload-preview {
+    width: 100%; height: 72px; border-radius: 10px;
+    background: linear-gradient(135deg, #1a2a1a, #1e3a2a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+  }
+  .upload-done-row { display: flex; align-items: center; gap: 8px; }
+  .upload-done-name { font-size: 12px; font-weight: 700; color: var(--success); }
+  .upload-done-change { font-size: 10px; color: var(--muted); text-decoration: underline; cursor: pointer; }
+
+  .verify-divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+  .verify-note {
+    background: rgba(251,191,36,.06);
+    border: 1px solid rgba(251,191,36,.2);
+    border-radius: 12px;
+    padding: 10px 13px;
+    font-size: 11px; color: var(--muted); line-height: 1.6;
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .verify-note-icon { flex-shrink: 0; }
+  .verify-submit-btn {
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+    border: none; border-radius: 14px; padding: 14px;
+    width: 100%; font-size: 14px; font-weight: 700; color: #fff;
+    cursor: pointer; transition: opacity .2s;
+  }
+  .verify-submit-btn:disabled { opacity: .4; cursor: not-allowed; }
+  .verify-submit-btn:not(:disabled):hover { opacity: .9; }
+
+  /* Pending overlay */
+  .verify-pending {
+    display: none;
+    position: absolute; inset: 0;
+    background: var(--bg);
+    flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 14px; padding: 24px;
+    text-align: center;
+    z-index: 50;
+  }
+  .verify-pending.show { display: flex; }
+  .verify-pending-icon { font-size: 52px; }
+  .verify-pending-title { font-size: 18px; font-weight: 800; }
+  .verify-pending-sub { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .verify-timeline-mini { display: flex; flex-direction: column; gap: 8px; width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+  .vtm-item { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+  .vtm-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Unverified banner on dashboard */
+  .unverified-banner {
+    background: rgba(251,191,36,.07);
+    border: 1px solid rgba(251,191,36,.3);
+    border-radius: 14px;
+    padding: 12px 13px;
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .unverified-banner:hover { background: rgba(251,191,36,.12); }
+  .uvb-icon { font-size: 20px; flex-shrink: 0; }
+  .uvb-text { flex: 1; }
+  .uvb-title { font-size: 12px; font-weight: 800; color: var(--warning); }
+  .uvb-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .uvb-arrow { font-size: 14px; color: var(--warning); }
+
+  /* SCREEN 4: PT Dashboard */
+  .s-pt-dash {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    padding: 44px 16px 16px;
+    gap: 12px;
+    overflow-y: auto;
+  }
+  .pt-dash-header { display: flex; justify-content: space-between; align-items: center; }
+  .pt-dash-title { font-size: 16px; font-weight: 800; }
+  .pt-dash-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #1e3a5f, #3b82f6); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .pt-stats-row { display: flex; gap: 8px; }
+  .pt-stat-box {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+  }
+  .pt-stat-num { font-size: 20px; font-weight: 800; color: var(--accent); }
+  .pt-stat-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .section-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+  .client-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: border-color .2s;
+  }
+  .client-item:hover { border-color: var(--accent); }
+  .client-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .client-name { font-size: 13px; font-weight: 700; }
+  .client-last-msg { font-size: 11px; color: var(--muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+  .client-time { font-size: 10px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+  .unread-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .scheduled-preview {
+    background: rgba(251,191,36,.06);
+    border: 1px solid rgba(251,191,36,.25);
+    border-radius: 14px;
+    padding: 12px 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sp-icon { font-size: 20px; flex-shrink: 0; }
+  .sp-info { flex: 1; min-width: 0; }
+  .sp-to { font-size: 11px; font-weight: 700; }
+  .sp-preview { font-size: 11px; color: var(--muted); margin-top: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sp-time { font-size: 10px; color: var(--warning); white-space: nowrap; }
+
+  /* SCREEN 5: Schedule Message */
+  .s-schedule {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    padding: 44px 16px 16px;
+    gap: 12px;
+    overflow-y: auto;
+  }
+  .schedule-header { display: flex; align-items: center; gap: 10px; }
+  .schedule-back { font-size: 18px; color: var(--muted); cursor: pointer; }
+  .schedule-title { font-size: 15px; font-weight: 800; }
+  .recipient-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .recipient-label { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .recipient-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .recipient-chip {
+    background: rgba(59,130,246,.15);
+    border: 1px solid rgba(59,130,246,.3);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--accent);
+    display: flex; align-items: center; gap: 4px;
+  }
+  .recipient-chip .r-x { opacity: .6; cursor: pointer; }
+  .msg-compose {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 13px;
+    min-height: 110px;
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+    resize: none;
+    width: 100%;
+    font-family: inherit;
+    line-height: 1.5;
+  }
+  .msg-compose:focus { border-color: var(--accent); }
+  .templates-row { display: flex; flex-direction: column; gap: 6px; }
+  .template-label { font-size: 11px; color: var(--muted); }
+  .template-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+  .template-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all .2s;
+  }
+  .template-chip:hover { border-color: var(--accent); color: var(--text); }
+  .datetime-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 13px;
+  }
+  .dt-label { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+  .dt-row { display: flex; gap: 8px; }
+  .dt-btn {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text);
+    transition: all .2s;
+  }
+  .dt-btn.selected { background: rgba(59,130,246,.15); border-color: var(--accent); color: var(--accent); }
+  .dt-btn:hover:not(.selected) { border-color: var(--border); }
+  .dt-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .dt-custom {
+    margin-top: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .dt-custom-label { font-size: 12px; color: var(--muted); }
+  .dt-custom-val { font-size: 12px; font-weight: 700; color: var(--warning); }
+  .schedule-preview {
+    background: rgba(251,191,36,.06);
+    border: 1px solid rgba(251,191,36,.25);
+    border-radius: 14px;
+    padding: 12px 13px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .schedule-preview-label { font-size: 10px; color: var(--warning); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+  .send-schedule-btn {
+    background: linear-gradient(135deg, var(--accent), #2563eb);
+    border: none;
+    border-radius: 14px;
+    padding: 14px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .send-schedule-btn:hover { opacity: .9; }
+
+  /* SCREEN 6: Connect / Onboarding */
+  .s-connect {
+    background: linear-gradient(160deg, #0d1a2e 0%, #0a0d0f 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 44px 20px 20px;
+    gap: 16px;
+  }
+  .connect-logo { font-size: 28px; font-weight: 800; text-align: center; margin-top: 10px; }
+  .connect-logo span { color: var(--accent); }
+  .connect-tagline { font-size: 13px; color: var(--muted); text-align: center; line-height: 1.6; }
+  .role-cards { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+  .role-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .role-card:hover { border-color: var(--accent); background: rgba(59,130,246,.05); }
+  .role-card.selected { border-color: var(--accent); background: rgba(59,130,246,.1); }
+  .role-icon { font-size: 32px; flex-shrink: 0; }
+  .role-name { font-size: 15px; font-weight: 800; }
+  .role-desc { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+  .free-banner {
+    background: rgba(74,222,128,.1);
+    border: 1px solid rgba(74,222,128,.3);
+    border-radius: 14px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+  .free-icon { font-size: 22px; }
+  .free-title { font-size: 13px; font-weight: 800; color: var(--success); }
+  .free-desc { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .get-started-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 14px;
+    padding: 14px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .get-started-btn:hover { opacity: .9; }
+  .signin-link { font-size: 11px; color: var(--muted); }
+  .signin-link span { color: var(--accent); cursor: pointer; }
+
+  /* ── Description panel ── */
+  .desc-panel { flex: 1; min-width: 0; }
+  .desc-screen-name { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+  .desc-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.6; }
+  .desc-features { display: flex; flex-direction: column; gap: 12px; }
+  .feature-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .feature-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .feature-title { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+  .feature-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .next-screen-btn {
+    margin-top: 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 11px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent2);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all .2s;
+  }
+  .next-screen-btn:hover { border-color: var(--accent2); background: var(--surface); }
+
+  /* ── Stack pills in desc panel ── */
+  .stack-row { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+  .stack-row-label { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .stack-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sp { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-family: 'SFMono-Regular', Consolas, monospace; }
+  .sp-blue { background: rgba(59,130,246,.12); color: var(--accent2); border: 1px solid rgba(59,130,246,.25); }
+  .sp-green { background: rgba(74,222,128,.1); color: #4ade80; border: 1px solid rgba(74,222,128,.2); }
+  .sp-yellow { background: rgba(251,191,36,.1); color: var(--warning); border: 1px solid rgba(251,191,36,.2); }
+  .sp-purple { background: rgba(167,139,250,.1); color: #a78bfa; border: 1px solid rgba(167,139,250,.2); }
+  .sp-gray { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+  .sp-rec { background: rgba(74,222,128,.15); color: #4ade80; border: 1px solid rgba(74,222,128,.35); font-weight: 700; }
+
+  /* ── Tech section below phone ── */
+  .tech-section {
+    max-width: 900px; width: 100%;
+    padding: 0 24px 48px;
+    display: flex; flex-direction: column; gap: 24px;
+  }
+  .tech-section-title {
+    font-size: 14px; font-weight: 800; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tech-section-title span { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .lib-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 12px; }
+  .lib-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    position: relative;
+  }
+  .lib-card.rec { border-color: rgba(74,222,128,.35); }
+  .lib-card.rec::after {
+    content: 'RECOMMENDED';
+    position: absolute; top: 12px; right: 12px;
+    font-size: 9px; font-weight: 700; letter-spacing: .1em;
+    color: #4ade80; background: rgba(74,222,128,.1);
+    border: 1px solid rgba(74,222,128,.25); padding: 2px 7px; border-radius: 100px;
+  }
+  .lib-name { font-size: 15px; font-weight: 800; margin-bottom: 2px; }
+  .lib-pkg { font-size: 11px; color: var(--accent); font-family: 'SFMono-Regular', Consolas, monospace; margin-bottom: 10px; }
+  .lib-rows { display: flex; flex-direction: column; gap: 5px; }
+  .lib-row { display: flex; gap: 8px; font-size: 11px; }
+  .lib-lbl { color: var(--muted); min-width: 70px; flex-shrink: 0; }
+  .lib-val { color: #d1d5db; }
+  .lib-price-tag { display: inline-block; margin-top: 10px; font-size: 10px; font-weight: 700; padding: 2px 10px; border-radius: 100px; }
+  .lpt-free { background: rgba(74,222,128,.1); color: #4ade80; border: 1px solid rgba(74,222,128,.2); }
+  .lpt-paid { background: rgba(251,191,36,.1); color: var(--warning); border: 1px solid rgba(251,191,36,.2); }
+  .lpt-diy  { background: rgba(59,130,246,.1); color: var(--accent2); border: 1px solid rgba(59,130,246,.2); }
+
+  /* ── Footer ── */
+  .footer { text-align: center; font-size: 11px; color: var(--muted); padding: 16px 24px 32px; }
+
+  @media (max-width: 700px) {
+    .stage { flex-direction: column; align-items: center; }
+    .desc-panel { width: 100%; max-width: 320px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">Coach<span>Link</span></div>
+  <div class="badge">PT ↔ Client Platform Mockup</div>
+  <button class="prd-btn" onclick="downloadPRD()">⬇ Download PRD.md</button>
+</div>
+
+<!-- View toggle -->
+<div class="view-toggle">
+  <span class="view-label">Góc nhìn:</span>
+  <button class="view-btn active" onclick="setView('client', this)">👤 Client</button>
+  <button class="view-btn" onclick="setView('pt', this)">🏋️ PT</button>
+</div>
+
+<!-- Flow navigation -->
+<div class="flow-nav" id="flow-nav">
+  <!-- filled by JS -->
+</div>
+
+<div class="stage">
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="screens">
+
+        <!-- ── CLIENT SCREENS ── -->
+
+        <!-- SCREEN 0: Discover PTs -->
+        <div class="screen s-discover active" id="screen-0">
+          <div class="discover-head">
+            <div class="discover-title">Tìm PT của bạn</div>
+            <div class="search-bar">
+              <div class="search-icon">🔍</div>
+              Tìm theo tên, chuyên môn...
+            </div>
+          </div>
+          <div class="filter-row">
+            <div class="filter-chip active">Tất cả</div>
+            <div class="filter-chip">Giảm cân</div>
+            <div class="filter-chip">Tăng cơ</div>
+            <div class="filter-chip">Yoga</div>
+            <div class="filter-chip">Cardio</div>
+            <div class="filter-chip">Calisthenics</div>
+          </div>
+          <div class="pt-list">
+            <div class="pt-card" onclick="goScreen(1, null)">
+              <div class="pt-avatar" style="background:linear-gradient(135deg,#1e3a5f,#2563eb)">
+                💪
+                <div class="pt-online-dot"></div>
+              </div>
+              <div class="pt-info">
+                <div class="pt-name">Nguyễn Minh Khoa</div>
+                <div class="pt-specialty">PT chuyên tăng cơ · 5 năm kinh nghiệm</div>
+                <div class="pt-tags">
+                  <div class="pt-tag">Tăng cơ</div>
+                  <div class="pt-tag">Sức mạnh</div>
+                  <div class="pt-tag">Dinh dưỡng</div>
+                </div>
+                <div class="pt-meta">
+                  <div class="pt-rating">★ 4.9</div>
+                  <div class="pt-reviews">(127 đánh giá)</div>
+                  <div class="pt-free-badge">FREE</div>
+                </div>
+              </div>
+            </div>
+            <div class="pt-card" onclick="goScreen(1, null)">
+              <div class="pt-avatar" style="background:linear-gradient(135deg,#4a1d96,#7c3aed)">
+                🧘
+                <div class="pt-online-dot"></div>
+              </div>
+              <div class="pt-info">
+                <div class="pt-name">Trần Thị Lan Anh</div>
+                <div class="pt-specialty">Yoga & Pilates · 7 năm kinh nghiệm</div>
+                <div class="pt-tags">
+                  <div class="pt-tag">Yoga</div>
+                  <div class="pt-tag">Linh hoạt</div>
+                  <div class="pt-tag">Thư giãn</div>
+                </div>
+                <div class="pt-meta">
+                  <div class="pt-rating">★ 4.8</div>
+                  <div class="pt-reviews">(89 đánh giá)</div>
+                  <div class="pt-free-badge">FREE</div>
+                </div>
+              </div>
+            </div>
+            <div class="pt-card" onclick="goScreen(1, null)">
+              <div class="pt-avatar" style="background:linear-gradient(135deg,#064e3b,#059669)">
+                🏃
+              </div>
+              <div class="pt-info">
+                <div class="pt-name">Lê Văn Dũng</div>
+                <div class="pt-specialty">Cardio & Giảm cân · 4 năm kinh nghiệm</div>
+                <div class="pt-tags">
+                  <div class="pt-tag">Giảm cân</div>
+                  <div class="pt-tag">HIIT</div>
+                  <div class="pt-tag">Chạy bộ</div>
+                </div>
+                <div class="pt-meta">
+                  <div class="pt-rating">★ 4.7</div>
+                  <div class="pt-reviews">(64 đánh giá)</div>
+                  <div class="pt-free-badge">FREE</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCREEN 1: PT Profile -->
+        <div class="screen s-profile-view" id="screen-1">
+          <div class="profile-cover">
+            <div class="profile-cover-back" onclick="goScreen(0, null)">←</div>
+            <div class="profile-cover-avatar">💪</div>
+          </div>
+          <div class="profile-body">
+            <div class="profile-name-row">
+              <div>
+                <div class="profile-name">Nguyễn Minh Khoa</div>
+                <div class="profile-cert">ISSA Certified Personal Trainer</div>
+              </div>
+              <div class="profile-verified">✅</div>
+            </div>
+            <div class="profile-stats-row">
+              <div class="profile-stat">
+                <div class="profile-stat-num" style="color:var(--accent)">127</div>
+                <div class="profile-stat-lbl">Đánh giá</div>
+              </div>
+              <div class="profile-stat">
+                <div class="profile-stat-num" style="color:var(--warning)">4.9★</div>
+                <div class="profile-stat-lbl">Điểm TB</div>
+              </div>
+              <div class="profile-stat">
+                <div class="profile-stat-num" style="color:var(--success)">48</div>
+                <div class="profile-stat-lbl">Client</div>
+              </div>
+            </div>
+            <div class="profile-bio">
+              5 năm kinh nghiệm tập luyện và huấn luyện. Tôi chuyên về tăng cơ, giảm mỡ bền vững và lên kế hoạch dinh dưỡng cá nhân hóa. Mỗi client có một lộ trình riêng – không có kế hoạch "copy-paste".
+            </div>
+            <div class="profile-specialties">
+              <div class="spec-chip">💪 Tăng cơ</div>
+              <div class="spec-chip">🔥 Giảm mỡ</div>
+              <div class="spec-chip">🍗 Dinh dưỡng</div>
+              <div class="spec-chip">🏋️ Powerlifting</div>
+            </div>
+            <div class="profile-avail">
+              <div class="avail-title">🗓 Lịch rảnh gần nhất</div>
+              <div class="avail-slots">
+                <div class="avail-slot">T5 · 18:00</div>
+                <div class="avail-slot">T6 · 07:00</div>
+                <div class="avail-slot">T7 · 09:00</div>
+              </div>
+            </div>
+            <div class="profile-reviews">
+              <div class="review-title">💬 Đánh giá gần đây</div>
+              <div class="review-item">
+                <div class="review-header">
+                  <div class="reviewer-avatar">🙂</div>
+                  <div class="reviewer-name">Minh Tuấn</div>
+                  <div class="review-stars">★★★★★</div>
+                </div>
+                <div class="review-text">Khoa rất tận tâm, luôn nhắn tin check-in đúng giờ và điều chỉnh plan kịp thời khi tôi bận.</div>
+              </div>
+              <div class="review-item">
+                <div class="review-header">
+                  <div class="reviewer-avatar">👩</div>
+                  <div class="reviewer-name">Thu Hà</div>
+                  <div class="review-stars">★★★★★</div>
+                </div>
+                <div class="review-text">Đã tập được 3 tháng, tăng 4kg cơ. Recommend 100%!</div>
+              </div>
+            </div>
+            <div class="profile-actions">
+              <div class="action-chat-btn" onclick="goScreen(2, null)">💬 Chat</div>
+              <div class="action-connect-btn" onclick="goScreen(6, null)">Kết nối miễn phí →</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCREEN 2: Chat -->
+        <div class="screen s-chat" id="screen-2">
+          <div class="chat-header">
+            <div class="chat-back" onclick="goScreen(1, null)">←</div>
+            <div class="chat-pt-avatar">💪</div>
+            <div>
+              <div class="chat-pt-name">Nguyễn Minh Khoa</div>
+              <div class="chat-pt-status">Đang hoạt động</div>
+            </div>
+            <div class="chat-actions-right">
+              <span onclick="goScreen(3, null)" title="Video call">📹</span>
+              <span>⋯</span>
+            </div>
+          </div>
+          <div class="chat-messages">
+            <div class="msg pt">
+              <div class="msg-bubble">Chào Tuấn! Tôi đã xem profile của bạn. Mục tiêu tăng cơ trong 6 tháng là hoàn toàn khả thi 💪</div>
+              <div class="msg-time">Thứ Hai · 9:00 SA</div>
+            </div>
+            <div class="msg pt">
+              <div class="msg-bubble">Bạn đang tập ở gym nào và tuần tập được mấy buổi?</div>
+              <div class="msg-time">9:01 SA</div>
+            </div>
+            <div class="msg me">
+              <div class="msg-bubble">Chào PT Khoa! Em tập ở California Fitness, khoảng 4–5 buổi/tuần</div>
+              <div class="msg-time">9:15 SA</div>
+            </div>
+            <div class="msg pt">
+              <div class="msg-bubble">Tốt! Vậy tôi sẽ lên plan PPL (Push-Pull-Legs) cho bạn. Ngày mai tôi gửi chi tiết nhé.</div>
+              <div class="msg-time">9:18 SA</div>
+            </div>
+            <div class="msg me">
+              <div class="msg-bubble">Cảm ơn PT! Em đợi</div>
+              <div class="msg-time">9:20 SA</div>
+            </div>
+            <!-- Scheduled message preview -->
+            <div class="scheduled-msg">
+              <div class="scheduled-label">🕐 Tin nhắn đã hẹn giờ · Sẽ gửi lúc 7:00 SA mai</div>
+              <div class="scheduled-text">Chào Tuấn! Đây là plan PPL tuần đầu tiên của bạn. Nhớ ăn đủ protein trước khi tập nhé 🍗</div>
+            </div>
+          </div>
+          <div class="chat-input-row">
+            <input class="chat-input" placeholder="Nhắn tin...">
+            <button class="send-btn">↑</button>
+          </div>
+        </div>
+
+        <!-- SCREEN 3: Video Call -->
+        <div class="screen s-video" id="screen-3">
+          <div class="video-bg">
+            <div class="video-pt-big">💪</div>
+          </div>
+          <div class="video-self">👤</div>
+          <div class="video-duration">
+            <div class="rec-dot"></div>
+            12:34
+          </div>
+          <div class="video-pt-name-big">Nguyễn Minh Khoa</div>
+          <div class="vc-note">
+            <div class="vc-note-icon">📋</div>
+            PT đang review form squat của bạn qua camera
+          </div>
+          <div class="video-controls">
+            <div class="vc-btn">🎙️</div>
+            <div class="vc-btn">📹</div>
+            <div class="vc-btn end" onclick="goScreen(2, null)">📵</div>
+            <div class="vc-btn">💬</div>
+            <div class="vc-btn">⋯</div>
+          </div>
+        </div>
+
+        <!-- ── PT SCREENS ── -->
+
+        <!-- SCREEN 4: PT Dashboard -->
+        <div class="screen s-pt-dash" id="screen-4">
+          <div class="pt-dash-header">
+            <div>
+              <div style="font-size:11px;color:var(--muted)">Xin chào, PT</div>
+              <div class="pt-dash-title">Minh Khoa 👋</div>
+            </div>
+            <div class="pt-dash-avatar">💪</div>
+          </div>
+          <div class="pt-stats-row">
+            <div class="pt-stat-box">
+              <div class="pt-stat-num">48</div>
+              <div class="pt-stat-lbl">Client</div>
+            </div>
+            <div class="pt-stat-box">
+              <div class="pt-stat-num">5</div>
+              <div class="pt-stat-lbl">Video hôm nay</div>
+            </div>
+            <div class="pt-stat-box">
+              <div class="pt-stat-num">12</div>
+              <div class="pt-stat-lbl">Tin hẹn giờ</div>
+            </div>
+          </div>
+
+          <!-- Unverified warning -->
+          <div class="unverified-banner" onclick="goScreen(7, null)">
+            <div class="uvb-icon">⚠️</div>
+            <div class="uvb-text">
+              <div class="uvb-title">Tài khoản chưa xác thực</div>
+              <div class="uvb-sub">Upload ảnh mặt + bằng cấp để nhận badge ✅ và tăng trust</div>
+            </div>
+            <div class="uvb-arrow">›</div>
+          </div>
+
+          <div class="section-title">Tin nhắn gần đây</div>
+          <div class="client-item">
+            <div class="client-avatar" style="background:rgba(59,130,246,.15)">🙂</div>
+            <div style="flex:1;min-width:0">
+              <div class="client-name">Minh Tuấn</div>
+              <div class="client-last-msg">Em đợi plan của PT nhé!</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+              <div class="client-time">9:20 SA</div>
+              <div class="unread-dot"></div>
+            </div>
+          </div>
+          <div class="client-item">
+            <div class="client-avatar" style="background:rgba(167,139,250,.15)">👩</div>
+            <div style="flex:1;min-width:0">
+              <div class="client-name">Thu Hà</div>
+              <div class="client-last-msg">PT ơi hôm nay em không tập được</div>
+            </div>
+            <div class="client-time">Hôm qua</div>
+          </div>
+          <div class="client-item">
+            <div class="client-avatar" style="background:rgba(74,222,128,.15)">👦</div>
+            <div style="flex:1;min-width:0">
+              <div class="client-name">Quang Huy</div>
+              <div class="client-last-msg">Cân nặng tuần này: 78.5kg PT ạ</div>
+            </div>
+            <div class="client-time">Hôm qua</div>
+          </div>
+
+          <div class="section-title">Tin nhắn đã hẹn giờ</div>
+          <div class="scheduled-preview">
+            <div class="sp-icon">🕐</div>
+            <div class="sp-info">
+              <div class="sp-to">→ Minh Tuấn</div>
+              <div class="sp-preview">Chào Tuấn! Đây là plan PPL tuần đầu tiên...</div>
+            </div>
+            <div class="sp-time">7:00 SA mai</div>
+          </div>
+          <div class="scheduled-preview">
+            <div class="sp-icon">🕐</div>
+            <div class="sp-info">
+              <div class="sp-to">→ Thu Hà · Quang Huy (+3)</div>
+              <div class="sp-preview">Nhắc nhở: Tuần này là tuần deload, giảm...</div>
+            </div>
+            <div class="sp-time">T2 · 8:00 SA</div>
+          </div>
+          <button class="send-schedule-btn" style="margin-top:4px" onclick="goScreen(5, null)">+ Tạo tin nhắn hẹn giờ</button>
+        </div>
+
+        <!-- SCREEN 5: Schedule Message -->
+        <div class="screen s-schedule" id="screen-5">
+          <div class="schedule-header">
+            <div class="schedule-back" onclick="goScreen(4, null)">←</div>
+            <div class="schedule-title">🕐 Hẹn giờ tin nhắn</div>
+          </div>
+
+          <div class="recipient-row">
+            <div class="recipient-label">Gửi đến:</div>
+            <div class="recipient-chips">
+              <div class="recipient-chip">Minh Tuấn <span class="r-x">×</span></div>
+              <div class="recipient-chip">Thu Hà <span class="r-x">×</span></div>
+              <div class="recipient-chip">+ Thêm</div>
+            </div>
+          </div>
+
+          <textarea class="msg-compose" id="msg-compose">Chào các bạn! Đây là nhắc nhở tập luyện tuần này. Nhớ giữ form đúng và ăn đủ protein nhé 💪</textarea>
+
+          <div class="templates-row">
+            <div class="template-label">Mẫu nhanh:</div>
+            <div class="template-chips">
+              <div class="template-chip" onclick="useTemplate(this)">📋 Nhắc tập</div>
+              <div class="template-chip" onclick="useTemplate(this)">🍗 Nhắc ăn protein</div>
+              <div class="template-chip" onclick="useTemplate(this)">⚖️ Nhắc check-in</div>
+              <div class="template-chip" onclick="useTemplate(this)">💪 Động viên</div>
+            </div>
+          </div>
+
+          <div class="datetime-card">
+            <div class="dt-label">⏰ Thời gian gửi</div>
+            <div class="dt-row">
+              <div class="dt-btn selected" onclick="selectDt(this)">
+                Sáng mai
+                <div class="dt-sub">7:00 SA</div>
+              </div>
+              <div class="dt-btn" onclick="selectDt(this)">
+                Tối nay
+                <div class="dt-sub">8:00 CH</div>
+              </div>
+              <div class="dt-btn" onclick="selectDt(this)">
+                Tuỳ chọn
+                <div class="dt-sub">Chọn ngày</div>
+              </div>
+            </div>
+            <div class="dt-custom">
+              <div class="dt-custom-label">Sẽ gửi lúc:</div>
+              <div class="dt-custom-val" id="dt-val">Thứ Sáu · 7:00 SA</div>
+            </div>
+          </div>
+
+          <div class="schedule-preview">
+            <div class="schedule-preview-label">👁 Preview tin nhắn</div>
+            Chào các bạn! Đây là nhắc nhở tập luyện tuần này. Nhớ giữ form đúng và ăn đủ protein nhé 💪
+          </div>
+
+          <button class="send-schedule-btn" onclick="showScheduleSuccess()">📅 Hẹn giờ gửi</button>
+          <div id="schedule-success" style="display:none;text-align:center;padding:10px;font-size:13px;color:var(--success);font-weight:700">✅ Đã lên lịch! Tin sẽ gửi lúc 7:00 SA mai.</div>
+        </div>
+
+        <!-- SCREEN 6: Connect / Onboarding -->
+        <div class="screen s-connect" id="screen-6">
+          <div class="connect-logo">Coach<span>Link</span></div>
+          <div class="connect-tagline">Kết nối với PT chuyên nghiệp.<br>Tập luyện đúng cách, tiến bộ thật sự.</div>
+
+          <div class="role-cards">
+            <div class="role-card selected" id="role-client" onclick="selectRole('client')">
+              <div class="role-icon">👤</div>
+              <div>
+                <div class="role-name">Tôi là Client</div>
+                <div class="role-desc">Tìm PT phù hợp, nhận kế hoạch cá nhân hóa và theo dõi tiến trình</div>
+              </div>
+            </div>
+            <div class="role-card" id="role-pt" onclick="selectRole('pt')">
+              <div class="role-icon">🏋️</div>
+              <div>
+                <div class="role-name">Tôi là Personal Trainer</div>
+                <div class="role-desc">Quản lý client, gửi kế hoạch, và tư vấn qua chat & video call</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="free-banner">
+            <div class="free-icon">🎁</div>
+            <div>
+              <div class="free-title">Miễn phí hoàn toàn</div>
+              <div class="free-desc">Không cần thẻ tín dụng. Kết nối và sử dụng đầy đủ tính năng ngay hôm nay.</div>
+            </div>
+          </div>
+
+          <button class="get-started-btn">Bắt đầu ngay →</button>
+          <div class="signin-link">Đã có tài khoản? <span>Đăng nhập</span></div>
+        </div>
+
+        <!-- SCREEN 7: PT Verification -->
+        <div class="screen s-verify" id="screen-7">
+          <div class="verify-header">
+            <div class="verify-back" onclick="goScreen(4, null)">←</div>
+            <div class="verify-title">Xác thực danh tính PT</div>
+          </div>
+
+          <!-- Step indicator -->
+          <div style="padding:12px 16px 0">
+            <div class="verify-steps">
+              <div class="vstep done" id="vstep-1">
+                <div class="vstep-dot">✓</div>
+                <div class="vstep-lbl">Đăng ký</div>
+              </div>
+              <div class="vstep active" id="vstep-2">
+                <div class="vstep-dot">2</div>
+                <div class="vstep-lbl">Xác thực</div>
+              </div>
+              <div class="vstep" id="vstep-3">
+                <div class="vstep-dot">3</div>
+                <div class="vstep-lbl">Duyệt</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="verify-body">
+
+            <!-- Step A: Face photo -->
+            <div>
+              <div class="verify-section-title">📸 Ảnh xác thực khuôn mặt</div>
+              <div class="verify-req">
+                <div class="verify-req-item">Rõ mặt, nhìn thẳng vào camera</div>
+                <div class="verify-req-item">Không đeo kính đen, không đội mũ</div>
+                <div class="verify-req-item">Ánh sáng đủ, không bị tối / ngược sáng</div>
+                <div class="verify-req-item">Chỉ 1 người trong ảnh</div>
+              </div>
+              <div class="upload-zone" id="zone-face" onclick="toggleUpload('face')">
+                <div id="face-idle">
+                  <div class="upload-icon">🤳</div>
+                  <div class="upload-label">Chụp ảnh hoặc tải lên</div>
+                  <div class="upload-sub">JPG · PNG · tối đa 10MB</div>
+                </div>
+                <div id="face-done" style="display:none;width:100%">
+                  <div class="upload-preview">😊</div>
+                  <div class="upload-done-row" style="margin-top:8px;justify-content:center">
+                    <div class="upload-done-name">✅ selfie_verify.jpg</div>
+                    <div class="upload-done-change">Đổi ảnh</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="verify-divider" />
+
+            <!-- Step B: Certification -->
+            <div>
+              <div class="verify-section-title">📄 Bằng cấp hoặc giấy nhập học</div>
+              <div class="verify-req">
+                <div class="verify-req-item">Chứng chỉ PT: ISSA, ACE, NASM, ACSM...</div>
+                <div class="verify-req-item">Giấy nhập học ngành TDTT / Y khoa / Dinh dưỡng</div>
+                <div class="verify-req-item">Giấy chứng nhận do gym / tổ chức cấp</div>
+                <div class="verify-req-item">Ảnh rõ, đọc được tên và ngày cấp</div>
+              </div>
+              <div class="upload-zone" id="zone-cert" onclick="toggleUpload('cert')">
+                <div id="cert-idle">
+                  <div class="upload-icon">📋</div>
+                  <div class="upload-label">Upload bằng cấp / giấy tờ</div>
+                  <div class="upload-sub">JPG · PNG · PDF · tối đa 20MB</div>
+                </div>
+                <div id="cert-done" style="display:none;width:100%">
+                  <div class="upload-preview" style="background:linear-gradient(135deg,#1e3a5f,#1e1e4f)">📜</div>
+                  <div class="upload-done-row" style="margin-top:8px;justify-content:center">
+                    <div class="upload-done-name">✅ ISSA_certificate.pdf</div>
+                    <div class="upload-done-change">Đổi file</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="verify-note">
+              <div class="verify-note-icon">🔒</div>
+              <div>Thông tin xác thực chỉ dùng để kiểm tra danh tính. Không hiển thị công khai, không chia sẻ bên thứ ba. Xét duyệt trong vòng <strong style="color:var(--warning)">24–48 giờ</strong>.</div>
+            </div>
+
+            <button class="verify-submit-btn" id="verify-submit-btn" disabled onclick="submitVerify()">
+              Gửi xác thực →
+            </button>
+
+          </div>
+
+          <!-- Pending overlay -->
+          <div class="verify-pending" id="verify-pending">
+            <div class="verify-pending-icon">🕐</div>
+            <div class="verify-pending-title">Đang xét duyệt</div>
+            <div class="verify-pending-sub">Chúng tôi đã nhận được tài liệu của bạn. Kết quả sẽ có trong <strong>24–48 giờ</strong> qua thông báo.</div>
+            <div class="verify-timeline-mini">
+              <div class="vtm-item"><div class="vtm-dot" style="background:var(--success)"></div>Tài liệu đã nộp</div>
+              <div class="vtm-item"><div class="vtm-dot" style="background:var(--warning);animation:pulse 1.5s infinite"></div>Đang xét duyệt bởi team CoachLink</div>
+              <div class="vtm-item"><div class="vtm-dot" style="background:var(--border)"></div>Nhận badge ✅ Verified PT</div>
+            </div>
+            <button style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px 20px;font-size:13px;font-weight:600;color:var(--text);cursor:pointer" onclick="goScreen(4,null)">Về Dashboard</button>
+          </div>
+        </div>
+
+      </div><!-- /screens -->
+    </div><!-- /phone -->
+  </div>
+
+  <div class="desc-panel" id="desc-panel"></div>
+</div>
+
+<!-- ── Tech Stack Comparison ── -->
+<div class="tech-section">
+
+  <!-- Chat -->
+  <div>
+    <div class="tech-section-title">💬 Chat SDK <span>— Flutter packages</span></div>
+    <div class="lib-grid">
+      <div class="lib-card rec">
+        <div class="lib-name">Stream Chat</div>
+        <div class="lib-pkg">stream_chat_flutter</div>
+        <div class="lib-rows">
+          <div class="lib-row"><span class="lib-lbl">Why</span><span class="lib-val">Prebuilt Flutter widgets (ChannelListView, MessageListView, MessageInput) — ship trong 1 ngày</span></div>
+          <div class="lib-row"><span class="lib-lbl">Features</span><span class="lib-val">Real-time, read receipts, reactions, file sharing, offline, threads, push</span></div>
+          <div class="lib-row"><span class="lib-lbl">Setup</span><span class="lib-val">~4 giờ kể cả token backend</span></div>
+          <div class="lib-row"><span class="lib-lbl">Free tier</span><span class="lib-val">5 MAU miễn phí — đủ cho beta</span></div>
+          <div class="lib-row"><span class="lib-lbl">Scale</span><span class="lib-val">→ $99/mo tại 100 MAU</span></div>
+        </div>
+        <span class="lib-price-tag lpt-free">$0 → $99/mo</span>
+      </div>
+      <div class="lib-card">
+        <div class="lib-name">Firebase Firestore</div>
+        <div class="lib-pkg">cloud_firestore</div>
+        <div class="lib-rows">
+          <div class="lib-row"><span class="lib-lbl">Why</span><span class="lib-val">Đã dùng Firebase cho auth + storage — giữ stack thuần Firebase, tự build chat UI</span></div>
+          <div class="lib-row"><span class="lib-lbl">Features</span><span class="lib-val">Real-time, offline — nhưng phải tự code: read receipts, reactions, file sharing</span></div>
+          <div class="lib-row"><span class="lib-lbl">Setup</span><span class="lib-val">~2–3 ngày để build đủ feature</span></div>
+          <div class="lib-row"><span class="lib-lbl">Free tier</span><span class="lib-val">Spark plan: 50K reads/ngày — gần như miễn phí mãi</span></div>
+          <div class="lib-row"><span class="lib-lbl">Scale</span><span class="lib-val">Pay-per-use, rẻ hơn Stream ở scale lớn</span></div>
+        </div>
+        <span class="lib-price-tag lpt-diy">$0 — DIY</span>
+      </div>
+      <div class="lib-card">
+        <div class="lib-name">Sendbird</div>
+        <div class="lib-pkg">sendbird_sdk</div>
+        <div class="lib-rows">
+          <div class="lib-row"><span class="lib-lbl">Why</span><span class="lib-val">Enterprise-grade — moderation, translation, AI bots. Overkill cho MVP.</span></div>
+          <div class="lib-row"><span class="lib-lbl">Features</span><span class="lib-val">Giống Stream nhưng nặng hơn, docs phức tạp hơn</span></div>
+          <div class="lib-row"><span class="lib-lbl">Setup</span><span class="lib-val">~2 ngày</span></div>
+          <div class="lib-row"><span class="lib-lbl">Free tier</span><span class="lib-val">Trial 30 ngày</span></div>
+          <div class="lib-row"><span class="lib-lbl">Scale</span><span class="lib-val">$399+/mo sau trial</span></div>
+        </div>
+        <span class="lib-price-tag lpt-paid">$399+/mo</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Video Call -->
+  <div>
+    <div class="tech-section-title">📹 Video Call SDK <span>— Flutter packages</span></div>
+    <div class="lib-grid">
+      <div class="lib-card rec">
+        <div class="lib-name">Agora RTC</div>
+        <div class="lib-pkg">agora_rtc_engine: ^6.x</div>
+        <div class="lib-rows">
+          <div class="lib-row"><span class="lib-lbl">Why</span><span class="lib-val">Native Flutter SDK tốt nhất, latency &lt;80ms, global CDN. Đã có trong PRD ban đầu.</span></div>
+          <div class="lib-row"><span class="lib-lbl">Features</span><span class="lib-val">AI noise suppression, screen share, cloud recording, beauty filter, breakout rooms</span></div>
+          <div class="lib-row"><span class="lib-lbl">Setup</span><span class="lib-val">~1 ngày — cần gen token từ Cloud Function</span></div>
+          <div class="lib-row"><span class="lib-lbl">Free tier</span><span class="lib-val">10,000 phút/tháng</span></div>
+          <div class="lib-row"><span class="lib-lbl">Scale</span><span class="lib-val">$0.00099/phút sau free tier</span></div>
+        </div>
+        <span class="lib-price-tag lpt-free">Free 10K min → $0.001/min</span>
+      </div>
+      <div class="lib-card">
+        <div class="lib-name">100ms</div>
+        <div class="lib-pkg">hmssdk_flutter</div>
+        <div class="lib-rows">
+          <div class="lib-row"><span class="lib-lbl">Why</span><span class="lib-val">DX tốt hơn Agora, prebuilt UI widgets, custom layout dễ hơn</span></div>
+          <div class="lib-row"><span class="lib-lbl">Features</span><span class="lib-val">Recording, RTMP streaming, breakout rooms, whiteboard</span></div>
+          <div class="lib-row"><span class="lib-lbl">Setup</span><span class="lib-val">~4–6 giờ</span></div>
+          <div class="lib-row"><span class="lib-lbl">Free tier</span><span class="lib-val">10,000 phút/tháng</span></div>
+          <div class="lib-row"><span class="lib-lbl">Scale</span><span class="lib-val">$0.002/phút — đắt hơn Agora x2</span></div>
+        </div>
+        <span class="lib-price-tag lpt-free">Free 10K min → $0.002/min</span>
+      </div>
+      <div class="lib-card">
+        <div class="lib-name">Twilio Video</div>
+        <div class="lib-pkg">twilio_programmable_video</div>
+        <div class="lib-rows">
+          <div class="lib-row"><span class="lib-lbl">Why</span><span class="lib-val">Nổi tiếng nhưng Flutter SDK không được maintain tốt. Risky cho production.</span></div>
+          <div class="lib-row"><span class="lib-lbl">Features</span><span class="lib-val">Cơ bản, ít feature hơn Agora</span></div>
+          <div class="lib-row"><span class="lib-lbl">Setup</span><span class="lib-val">~1 ngày nhưng cần workaround</span></div>
+          <div class="lib-row"><span class="lib-lbl">Free tier</span><span class="lib-val">Không có — pay-per-use từ đầu</span></div>
+          <div class="lib-row"><span class="lib-lbl">Scale</span><span class="lib-val">$0.004/phút — đắt nhất</span></div>
+        </div>
+        <span class="lib-price-tag lpt-paid">$0.004/min từ đầu</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full tech stack table -->
+  <div>
+    <div class="tech-section-title">🛠 Full Tech Stack <span>— Flutter · Firebase · Agora · Stream</span></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:540px">
+        <thead>
+          <tr style="border-bottom:1px solid var(--border)">
+            <th style="text-align:left;padding:10px 16px;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:500">Layer</th>
+            <th style="text-align:left;padding:10px 16px;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:500">Technology</th>
+            <th style="text-align:left;padding:10px 16px;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:500">Package / Service</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:11px 16px;color:var(--muted)">Mobile</td><td style="padding:11px 16px;font-weight:700">Flutter 3.x</td><td style="padding:11px 16px;color:var(--accent);font-family:monospace;font-size:11px">iOS + Android, go_router</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:11px 16px;color:var(--muted)">Auth</td><td style="padding:11px 16px;font-weight:700">Firebase Auth</td><td style="padding:11px 16px;color:var(--accent);font-family:monospace;font-size:11px">firebase_auth, google_sign_in, sign_in_with_apple</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:11px 16px;color:var(--muted)">Database</td><td style="padding:11px 16px;font-weight:700">Firestore</td><td style="padding:11px 16px;color:var(--accent);font-family:monospace;font-size:11px">cloud_firestore — profiles, plans, sessions, reviews</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:11px 16px;color:var(--muted)">Storage</td><td style="padding:11px 16px;font-weight:700">Firebase Storage</td><td style="padding:11px 16px;color:var(--accent);font-family:monospace;font-size:11px">firebase_storage — avatars, certs, progress photos</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:11px 16px;color:var(--muted);font-weight:700;color:#4ade80">Chat ✓</td><td style="padding:11px 16px;font-weight:700;color:#4ade80">Stream Chat</td><td style="padding:11px 16px;color:var(--accent);font-family:monospace;font-size:11px">stream_chat_flutter — prebuilt widgets</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:11px 16px;color:var(--muted);font-weight:700;color:#4ade80">Video ✓</td><td style="padding:11px 16px;font-weight:700;color:#4ade80">Agora RTC</td><td style="padding:11px 16px;color:var(--accent);font-family:monospace;font-size:11px">agora_rtc_engine: ^6.3.0</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:11px 16px;color:var(--muted)">Scheduled Msgs</td><td style="padding:11px 16px;font-weight:700">Cloud Functions + Scheduler</td><td style="padding:11px 16px;color:var(--accent);font-family:monospace;font-size:11px">Cloud Scheduler cron → Cloud Function → FCM</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:11px 16px;color:var(--muted)">Notifications</td><td style="padding:11px 16px;font-weight:700">FCM</td><td style="padding:11px 16px;color:var(--accent);font-family:monospace;font-size:11px">firebase_messaging, flutter_local_notifications</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:11px 16px;color:var(--muted)">Search</td><td style="padding:11px 16px;font-weight:700">Algolia (optional)</td><td style="padding:11px 16px;color:var(--accent);font-family:monospace;font-size:11px">algolia_helper_flutter — PT discovery search</td></tr>
+          <tr><td style="padding:11px 16px;color:var(--muted)">Analytics</td><td style="padding:11px 16px;font-weight:700">PostHog</td><td style="padding:11px 16px;color:var(--accent);font-family:monospace;font-size:11px">posthog_flutter — event tracking, funnels</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">CoachLink · Mockup v1.0 · Firebase: streak-habit-mvp · /pt-app</div>
+
+<script>
+const allScreens = {
+  client: [
+    { tabLabel: '🔍 Tìm PT', idx: 0,
+      name: '🔍 Khám phá PT',
+      subtitle: 'Client duyệt danh sách PT, lọc theo chuyên môn, xem rating và kết nối miễn phí.',
+      features: [
+        { icon: '🔍', title: 'Search & Filter', desc: 'Tìm PT theo tên, chuyên môn (tăng cơ, giảm cân, yoga...). Filter giúp client khoanh vùng nhanh.' },
+        { icon: '⭐', title: 'PT Cards với Rating', desc: 'Mỗi PT card hiển thị: ảnh, chuyên môn, số năm kinh nghiệm, rating + số đánh giá, và badge FREE.' },
+        { icon: '🟢', title: 'Online Status', desc: 'Chấm xanh hiển thị PT đang online – client biết ai có thể phản hồi ngay.' },
+        { icon: '🎁', title: 'Free Badge', desc: 'Giai đoạn đầu mọi kết nối đều miễn phí. Badge FREE nổi bật để giảm rào cản thử lần đầu.' },
+      ],
+      stack: [
+        { label: 'cloud_firestore', cls: 'sp-blue', note: 'query + stream PT list' },
+        { label: 'firebase_storage', cls: 'sp-blue', note: 'avatars' },
+        { label: 'algolia_helper_flutter', cls: 'sp-gray', note: 'full-text search (optional)' },
+        { label: 'cached_network_image', cls: 'sp-gray', note: 'PT avatar caching' },
+      ],
+      next: { label: 'Xem PT Profile →', idx: 1 }
+    },
+    { tabLabel: '👤 PT Profile', idx: 1,
+      name: '👤 PT Profile',
+      subtitle: 'Trang hồ sơ chi tiết của PT: chứng chỉ, thống kê, bio, chuyên môn, lịch trống và đánh giá từ client.',
+      features: [
+        { icon: '🏅', title: 'Chứng chỉ & Verification', desc: 'Badge chứng chỉ (ISSA, ACE...) và tick xanh verified tạo độ tin cậy. PT phải upload giấy tờ để được verify.' },
+        { icon: '📊', title: 'Social Proof Stats', desc: 'Số đánh giá, điểm trung bình, số client hiện tại. Số liệu thật – không phải marketing copy.' },
+        { icon: '🗓', title: 'Availability Slots', desc: 'PT cài đặt khung giờ rảnh. Client thấy ngay khi nào có thể video call – không cần nhắn hỏi.' },
+        { icon: '💬', title: 'Real Reviews', desc: 'Đánh giá từ client thật, có tên và sao. Không filter review xấu – tính trung thực là ưu tiên.' },
+      ],
+      stack: [
+        { label: 'cloud_firestore', cls: 'sp-blue', note: 'profile + reviews' },
+        { label: 'firebase_storage', cls: 'sp-blue', note: 'cert photos, cover image' },
+        { label: 'cloud_functions', cls: 'sp-yellow', note: 'verify badge trigger' },
+        { label: 'url_launcher', cls: 'sp-gray', note: 'share profile link' },
+      ],
+      next: { label: 'Xem Chat →', idx: 2 }
+    },
+    { tabLabel: '💬 Chat', idx: 2,
+      name: '💬 Chat PT ↔ Client',
+      subtitle: 'Nhắn tin trực tiếp giữa PT và client. PT có thể thấy tin nhắn đã được hẹn giờ ngay trong thread.',
+      features: [
+        { icon: '💬', title: 'Direct Messaging', desc: 'Chat 1-1 giữa PT và client. Tin nhắn text, ảnh, file (kế hoạch tập, bảng dinh dưỡng).' },
+        { icon: '📹', title: 'Quick Video Call', desc: 'Nút video call ngay trên header chat – chuyển sang call trong 1 tap, không cần app khác.' },
+        { icon: '🕐', title: 'Scheduled Message Preview', desc: 'Tin nhắn đã hẹn giờ hiển thị trong thread với viền vàng đứt. Client thấy PT đã chuẩn bị sẵn.' },
+        { icon: '📎', title: 'File Sharing', desc: 'PT gửi plan tập (PDF/ảnh), video hướng dẫn. Client gửi ảnh check-in, log buổi tập.' },
+      ],
+      stack: [
+        { label: 'stream_chat_flutter ✓', cls: 'sp-rec', note: 'MessageListView + MessageInput prebuilt' },
+        { label: 'firebase_storage', cls: 'sp-blue', note: 'file attachments fallback' },
+        { label: 'image_picker', cls: 'sp-gray', note: 'pick photo/video to send' },
+        { label: 'open_filepicker', cls: 'sp-gray', note: 'send PDF plans' },
+      ],
+      next: { label: 'Xem Video Call →', idx: 3 }
+    },
+    { tabLabel: '📹 Video Call', idx: 3,
+      name: '📹 Video Call',
+      subtitle: 'Buổi tư vấn trực tiếp qua video – PT xem form, hướng dẫn real-time, không cần gặp mặt.',
+      features: [
+        { icon: '🎥', title: 'In-App Video Call', desc: 'Không cần Zoom hay Meet. Call thẳng trong app – ít friction, dễ dùng hơn cho người không quen tech.' },
+        { icon: '👁', title: 'Form Review', desc: 'Client tập trước camera, PT nhìn thấy real-time và sửa form ngay lập tức. Giống PT thật bên cạnh.' },
+        { icon: '💬', title: 'In-Call Chat', desc: 'Gửi link, note hoặc ảnh ngay trong khi call mà không cần tắt màn hình.' },
+        { icon: '📅', title: 'Session Scheduling', desc: 'Đặt lịch call trước. Notification nhắc nhở cả PT lẫn client 15 phút trước giờ hẹn.' },
+      ],
+      stack: [
+        { label: 'agora_rtc_engine: ^6.x ✓', cls: 'sp-rec', note: 'main video call SDK' },
+        { label: 'cloud_functions', cls: 'sp-yellow', note: 'gen Agora token server-side' },
+        { label: 'permission_handler', cls: 'sp-gray', note: 'camera + mic permissions' },
+        { label: 'wakelock_plus', cls: 'sp-gray', note: 'keep screen on during call' },
+        { label: 'cloud_firestore', cls: 'sp-blue', note: 'save session log after call' },
+      ],
+      next: { label: 'Xem PT Dashboard →', idx: 4 }
+    },
+  ],
+  pt: [
+    { tabLabel: '🏠 Dashboard', idx: 4,
+      name: '🏠 PT Dashboard',
+      subtitle: 'Tổng quan của PT: số client, lịch video hôm nay, tin nhắn chưa đọc, và tin đã hẹn giờ sắp gửi.',
+      features: [
+        { icon: '📊', title: 'Client Overview', desc: 'Số client đang active, số buổi video hôm nay, số tin nhắn đã hẹn giờ. Tóm tắt để PT bắt đầu ngày làm việc.' },
+        { icon: '💬', title: 'Message Inbox', desc: 'Danh sách client kèm tin nhắn gần nhất và badge unread. Sort theo thứ tự mới nhất.' },
+        { icon: '🕐', title: 'Scheduled Messages Panel', desc: 'PT thấy tất cả tin đã hẹn giờ: gửi cho ai, preview nội dung, và thời gian gửi. Có thể chỉnh sửa trước khi gửi.' },
+        { icon: '⚡', title: 'Quick Actions', desc: 'Nút "Tạo tin nhắn hẹn giờ" ngay trên dashboard – PT không cần vào từng conversation.' },
+      ],
+      stack: [
+        { label: 'stream_chat_flutter', cls: 'sp-green', note: 'unread counts + inbox' },
+        { label: 'cloud_firestore', cls: 'sp-blue', note: 'stats + scheduled msg list' },
+        { label: 'firebase_messaging', cls: 'sp-yellow', note: 'new message push' },
+        { label: 'fl_chart', cls: 'sp-gray', note: 'revenue / activity mini chart' },
+      ],
+      next: { label: 'Xem Schedule Message →', idx: 5 }
+    },
+    { tabLabel: '🕐 Hẹn giờ tin', idx: 5,
+      name: '🕐 Schedule Message',
+      subtitle: 'PT soạn tin nhắn và hẹn giờ gửi tự động – cho 1 hoặc nhiều client cùng lúc.',
+      features: [
+        { icon: '👥', title: 'Broadcast to Multiple', desc: 'Chọn nhiều client cùng một lúc. Tin nhắn nhắc tập, nhắc check-in, hoặc nội dung deload tuần – gửi một lần cho cả nhóm.' },
+        { icon: '📋', title: 'Message Templates', desc: 'Template có sẵn: nhắc tập, nhắc ăn protein, nhắc check-in cân, tin động viên. PT chọn rồi tùy chỉnh, tiết kiệm thời gian.' },
+        { icon: '⏰', title: 'Flexible Scheduling', desc: 'Chọn nhanh (sáng mai, tối nay) hoặc chọn ngày giờ tùy ý. PT lên batch cả tuần trong một lần.' },
+        { icon: '👁', title: 'Message Preview', desc: 'Preview tin nhắn trước khi lên lịch. Đảm bảo nội dung đúng trước khi hẹn gửi cho client.' },
+      ],
+      stack: [
+        { label: 'cloud_firestore', cls: 'sp-blue', note: 'save scheduled message doc' },
+        { label: 'Cloud Scheduler', cls: 'sp-yellow', note: 'cron trigger at send time' },
+        { label: 'Cloud Functions', cls: 'sp-yellow', note: 'execute send + FCM dispatch' },
+        { label: 'stream_chat_flutter', cls: 'sp-green', note: 'deliver via Stream channel' },
+      ],
+      next: { label: 'Xem Onboarding →', idx: 6 }
+    },
+    { tabLabel: '🎁 Onboarding', idx: 6,
+      name: '🎁 Onboarding – Chọn vai trò',
+      subtitle: 'Màn hình đầu tiên khi vào app: chọn là PT hay Client, và nhấn mạnh tất cả đều miễn phí.',
+      features: [
+        { icon: '🔀', title: 'Two-Sided Platform', desc: 'App phục vụ cả PT lẫn client. Onboarding fork ngay từ đầu để UI, tính năng và flow phù hợp với từng role.' },
+        { icon: '🎁', title: 'Free Positioning', desc: 'Banner "Miễn phí hoàn toàn" nổi bật để giảm rào cản. Giai đoạn đầu không cần thẻ tín dụng.' },
+        { icon: '⚡', title: 'Minimal Friction', desc: 'Chỉ cần chọn role và bấm một nút. Không hỏi dài dòng ngay từ đầu – thông tin thu thập dần trong app.' },
+        { icon: '🔄', title: 'Role Switching', desc: 'PT có thể xem app theo góc nhìn client và ngược lại. Giúp PT hiểu client experience.' },
+      ],
+      stack: [
+        { label: 'firebase_auth', cls: 'sp-blue', note: 'email + OAuth' },
+        { label: 'google_sign_in', cls: 'sp-blue', note: 'Google OAuth' },
+        { label: 'sign_in_with_apple', cls: 'sp-gray', note: 'Apple Sign-In (iOS required)' },
+        { label: 'cloud_firestore', cls: 'sp-blue', note: 'create user + role doc' },
+      ],
+      next: { label: '← Về Discover', idx: 0 }
+    },
+    { tabLabel: '✅ Xác thực PT', idx: 7,
+      name: '✅ Xác thực danh tính PT',
+      subtitle: 'PT phải nộp ảnh khuôn mặt rõ và bằng cấp / giấy nhập học trước khi được nhận badge xác thực và hiển thị với client.',
+      features: [
+        { icon: '🤳', title: 'Ảnh khuôn mặt rõ', desc: 'Selfie nhìn thẳng, không kính đen, không đội mũ, ánh sáng đủ, chỉ 1 người. Dùng để đối chiếu danh tính thật.' },
+        { icon: '📄', title: 'Bằng cấp / Giấy nhập học', desc: 'Chứng chỉ ISSA / ACE / NASM, giấy nhập học ngành TDTT hoặc Y khoa, giấy chứng nhận PT do tổ chức cấp.' },
+        { icon: '🔒', title: 'Tài liệu bảo mật', desc: 'Chỉ dùng nội bộ để xét duyệt. Không hiển thị công khai, không chia sẻ bên thứ ba.' },
+        { icon: '🕐', title: 'Xét duyệt 24–48 giờ', desc: 'Team CoachLink review thủ công. PT nhận notification khi được duyệt và badge ✅ Verified hiển thị trên profile.' },
+      ],
+      stack: [
+        { label: 'image_picker', cls: 'sp-blue', note: 'chọn ảnh từ camera hoặc gallery' },
+        { label: 'file_picker', cls: 'sp-blue', note: 'chọn PDF bằng cấp' },
+        { label: 'firebase_storage', cls: 'sp-green', note: 'upload vào /verifications/{uid}/ (private bucket)' },
+        { label: 'cloud_firestore', cls: 'sp-blue', note: 'lưu verification request doc + status' },
+        { label: 'cloud_functions', cls: 'sp-yellow', note: 'trigger admin notification khi có request mới' },
+        { label: 'firebase_messaging', cls: 'sp-yellow', note: 'push thông báo kết quả cho PT' },
+      ],
+      next: { label: '← PT Dashboard', idx: 4 }
+    },
+  ]
+};
+
+let currentView = 'client';
+let currentScreenIdx = 0;
+
+function setView(view, btn) {
+  currentView = view;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildTabs();
+  const firstIdx = allScreens[view][0].idx;
+  goScreen(firstIdx, null);
+}
+
+function buildTabs() {
+  const nav = document.getElementById('flow-nav');
+  const screens = allScreens[currentView];
+  nav.innerHTML = screens.map(s =>
+    `<button class="flow-tab${s.idx === currentScreenIdx ? ' active' : ''}" onclick="goScreen(${s.idx}, this)">${s.tabLabel}</button>`
+  ).join('');
+}
+
+function goScreen(idx, tabEl) {
+  // reset verify overlay when leaving that screen
+  if (currentScreenIdx === 7 && idx !== 7) {
+    const p = document.getElementById('verify-pending');
+    if (p) p.classList.remove('show');
+  }
+  document.querySelectorAll('.screen').forEach((s, i) => {
+    s.classList.toggle('active', i === idx);
+  });
+  currentScreenIdx = idx;
+  buildTabs();
+  if (tabEl) {
+    document.querySelectorAll('.flow-tab').forEach(t => t.classList.remove('active'));
+    tabEl.classList.add('active');
+  }
+  renderDesc(idx);
+}
+
+function findScreenMeta(idx) {
+  for (const view of Object.values(allScreens)) {
+    for (const s of view) { if (s.idx === idx) return s; }
+  }
+  return null;
+}
+
+function renderDesc(idx) {
+  const s = findScreenMeta(idx);
+  if (!s) return;
+  const panel = document.getElementById('desc-panel');
+  const stackHtml = s.stack ? `
+    <div class="stack-row">
+      <div class="stack-row-label">Tech Stack</div>
+      <div class="stack-pills">
+        ${s.stack.map(t => `<span class="sp ${t.cls}" title="${t.note}">${t.label}</span>`).join('')}
+      </div>
+    </div>` : '';
+  panel.innerHTML = `
+    <div class="desc-screen-name">${s.name}</div>
+    <div class="desc-subtitle">${s.subtitle}</div>
+    <div class="desc-features">
+      ${s.features.map(f => `
+        <div class="feature-item">
+          <div class="feature-icon">${f.icon}</div>
+          <div>
+            <div class="feature-title">${f.title}</div>
+            <div class="feature-desc">${f.desc}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    ${stackHtml}
+    ${s.next ? `<button class="next-screen-btn" onclick="goScreen(${s.next.idx}, null)">
+      ${s.next.label}
+    </button>` : ''}
+  `;
+}
+
+function selectRole(role) {
+  document.getElementById('role-client').classList.toggle('selected', role === 'client');
+  document.getElementById('role-pt').classList.toggle('selected', role === 'pt');
+}
+
+function selectDt(el) {
+  document.querySelectorAll('.dt-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  const labels = { 'Sáng mai': 'Thứ Sáu · 7:00 SA', 'Tối nay': 'Thứ Năm · 8:00 CH', 'Tuỳ chọn': 'Chọn ngày giờ...' };
+  const key = el.textContent.trim().split('\n')[0].trim();
+  document.getElementById('dt-val').textContent = labels[key] || 'Thứ Sáu · 7:00 SA';
+}
+
+function useTemplate(el) {
+  const templates = {
+    '📋 Nhắc tập': 'Hôm nay là ngày tập rồi nhé! Đừng quên khởi động kỹ trước và cool-down sau. Cần gì cứ nhắn PT 💪',
+    '🍗 Nhắc ăn protein': 'Nhắc nhở: hôm nay bạn đã nạp đủ protein chưa? Mục tiêu là 2g/kg cân nặng mỗi ngày 🍗',
+    '⚖️ Nhắc check-in': 'Tuần mới rồi! Nhớ cân và gửi số liệu cho PT nhé. Cân buổi sáng ngủ dậy, trước khi ăn 📊',
+    '💪 Động viên': 'Tuần này bạn làm rất tốt! Đừng nản – tiến bộ cần thời gian. Cứ tin vào process 🔥',
+  };
+  const key = el.textContent.trim();
+  const ta = document.getElementById('msg-compose');
+  if (ta && templates[key]) ta.value = templates[key];
+}
+
+function showScheduleSuccess() {
+  const s = document.getElementById('schedule-success');
+  s.style.display = 'block';
+  setTimeout(() => { s.style.display = 'none'; }, 3000);
+}
+
+// ── PRD download ──
+function downloadPRD() {
+  const content = `# CoachLink — Product Requirements Document
+
+**Version:** 2.0
+**Date:** 2026-05-27
+**Status:** Active
+**Mockup:** /pt-app (streak-habit-mvp.web.app/pt-app)
+
+---
+
+## 1. Executive Summary
+
+CoachLink is a two-sided platform connecting Personal Trainers (PT) with clients. The app lets PTs manage clients professionally and lets clients find a trusted PT — all through in-app chat, video call, and a scheduled-message system.
+
+Phase 1 positioning: Free for both PTs and clients to remove all friction and grow supply/demand simultaneously.
+
+---
+
+## 2. Problem Statement
+
+### Client side
+- Hard to find a credible PT — lack of transparency on qualifications and pricing
+- Real PT sessions are expensive (500K–2M VND/session) and hard to access daily
+- Fragmented tools: Zalo for chat, Zoom for calls, Google Sheets for plans
+
+### PT side
+- Managing many clients scattered across Zalo, Facebook — unprofessional and inefficient
+- Sending reminder messages manually to each client wastes hours per week
+- No unified tool for scheduling, progress tracking, or structured feedback
+
+---
+
+## 3. Users
+
+| Role | Profile | Core Need |
+|---|---|---|
+| Client | 20–40 y/o, wants to train correctly | Find a trusted PT, easy communication |
+| PT | Freelance or gym-based trainer | Manage clients professionally, save time |
+
+---
+
+## 4. Screen Map (8 screens)
+
+### CLIENT VIEW
+
+#### S0 — Discover PT
+- Search by name or specialty (strength, weight loss, yoga, cardio, calisthenics)
+- Filter chips: Tất cả / Giảm cân / Tăng cơ / Yoga / Cardio / Calisthenics
+- PT cards: avatar, name, specialty, years of experience, rating, review count
+- Online status dot (green = available now)
+- FREE badge — zero barrier in Phase 1
+Stack: cloud_firestore, firebase_storage, algolia_helper_flutter (optional), cached_network_image
+
+#### S1 — PT Profile
+- Cover photo + avatar
+- Certification badge (ISSA, ACE, NASM…) + verified tick (unlocked after S7)
+- Stats: review count · average rating · active client count
+- Personal bio, specialty chips, availability slots, recent reviews (unfiltered)
+- Actions: Chat → S2, Connect → S6
+Stack: cloud_firestore, firebase_storage, cloud_functions (verify badge), url_launcher
+
+#### S2 — Chat (PT ↔ Client)
+- 1-on-1 real-time messaging: text, images, files (PDF plans, diet sheets)
+- Read receipts, message reactions
+- Scheduled message preview in thread (dashed yellow border)
+- Video call quick-launch in header → S3
+SDK: stream_chat_flutter (chosen over Firestore DIY — prebuilt widgets, ships in ~4h)
+Stack: stream_chat_flutter, firebase_storage, image_picker, open_filepicker
+
+#### S3 — Video Call
+- Full-screen call with self-view PiP, session timer, recording indicator
+- Trainer note overlay, screen share, in-call chat
+- Cloud recording → session replay linked in Firestore
+- End call → auto session log entry
+SDK: agora_rtc_engine ^6.3.0 (chosen — best Flutter SDK, <80ms, 10K free min/mo)
+Stack: agora_rtc_engine, cloud_functions (token gen), permission_handler, wakelock_plus, cloud_firestore
+
+### PT VIEW
+
+#### S4 — PT Dashboard
+- ⚠️ Unverified banner → S7 (visible until verification complete)
+- Stats: active clients · video sessions today · pending scheduled messages
+- Message inbox with unread badges
+- Scheduled messages panel with preview + send time
+- Quick action: "+ Tạo tin nhắn hẹn giờ" → S5
+Stack: stream_chat_flutter, cloud_firestore, firebase_messaging, fl_chart
+
+#### S5 — Schedule Message
+- Multi-recipient selector (individual or broadcast all)
+- Free-form compose + quick templates (nhắc tập, protein, check-in, động viên)
+- Time picker: Sáng mai 7h / Tối nay 8h / Custom
+- Live message preview before scheduling
+Backend: Firestore doc → Cloud Scheduler cron → Cloud Function → Stream + FCM
+Stack: cloud_firestore, Cloud Scheduler, Cloud Functions, stream_chat_flutter, firebase_messaging
+
+#### S6 — Onboarding / Role Selection
+- Role cards: Client / PT
+- FREE banner (no credit card)
+- Single CTA: "Bắt đầu ngay →"
+- PT role → proceeds to S7 after account creation
+Stack: firebase_auth, google_sign_in, sign_in_with_apple, cloud_firestore
+
+#### S7 — PT Verification (NEW)
+PTs must verify identity + credentials before receiving the ✅ badge.
+
+Flow:
+  PT registers → S7
+  1. Upload face photo (selfie)
+  2. Upload certificate / enrollment doc
+  3. Submit → status: pending
+  Team reviews in 24–48h → approved → FCM push → ✅ badge on profile
+
+Upload 1 — Face photo requirements:
+  - Rõ mặt, nhìn thẳng camera
+  - Không kính đen, không đội mũ
+  - Ánh sáng đủ, chỉ 1 người
+  - JPG/PNG, max 10MB
+
+Upload 2 — Certificate / enrollment doc:
+  - Accepted: ISSA, ACE, NASM, ACSM, giấy nhập học TDTT/Y khoa/Dinh dưỡng, giấy chứng nhận gym
+  - Ảnh rõ, đọc được tên + ngày cấp
+  - JPG/PNG/PDF, max 20MB
+
+Privacy: stored in private Storage bucket /verifications/{uid}/ — not public, not shared.
+Submit button disabled until both uploads complete.
+Stack: image_picker, file_picker, firebase_storage, cloud_firestore, cloud_functions, firebase_messaging
+
+---
+
+## 5. Firestore Data Model
+
+users/{uid}
+  role: "pt" | "client", displayName, avatarUrl, createdAt
+
+pts/{uid}
+  bio, specialties[], certifications[], verificationStatus: "unverified"|"pending"|"verified"
+  availabilitySlots[{ day, time }], rating, reviewCount, clientCount, hourlyRate
+
+verifications/{uid}  ← private Storage rules required
+  facePhotoUrl, certDocUrl
+  status: "pending" | "approved" | "rejected"
+  submittedAt, reviewedAt, reviewerNote
+
+sessions/{sessionId}
+  ptId, clientId, scheduledAt, agoraRoomId, recordingUrl, durationSeconds
+  status: "scheduled" | "completed" | "cancelled"
+
+scheduledMessages/{msgId}
+  fromPtId, toClientIds[], content, sendAt, templateType
+  status: "pending" | "sent" | "failed"
+
+reviews/{reviewId}
+  ptId, clientId, rating (1–5), text, createdAt
+
+---
+
+## 6. Tech Stack
+
+| Layer | Technology | Package |
+|---|---|---|
+| Mobile | Flutter 3.x | iOS + Android, go_router |
+| Auth | Firebase Auth | firebase_auth, google_sign_in, sign_in_with_apple |
+| Database | Cloud Firestore | cloud_firestore |
+| Storage | Firebase Storage | firebase_storage |
+| Chat ✓ | Stream Chat | stream_chat_flutter — prebuilt widgets, 5 MAU free |
+| Video ✓ | Agora RTC Engine | agora_rtc_engine: ^6.3.0 — 10K min/mo free, <80ms |
+| Scheduled Msgs | Cloud Functions + Scheduler | Cron → Function → FCM |
+| Notifications | FCM | firebase_messaging, flutter_local_notifications |
+| File Picker | — | image_picker, file_picker |
+| Search | Algolia (Phase 2) | algolia_helper_flutter |
+| Analytics | PostHog | posthog_flutter |
+
+Chat decision: stream_chat_flutter — 4h setup vs 2–3 days DIY. Abstract ChatService from day one.
+Video decision: agora_rtc_engine — token server-side via Cloud Function, never expose App ID in client.
+
+---
+
+## 7. MVP Phases
+
+### Phase 1 — Core (Weeks 1–4)
+- [ ] Onboarding: role selection + Firebase Auth
+- [ ] PT profile + listing (S0, S1)
+- [ ] PT Verification upload flow (S7) + manual admin review
+- [ ] 1-on-1 chat + file sharing (S2) via Stream Chat
+- [ ] Scheduled message: single recipient, text only (S5 lite)
+- [ ] PT Dashboard with inbox + unverified banner (S4)
+
+### Phase 2 — Video + Full Schedule (Weeks 5–8)
+- [ ] Video call via Agora RTC (S3) with cloud recording
+- [ ] Broadcast scheduled messages + templates
+- [ ] Availability calendar + session booking
+- [ ] Reviews & ratings post-session
+- [ ] FCM push: new message, session reminder, verification result
+
+### Phase 3 — Growth (Weeks 9–12)
+- [ ] In-call chat overlay
+- [ ] PT analytics dashboard
+- [ ] Algolia full-text search
+- [ ] Admin dashboard for verification review
+- [ ] PT subscription tier ($29/mo for advanced features)
+
+---
+
+## 8. Success Metrics
+
+| Metric | Month 1 | Month 3 |
+|---|---|---|
+| PT registrations | 50 | 200 |
+| PT verified (badge) | 30 | 160 |
+| Client registrations | 200 | 1,000 |
+| PT–Client connections | 100 | 600 |
+| Avg messages/connection/week | 5 | 10 |
+| Video sessions/week | 50 | 300 |
+| Scheduled messages sent | 100 | 800 |
+| Verification approval rate | — | >80% |
+
+---
+
+## 9. Open Questions
+
+1. Who reviews verifications — internal team or outsourced? (High)
+2. Rejection flow — does PT get a reason + retry option? (High)
+3. Re-verification if cert expires? (Medium)
+4. Stream Chat vs Firestore DIY — revisit at 50 active PTs (Medium)
+5. Apple IAP — does PT subscription need to go through IAP? (High)
+
+---
+
+*CoachLink · PRD v2.0 · 2026-05-27*
+`;
+  const blob = new Blob([content], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'CoachLink-PRD.md';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── Verification upload toggle ──
+const verifyState = { face: false, cert: false };
+
+function toggleUpload(type) {
+  verifyState[type] = !verifyState[type];
+  const zone = document.getElementById('zone-' + type);
+  const idle = document.getElementById(type + '-idle');
+  const done = document.getElementById(type + '-done');
+  if (verifyState[type]) {
+    zone.classList.add('uploaded');
+    idle.style.display = 'none';
+    done.style.display = 'block';
+  } else {
+    zone.classList.remove('uploaded');
+    idle.style.display = 'block';
+    done.style.display = 'none';
+  }
+  const btn = document.getElementById('verify-submit-btn');
+  if (btn) btn.disabled = !(verifyState.face && verifyState.cert);
+}
+
+function submitVerify() {
+  const pending = document.getElementById('verify-pending');
+  if (pending) pending.classList.add('show');
+}
+
+// reset verify state when leaving screen
+const _origGoScreen = goScreen;
+
+// ── Init ──
+buildTabs();
+renderDesc(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>ParentBridge — MVP & Tech Stack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0a0a0a; --card:#111111; --card2:#161616; --card3:#1a1a1a;
+      --bd:rgba(246,242,233,.08); --bd2:rgba(246,242,233,.15);
+      --cr:#f6f2e9; --cr7:rgba(246,242,233,.7); --cr5:rgba(246,242,233,.5);
+      --cr3:rgba(246,242,233,.3); --cr1:rgba(246,242,233,.06);
+      --a:#fb923c; --g:#4ade80; --b:#60a5fa; --p:#c084fc;
+      --y:#facc15; --r:#f87171; --t:#2dd4bf; --pk:#f472b6;
+      --mono:'JetBrains Mono',monospace;
+      --serif:'Instrument Serif',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+    }
+    html { scroll-behavior:smooth }
+    body { background:var(--bg); color:var(--cr); font-family:var(--sans); font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden }
+
+    .bg-orbs { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden }
+    .orb { position:absolute; border-radius:50%; filter:blur(120px) }
+    .orb-1 { width:600px; height:600px; top:-150px; left:-150px; background:radial-gradient(circle,rgba(251,146,60,.06),transparent 70%) }
+    .orb-2 { width:500px; height:500px; bottom:20%; right:-150px; background:radial-gradient(circle,rgba(74,222,128,.05),transparent 70%) }
+    .orb-3 { width:400px; height:400px; bottom:0; left:30%; background:radial-gradient(circle,rgba(96,165,250,.04),transparent 70%) }
+
+    .wrap { position:relative; z-index:1; max-width:960px; margin:0 auto; padding:0 24px }
+
+    .hd { border-bottom:1px solid var(--bd); padding:15px 0; position:sticky; top:0; background:rgba(10,10,10,.9); backdrop-filter:blur(16px); z-index:200 }
+    .hd .wrap { display:flex; align-items:center; justify-content:space-between }
+    .hd-brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--cr); font-family:var(--serif); font-size:17px }
+    .hd-dot { width:8px; height:8px; border-radius:50%; background:var(--a); box-shadow:0 0 8px var(--a); animation:pulse 2s ease-in-out infinite }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.75)} }
+    .hd-nav { display:flex; align-items:center; gap:20px }
+    .hd-back { font-size:12px; color:var(--cr3); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .15s }
+    .hd-back:hover { color:var(--cr) }
+    .hd-meta { font-size:11px; color:var(--cr3); letter-spacing:.06em }
+
+    .hero { padding:72px 0 52px; text-align:center }
+    .pill { display:inline-flex; align-items:center; gap:8px; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--a); border:1px solid rgba(251,146,60,.2); border-radius:100px; padding:5px 16px; margin-bottom:28px }
+    .hero-h1 { font-family:var(--serif); font-size:clamp(2rem,5.5vw,3.4rem); font-weight:400; line-height:1.12; margin-bottom:16px }
+    .hero-h1 em { font-style:italic; color:var(--cr5) }
+    .hero-sub { font-size:15px; color:var(--cr5); max-width:520px; margin:0 auto 40px; line-height:1.75 }
+
+    /* Timeline phases */
+    .phase-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:64px }
+    @media(max-width:680px){ .phase-row { grid-template-columns:1fr } }
+    .phase-card { background:var(--card); border:1px solid var(--bd); border-radius:16px; padding:20px; position:relative; overflow:hidden }
+    .phase-card::before { content:''; position:absolute; inset:0; opacity:.04; pointer-events:none }
+    .phase-card.p1::before { background:var(--a) }
+    .phase-card.p2::before { background:var(--b) }
+    .phase-card.p3::before { background:var(--t) }
+    .phase-num { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px }
+    .phase-num.c1 { color:var(--a) }
+    .phase-num.c2 { color:var(--b) }
+    .phase-num.c3 { color:var(--t) }
+    .phase-title { font-family:var(--serif); font-size:1.15rem; margin-bottom:4px }
+    .phase-weeks { font-size:12px; color:var(--cr3); margin-bottom:14px }
+    .phase-items { display:flex; flex-direction:column; gap:6px }
+    .phase-item { display:flex; align-items:flex-start; gap:8px; font-size:12px; color:var(--cr5); line-height:1.5 }
+    .phase-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; margin-top:6px }
+    .phase-dot.c1 { background:var(--a) }
+    .phase-dot.c2 { background:var(--b) }
+    .phase-dot.c3 { background:var(--t) }
+
+    hr.dv { border:none; border-top:1px solid var(--bd); margin:64px 0 }
+    .sec-eye { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--cr3); margin-bottom:10px }
+    .sec-h2 { font-family:var(--serif); font-size:clamp(1.4rem,3.5vw,2rem); font-weight:400; line-height:1.2; margin-bottom:8px }
+    .sec-h2 em { font-style:italic; color:var(--cr5) }
+    .sec-lead { font-size:14px; color:var(--cr5); max-width:600px; margin-bottom:32px; line-height:1.7 }
+
+    /* Feature table */
+    .ftable-wrap { background:var(--card); border:1px solid var(--bd); border-radius:16px; overflow-x:auto; margin-bottom:20px }
+    .ftable { width:100%; border-collapse:collapse; font-size:13px; min-width:560px }
+    .ftable th { text-align:left; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--cr3); padding:12px 16px; border-bottom:1px solid var(--bd); font-weight:500 }
+    .ftable td { padding:13px 16px; border-bottom:1px solid var(--bd); vertical-align:top }
+    .ftable tr:last-child td { border-bottom:none }
+    .ftable tr:hover td { background:rgba(246,242,233,.015) }
+    .feat-name { font-weight:600; font-size:13px; margin-bottom:3px }
+    .feat-detail { font-size:11px; color:var(--cr5); line-height:1.5 }
+    .badge { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:100px }
+    .badge-must { background:rgba(74,222,128,.1); color:var(--g); border:1px solid rgba(74,222,128,.2) }
+    .badge-diff { background:rgba(251,146,60,.12); color:var(--a); border:1px solid rgba(251,146,60,.2) }
+    .badge-gate { background:rgba(250,204,21,.1); color:var(--y); border:1px solid rgba(250,204,21,.2) }
+    .week-tag { font-size:10px; color:var(--cr3); white-space:nowrap }
+
+    /* Tech stack */
+    .stack-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-bottom:32px }
+    .stack-card { background:var(--card); border:1px solid var(--bd); border-radius:16px; padding:22px }
+    .stack-card-header { display:flex; align-items:center; gap:10px; margin-bottom:16px }
+    .stack-icon { font-size:22px }
+    .stack-label { font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase }
+    .stack-label.fe { color:var(--b) }
+    .stack-label.be { color:var(--g) }
+    .stack-label.ai { color:var(--p) }
+    .stack-label.int { color:var(--t) }
+    .stack-label.inf { color:var(--a) }
+    .stack-label.pay { color:var(--y) }
+    .stack-items { display:flex; flex-direction:column; gap:10px }
+    .stack-item { display:flex; align-items:flex-start; gap:10px }
+    .stack-name { font-size:13px; font-weight:600; margin-bottom:2px }
+    .stack-desc { font-size:11px; color:var(--cr5); line-height:1.5 }
+    .stack-tag { display:inline-block; font-size:10px; padding:1px 7px; border-radius:100px; background:var(--cr1); border:1px solid var(--bd); color:var(--cr3); margin-top:3px }
+
+    /* Code block */
+    .code-block { background:#0d0d0d; border:1px solid rgba(246,242,233,.08); border-radius:14px; padding:20px 22px; font-family:var(--mono); font-size:12.5px; line-height:1.8; overflow-x:auto; margin-bottom:16px }
+    .code-block .cm { color:rgba(246,242,233,.25) }
+    .code-block .kw { color:var(--a) }
+    .code-block .st { color:var(--g) }
+    .code-block .fn { color:var(--b) }
+    .code-block .val { color:var(--p) }
+    .code-label { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--cr3); margin-bottom:8px }
+
+    /* Timeline */
+    .timeline { display:flex; flex-direction:column; gap:0; margin-bottom:48px }
+    .tl-item { display:grid; grid-template-columns:60px 2px 1fr; gap:0 16px }
+    .tl-week { font-size:11px; color:var(--cr3); text-align:right; padding-top:14px; font-weight:500 }
+    .tl-spine { display:flex; flex-direction:column; align-items:center }
+    .tl-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:16px }
+    .tl-dot.w1 { background:var(--a); box-shadow:0 0 8px rgba(251,146,60,.5) }
+    .tl-dot.w2 { background:var(--b); box-shadow:0 0 6px rgba(96,165,250,.4) }
+    .tl-dot.w3 { background:var(--g); box-shadow:0 0 6px rgba(74,222,128,.4) }
+    .tl-line { width:2px; flex:1; background:var(--bd); margin-top:4px }
+    .tl-item:last-child .tl-line { display:none }
+    .tl-body { background:var(--card2); border:1px solid var(--bd); border-radius:12px; padding:14px 16px; margin:8px 0 }
+    .tl-phase { font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px }
+    .tl-title { font-family:var(--serif); font-size:.95rem; margin-bottom:6px }
+    .tl-tasks { display:flex; flex-direction:column; gap:4px }
+    .tl-task { font-size:12px; color:var(--cr5); display:flex; align-items:flex-start; gap:6px }
+    .tl-task::before { content:'→'; color:var(--cr3); flex-shrink:0 }
+
+    /* Risk cards */
+    .risk-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-bottom:48px }
+    .risk-card { background:var(--card2); border:1px solid rgba(248,113,113,.15); border-radius:14px; padding:18px }
+    .risk-header { display:flex; align-items:center; gap:10px; margin-bottom:10px }
+    .risk-icon { font-size:18px }
+    .risk-title { font-size:13px; font-weight:600 }
+    .risk-desc { font-size:12px; color:var(--cr5); line-height:1.6 }
+    .risk-fix { font-size:11px; color:var(--g); margin-top:8px; display:flex; align-items:flex-start; gap:6px }
+    .risk-fix::before { content:'Fix:'; font-weight:700; flex-shrink:0 }
+
+    /* Summary box */
+    .summary-wrap { background:var(--card); border:1px solid rgba(251,146,60,.25); border-radius:20px; padding:32px; position:relative; overflow:hidden; margin-bottom:64px }
+    .summary-wrap::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(251,146,60,.05) 0%,rgba(74,222,128,.03) 100%); pointer-events:none }
+    .summary-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px; position:relative }
+    @media(max-width:640px){ .summary-grid { grid-template-columns:1fr } }
+    .sum-col-label { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--cr3); margin-bottom:14px }
+    .sum-items { display:flex; flex-direction:column; gap:8px }
+    .sum-item { display:flex; align-items:flex-start; gap:8px; font-size:13px; color:var(--cr7) }
+    .sum-bullet { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:6px }
+
+    .reveal { opacity:0; transform:translateY(16px); transition:opacity .5s ease,transform .5s ease }
+    .reveal.visible { opacity:1; transform:none }
+    .ft { border-top:1px solid var(--bd); padding:28px 0 44px; text-align:center; font-size:12px; color:var(--cr3); margin-top:72px }
+    @media(max-width:640px){ .hero { padding:48px 0 36px } }
+  </style>
+</head>
+<body>
+<div class="bg-orbs" aria-hidden="true">
+  <span class="orb orb-1"></span><span class="orb orb-2"></span><span class="orb orb-3"></span>
+</div>
+
+<header class="hd">
+  <div class="wrap">
+    <a class="hd-brand" href="#"><span class="hd-dot"></span>Nghiên Cứu Sản Phẩm 2026</a>
+    <div class="hd-nav">
+      <a class="hd-back" href="parent-learning-tracker.html">← ParentBridge</a>
+      <a class="hd-back" href="market-report.html">← Tất Cả Phân Khúc</a>
+      <span class="hd-meta">🛠️ MVP · TECH STACK</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <!-- Hero -->
+  <div class="hero reveal">
+    <div class="pill">🧡 ParentBridge · Kế Hoạch Xây Dựng</div>
+    <h1 class="hero-h1">MVP & Tech Stack<br/><em>để ship trong 7 tuần</em></h1>
+    <p class="hero-sub">Từ Google Classroom sync đến AI conversation starters đến learning roadmap — đây là thứ tự build và công nghệ cụ thể.</p>
+  </div>
+
+  <!-- Phase overview -->
+  <div class="phase-row reveal">
+    <div class="phase-card p1">
+      <div class="phase-num c1">Phase 1</div>
+      <div class="phase-title">Lịch & Cảnh Báo</div>
+      <div class="phase-weeks">Tuần 1–3</div>
+      <div class="phase-items">
+        <div class="phase-item"><div class="phase-dot c1"></div>Google OAuth + Classroom API sync</div>
+        <div class="phase-item"><div class="phase-dot c1"></div>Unified schedule dashboard</div>
+        <div class="phase-item"><div class="phase-dot c1"></div>Push notification nhắc bài & thi</div>
+        <div class="phase-item"><div class="phase-dot c1"></div>Multi-child profile</div>
+        <div class="phase-item"><div class="phase-dot c1"></div>Freemium gate + Stripe billing</div>
+      </div>
+    </div>
+    <div class="phase-card p2">
+      <div class="phase-num c2">Phase 2</div>
+      <div class="phase-title">AI Trò Chuyện</div>
+      <div class="phase-weeks">Tuần 4–5</div>
+      <div class="phase-items">
+        <div class="phase-item"><div class="phase-dot c2"></div>Claude API — conversation starters</div>
+        <div class="phase-item"><div class="phase-dot c2"></div>Prompt engineering theo môn + lớp</div>
+        <div class="phase-item"><div class="phase-dot c2"></div>Push 6PM hàng ngày với gợi ý</div>
+        <div class="phase-item"><div class="phase-dot c2"></div>Chọn giọng điệu (vui / nghiêm túc)</div>
+        <div class="phase-item"><div class="phase-dot c2"></div>Prompt caching để tiết kiệm cost</div>
+      </div>
+    </div>
+    <div class="phase-card p3">
+      <div class="phase-num c3">Phase 3</div>
+      <div class="phase-title">Lộ Trình Học</div>
+      <div class="phase-weeks">Tuần 6–7</div>
+      <div class="phase-items">
+        <div class="phase-item"><div class="phase-dot c3"></div>Progress bar theo từng môn</div>
+        <div class="phase-item"><div class="phase-dot c3"></div>Cảnh báo tụt hậu (drop >15% / 2 tuần)</div>
+        <div class="phase-item"><div class="phase-dot c3"></div>Weekly digest Chủ nhật 8AM</div>
+        <div class="phase-item"><div class="phase-dot c3"></div>Polish + beta launch</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Feature list -->
+  <div class="reveal">
+    <p class="sec-eye">Danh Sách Tính Năng</p>
+    <h2 class="sec-h2">MVP features — <em>đầy đủ & có thứ tự</em></h2>
+    <p class="sec-lead">13 tính năng, chia theo 3 phase. Mỗi tính năng rõ chi tiết kỹ thuật và lý do ưu tiên.</p>
+
+    <!-- Phase 1 -->
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--a);margin-bottom:10px;">Phase 1 · Lịch & Cảnh Báo · Tuần 1–3</div>
+    <div class="ftable-wrap" style="margin-bottom:24px;">
+      <table class="ftable">
+        <thead><tr><th style="width:200px">Tính năng</th><th>Chi tiết kỹ thuật</th><th style="width:100px">Loại</th><th style="width:70px">Tuần</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="feat-name">Google OAuth</div><div class="feat-detail">Đăng nhập bằng Google, lấy access token Classroom</div></td>
+            <td><div class="feat-detail">NextAuth.js + Google provider · Lưu refresh token trong Supabase · Scope: <code style="font-family:var(--mono);font-size:11px;color:var(--a)">classroom.courses.readonly + classroom.coursework.me</code></div></td>
+            <td><span class="badge badge-must">Cần có</span></td>
+            <td><span class="week-tag">T1</span></td>
+          </tr>
+          <tr>
+            <td><div class="feat-name">Classroom Sync</div><div class="feat-detail">Pull assignments, due dates, topics về DB</div></td>
+            <td><div class="feat-detail">Cron job mỗi 6h · Google Classroom API v1 · Map coursework → schedule items trong Postgres · Incremental sync (chỉ pull changed items)</div></td>
+            <td><span class="badge badge-must">Cần có</span></td>
+            <td><span class="week-tag">T1</span></td>
+          </tr>
+          <tr>
+            <td><div class="feat-name">Multi-child Profile</div><div class="feat-detail">Một tài khoản phụ huynh, nhiều con</div></td>
+            <td><div class="feat-detail">Bảng <code style="font-family:var(--mono);font-size:11px;color:var(--a)">children</code> FK đến <code style="font-family:var(--mono);font-size:11px;color:var(--a)">users</code> · Mỗi child có Google account riêng hoặc nhập tay · UI switcher ở top nav</div></td>
+            <td><span class="badge badge-must">Cần có</span></td>
+            <td><span class="week-tag">T1</span></td>
+          </tr>
+          <tr>
+            <td><div class="feat-name">Unified Schedule View</div><div class="feat-detail">Timeline tuần, tất cả môn + hoạt động</div></td>
+            <td><div class="feat-detail">Aggregate từ Classroom data + manual entries · Group by day · Color-code theo môn · Filter toggle per child · Mobile-first layout</div></td>
+            <td><span class="badge badge-must">Cần có</span></td>
+            <td><span class="week-tag">T2</span></td>
+          </tr>
+          <tr>
+            <td><div class="feat-name">Push Notifications</div><div class="feat-detail">Nhắc bài 24h trước, nhắc thi 48h trước</div></td>
+            <td><div class="feat-detail">Web Push API (Vercel Edge) + Expo Push (mobile) · Scheduled via Supabase pg_cron · User preference: chọn giờ nhận thông báo</div></td>
+            <td><span class="badge badge-must">Cần có</span></td>
+            <td><span class="week-tag">T2</span></td>
+          </tr>
+          <tr>
+            <td><div class="feat-name">Manual Add Fallback</div><div class="feat-detail">Thêm lịch tay khi trường không dùng Classroom</div></td>
+            <td><div class="feat-detail">Form đơn giản: tên môn, ngày, loại (bài tập / kiểm tra / hoạt động) · Lưu vào bảng <code style="font-family:var(--mono);font-size:11px;color:var(--a)">manual_schedule_items</code> · Merge với Classroom data trong query</div></td>
+            <td><span class="badge badge-must">Cần có</span></td>
+            <td><span class="week-tag">T2</span></td>
+          </tr>
+          <tr>
+            <td><div class="feat-name">Freemium Gate + Stripe</div><div class="feat-detail">Free: 1 con / 4 tuần · Paid: không giới hạn</div></td>
+            <td><div class="feat-detail">Stripe Billing + Stripe Customer Portal · Webhook xử lý subscription events · Middleware check plan trước khi render roadmap / child #2</div></td>
+            <td><span class="badge badge-gate">Paywall</span></td>
+            <td><span class="week-tag">T3</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Phase 2 -->
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--b);margin-bottom:10px;">Phase 2 · AI Trò Chuyện · Tuần 4–5</div>
+    <div class="ftable-wrap" style="margin-bottom:24px;">
+      <table class="ftable">
+        <thead><tr><th style="width:200px">Tính năng</th><th>Chi tiết kỹ thuật</th><th style="width:100px">Loại</th><th style="width:70px">Tuần</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="feat-name">Conversation Starters</div><div class="feat-detail">3 câu hỏi AI mỗi ngày dựa trên topic đang học</div></td>
+            <td><div class="feat-detail">Claude Sonnet 4.6 API · Input: tên môn + chủ đề tuần + lớp của con · Output: 3 câu hỏi tự nhiên, không chuyên môn · Prompt caching system prompt (≤5 phút TTL)</div></td>
+            <td><span class="badge badge-diff">Khác biệt</span></td>
+            <td><span class="week-tag">T4</span></td>
+          </tr>
+          <tr>
+            <td><div class="feat-name">Daily 6PM Push</div><div class="feat-detail">"Hỏi Minh về X tối nay" + tap để xem gợi ý</div></td>
+            <td><div class="feat-detail">Generate prompt buổi sáng, cache trong Redis · Push notification 6PM theo timezone · Deep link đến conversation screen · Track open rate per user</div></td>
+            <td><span class="badge badge-diff">Khác biệt</span></td>
+            <td><span class="week-tag">T4</span></td>
+          </tr>
+          <tr>
+            <td><div class="feat-name">Tone Preference</div><div class="feat-detail">Chọn giọng điệu: vui vẻ / nghiêm túc / Socratic</div></td>
+            <td><div class="feat-detail">Setting per child · Thêm vào system prompt: <code style="font-family:var(--mono);font-size:11px;color:var(--a)">"tone: playful | serious | socratic"</code> · A/B test: tone nào có open rate cao nhất</div></td>
+            <td><span class="badge badge-must">Cần có</span></td>
+            <td><span class="week-tag">T5</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Phase 3 -->
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t);margin-bottom:10px;">Phase 3 · Lộ Trình Học · Tuần 6–7</div>
+    <div class="ftable-wrap">
+      <table class="ftable">
+        <thead><tr><th style="width:200px">Tính năng</th><th>Chi tiết kỹ thuật</th><th style="width:100px">Loại</th><th style="width:70px">Tuần</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="feat-name">Subject Progress</div><div class="feat-detail">% hoàn thành curriculum theo từng môn</div></td>
+            <td><div class="feat-detail">Tính từ assignments submitted / total trong Classroom · Weighted: bài tập 40% · kiểm tra 60% · Hiển thị progress bar per subject · So sánh với expected pace</div></td>
+            <td><span class="badge badge-diff">Khác biệt</span></td>
+            <td><span class="week-tag">T6</span></td>
+          </tr>
+          <tr>
+            <td><div class="feat-name">Struggle Alert</div><div class="feat-detail">Cảnh báo khi điểm drop >15% trong 2 tuần</div></td>
+            <td><div class="feat-detail">Cron job weekly · So sánh rolling average 2 tuần vs 2 tuần trước · Push + in-app badge đỏ · Đề xuất action cụ thể (ôn lại chapter X)</div></td>
+            <td><span class="badge badge-diff">Khác biệt</span></td>
+            <td><span class="week-tag">T6</span></td>
+          </tr>
+          <tr>
+            <td><div class="feat-name">Weekly Digest</div><div class="feat-detail">Chủ nhật 8AM: tóm tắt + 1 hành động được gợi ý</div></td>
+            <td><div class="feat-detail">Claude API tổng hợp tuần · Template: tuần qua · sắp tới · 1 action · Gửi qua push + email (Resend) · Unsubscribe 1-click</div></td>
+            <td><span class="badge badge-must">Cần có</span></td>
+            <td><span class="week-tag">T7</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Tech Stack -->
+  <div class="reveal">
+    <p class="sec-eye">Tech Stack</p>
+    <h2 class="sec-h2">Công nghệ cụ thể — <em>không có lựa chọn thừa</em></h2>
+    <p class="sec-lead">Chọn theo tiêu chí: ship nhanh nhất, ít moving parts nhất, dễ scale khi có traction.</p>
+
+    <div class="stack-grid">
+      <div class="stack-card">
+        <div class="stack-card-header"><div class="stack-icon">🖥️</div><div class="stack-label fe">Frontend</div></div>
+        <div class="stack-items">
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">Next.js 14 (App Router)</div>
+              <div class="stack-desc">Web + PWA — ship trước, mobile sau. Server Components cho tốc độ load. API routes tích hợp luôn, không cần backend riêng giai đoạn đầu.</div>
+              <span class="stack-tag">Web-first</span> <span class="stack-tag">PWA</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">Tailwind CSS + shadcn/ui</div>
+              <div class="stack-desc">Component library sẵn có (Calendar, Sheet, Dialog). Không tốn thời gian build UI from scratch.</div>
+              <span class="stack-tag">Nhanh</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">React Native + Expo (v2)</div>
+              <div class="stack-desc">Mobile app sau khi web có traction. Dùng lại logic, chỉ viết lại UI layer. Expo Push Notifications tích hợp sẵn.</div>
+              <span class="stack-tag">Phase 2+</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-card-header"><div class="stack-icon">⚙️</div><div class="stack-label be">Backend</div></div>
+        <div class="stack-items">
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">Supabase</div>
+              <div class="stack-desc">Postgres + Auth + Realtime + Storage trong một. Row-level security cho multi-tenant. pg_cron cho scheduled jobs (sync, push, digest).</div>
+              <span class="stack-tag">Postgres</span> <span class="stack-tag">Auth</span> <span class="stack-tag">Realtime</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">Next.js API Routes</div>
+              <div class="stack-desc">Serverless functions, cùng repo với frontend. Xử lý Classroom sync, Stripe webhooks, push notifications. Không cần Express riêng.</div>
+              <span class="stack-tag">Serverless</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">Upstash Redis</div>
+              <div class="stack-desc">Cache daily conversation starters (tránh gọi Claude API lặp lại). Rate limiting Classroom API calls. Serverless-friendly, pay-per-request.</div>
+              <span class="stack-tag">Cache</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-card-header"><div class="stack-icon">🤖</div><div class="stack-label ai">AI</div></div>
+        <div class="stack-items">
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">Claude Sonnet 4.6</div>
+              <div class="stack-desc">Tạo conversation starters + weekly digest. Ngữ cảnh dài, hiểu tốt context giáo dục. Dùng prompt caching cho system prompt cố định.</div>
+              <span class="stack-tag">claude-sonnet-4-6</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">Prompt Caching</div>
+              <div class="stack-desc">Cache system prompt (grade level, curriculum, tone) — TTL 5 phút. Giảm cost ~80% với repeated calls. Chỉ thay đổi phần topic trong user turn.</div>
+              <span class="stack-tag">Cost −80%</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;">
+          <div class="code-label">Prompt structure</div>
+          <div class="code-block"><span class="cm">// System (cached)</span>
+<span class="kw">You are</span> a parent conversation coach.
+<span class="kw">Child:</span> <span class="st">Grade 4</span>, tone: <span class="val">playful</span>
+<span class="kw">Rules:</span> simple words, curiosity-first,
+no jargon, max 15 words per question.
+
+<span class="cm">// User (dynamic)</span>
+<span class="kw">Topic this week:</span> <span class="st">"Ecosystems & food chains"</span>
+<span class="fn">Generate</span> 3 dinner questions.</div>
+        </div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-card-header"><div class="stack-icon">🔗</div><div class="stack-label int">Integrations</div></div>
+        <div class="stack-items">
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">Google Classroom API v1</div>
+              <div class="stack-desc">OAuth 2.0, scope <code style="font-family:var(--mono);font-size:10px;color:var(--a)">classroom.courses.readonly</code>. Pull courses, coursework, submissions. Cần xin Google API approval trước (2–4 tuần).</div>
+              <span class="stack-tag">⚠️ Xin approval sớm</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">Web Push + Expo Push</div>
+              <div class="stack-desc">Web: Web Push API qua Vercel Edge. Mobile: Expo Notifications. Unified notification service — 1 API call, gửi cả web lẫn mobile.</div>
+              <span class="stack-tag">Web</span> <span class="stack-tag">iOS</span> <span class="stack-tag">Android</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">Resend</div>
+              <div class="stack-desc">Email weekly digest + transactional (welcome, invoice). React Email templates. 3.000 email/tháng free tier.</div>
+              <span class="stack-tag">Email</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-card-header"><div class="stack-icon">💳</div><div class="stack-label pay">Payments</div></div>
+        <div class="stack-items">
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">Stripe Billing</div>
+              <div class="stack-desc">Subscription $9.99/tháng hoặc $89/năm. Stripe Customer Portal để phụ huynh tự quản lý plan. Webhook → Supabase cập nhật subscription status.</div>
+              <span class="stack-tag">Subscriptions</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">Pricing logic</div>
+              <div class="stack-desc">Free: 1 con, 4 tuần, không có roadmap. Paid: không giới hạn con, roadmap đầy đủ, AI digest. Check plan bằng Supabase RLS + middleware.</div>
+              <span class="stack-tag">Freemium</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-card-header"><div class="stack-icon">🚀</div><div class="stack-label inf">Infra</div></div>
+        <div class="stack-items">
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">Vercel</div>
+              <div class="stack-desc">Deploy Next.js. Edge Functions cho push notifications. Preview deploys cho mỗi PR. Analytics tích hợp sẵn. Free tier đủ dùng đến 10K users.</div>
+              <span class="stack-tag">Hosting</span> <span class="stack-tag">Edge</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">Supabase Cloud</div>
+              <div class="stack-desc">Managed Postgres. Tự động backup daily. Connection pooling với PgBouncer. Free tier: 500MB DB, 2GB bandwidth.</div>
+              <span class="stack-tag">Managed DB</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <div>
+              <div class="stack-name">GitHub Actions</div>
+              <div class="stack-desc">CI: run type-check + lint trước khi merge. CD: auto deploy main → Vercel production. Secrets quản lý qua GitHub Secrets.</div>
+              <span class="stack-tag">CI/CD</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- DB Schema -->
+  <div class="reveal">
+    <p class="sec-eye">Database Schema</p>
+    <h2 class="sec-h2">Cấu trúc DB — <em>đủ dùng cho MVP</em></h2>
+    <p class="sec-lead">6 bảng chính. Postgres với Supabase RLS đảm bảo phụ huynh chỉ thấy dữ liệu của con mình.</p>
+    <div class="code-block">
+<span class="cm">-- Phụ huynh</span>
+<span class="kw">users</span>         id · email · google_id · plan · stripe_customer_id
+
+<span class="cm">-- Con của phụ huynh</span>
+<span class="kw">children</span>      id · user_id · name · grade · google_account · tone_pref
+
+<span class="cm">-- Dữ liệu từ Google Classroom</span>
+<span class="kw">schedule_items</span> id · child_id · source(classroom|manual) · subject
+               title · due_at · type(homework|test|activity) · grade_pct
+
+<span class="cm">-- Gợi ý trò chuyện AI (cache 24h)</span>
+<span class="kw">daily_prompts</span>  id · child_id · date · topic · prompts(jsonb) · generated_at
+
+<span class="cm">-- Tiến độ học theo môn</span>
+<span class="kw">subject_progress</span> id · child_id · subject · week · avg_score · submitted · total
+
+<span class="cm">-- Thông báo đã gửi</span>
+<span class="kw">notifications</span>  id · child_id · type · sent_at · opened_at · payload(jsonb)
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Timeline -->
+  <div class="reveal">
+    <p class="sec-eye">Timeline Build</p>
+    <h2 class="sec-h2">7 tuần — <em>từng tuần cụ thể</em></h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-week">T1</div>
+        <div class="tl-spine"><div class="tl-dot w1"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-phase" style="color:var(--a)">Phase 1 bắt đầu</div>
+          <div class="tl-title">Setup + Google Classroom Auth & Sync</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Next.js 14 + Supabase + NextAuth setup</div>
+            <div class="tl-task">Google OAuth flow + scope request</div>
+            <div class="tl-task">Classroom API: pull courses + coursework</div>
+            <div class="tl-task">DB schema + RLS policies</div>
+            <div class="tl-task">Xin Google Classroom API approval (nộp ngay ngày 1)</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-week">T2</div>
+        <div class="tl-spine"><div class="tl-dot w1"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-phase" style="color:var(--a)">Phase 1</div>
+          <div class="tl-title">Dashboard + Push Notifications</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Schedule UI (timeline view, filter per child)</div>
+            <div class="tl-task">Multi-child profile switcher</div>
+            <div class="tl-task">Manual add form (bài tập / thi / hoạt động)</div>
+            <div class="tl-task">Web Push setup + Supabase pg_cron scheduler</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-week">T3</div>
+        <div class="tl-spine"><div class="tl-dot w1"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-phase" style="color:var(--a)">Phase 1 kết thúc · Launch freemium</div>
+          <div class="tl-title">Stripe Billing + Beta Launch</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Stripe subscriptions + webhook handler</div>
+            <div class="tl-task">Freemium gate middleware</div>
+            <div class="tl-task">Vercel production deploy + custom domain</div>
+            <div class="tl-task">Onboard 20–30 beta users (tuyển từ Facebook Parenting groups)</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-week">T4</div>
+        <div class="tl-spine"><div class="tl-dot w2"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-phase" style="color:var(--b)">Phase 2 bắt đầu</div>
+          <div class="tl-title">Claude API + Conversation Starters</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Anthropic SDK setup + prompt engineering</div>
+            <div class="tl-task">Prompt caching system prompt (grade + tone)</div>
+            <div class="tl-task">Generate daily starters từ topic của tuần</div>
+            <div class="tl-task">Cache kết quả trong Upstash Redis (24h)</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-week">T5</div>
+        <div class="tl-spine"><div class="tl-dot w2"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-phase" style="color:var(--b)">Phase 2 kết thúc</div>
+          <div class="tl-title">Daily Push + Tone Settings</div>
+          <div class="tl-tasks">
+            <div class="tl-task">6PM push notification với conversation starter</div>
+            <div class="tl-task">Conversation screen (hiển thị 3 gợi ý + context)</div>
+            <div class="tl-task">Tone preference setting per child</div>
+            <div class="tl-task">Track open rate, A/B test tone</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-week">T6</div>
+        <div class="tl-spine"><div class="tl-dot w3"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-phase" style="color:var(--t)">Phase 3 bắt đầu</div>
+          <div class="tl-title">Learning Roadmap + Struggle Detection</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Subject progress bars (từ Classroom grade data)</div>
+            <div class="tl-task">Weekly score rolling average calculation</div>
+            <div class="tl-task">Struggle alert: drop >15% → push + in-app badge</div>
+            <div class="tl-task">Roadmap screen (chỉ visible cho paid users)</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-week">T7</div>
+        <div class="tl-spine"><div class="tl-dot w3"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-phase" style="color:var(--t)">Phase 3 kết thúc · Launch</div>
+          <div class="tl-title">Weekly Digest + Polish + Public Launch</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Claude tổng hợp weekly digest (Chủ nhật 8AM)</div>
+            <div class="tl-task">Resend email template + push digest</div>
+            <div class="tl-task">Performance audit + mobile responsive fixes</div>
+            <div class="tl-task">Product Hunt launch + PTA group outreach</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Risks -->
+  <div class="reveal">
+    <p class="sec-eye">Rủi Ro Kỹ Thuật</p>
+    <h2 class="sec-h2">3 rủi ro cần <em>xử lý từ đầu</em></h2>
+    <div class="risk-grid">
+      <div class="risk-card">
+        <div class="risk-header"><div class="risk-icon">🔑</div><div class="risk-title">Google Classroom API Approval</div></div>
+        <div class="risk-desc">Google yêu cầu review ứng dụng trước khi cho phép access Classroom data của user ngoài tổ chức. Quá trình này mất 2–4 tuần và có thể bị từ chối nếu không đáp ứng privacy policy requirements.</div>
+        <div class="risk-fix">Nộp đơn ngày 1. Trong thời gian chờ, dùng test accounts trong G Suite domain riêng. Chuẩn bị privacy policy + demo video đầy đủ trước khi submit.</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header"><div class="risk-icon">📊</div><div class="risk-title">Struggle Detection Cần Đủ Data</div></div>
+        <div class="risk-desc">Thuật toán phát hiện tụt hậu cần ít nhất 3 tuần grade data để tính rolling average có ý nghĩa. User mới sẽ không thấy feature này ngay — có thể gây thất vọng.</div>
+        <div class="risk-fix">Onboarding rõ ràng: "Lộ trình sẽ đầy đủ sau 3 tuần sync." Cho phép nhập điểm lịch sử thủ công trong tuần đầu để bootstrap data sớm hơn.</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header"><div class="risk-icon">🏫</div><div class="risk-title">Trường Không Dùng Google Classroom</div></div>
+        <div class="risk-desc">~40% trường K–12 tại Mỹ dùng Canvas, Schoology, hoặc PowerSchool thay vì Google Classroom. Phase 1 chỉ sync được Google Classroom — đây là giới hạn lớn cho TAM thực tế.</div>
+        <div class="risk-fix">Manual add fallback phủ 100% ngay từ đầu. Roadmap v2: Canvas API + Schoology integration. Ưu tiên tuyển beta users từ các trường dùng Google Workspace for Education.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Summary -->
+  <div class="summary-wrap reveal">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--a);margin-bottom:8px;">Tóm Tắt</div>
+    <div style="font-family:var(--serif);font-size:clamp(1.4rem,3vw,1.9rem);margin-bottom:28px;">Ship trong 7 tuần với <em>stack tối giản</em></div>
+    <div class="summary-grid">
+      <div>
+        <div class="sum-col-label">Frontend & Backend</div>
+        <div class="sum-items">
+          <div class="sum-item"><div class="sum-bullet" style="background:var(--b)"></div>Next.js 14 (web + API routes)</div>
+          <div class="sum-item"><div class="sum-bullet" style="background:var(--b)"></div>Supabase (Postgres + Auth)</div>
+          <div class="sum-item"><div class="sum-bullet" style="background:var(--b)"></div>Tailwind + shadcn/ui</div>
+          <div class="sum-item"><div class="sum-bullet" style="background:var(--b)"></div>Upstash Redis (cache)</div>
+        </div>
+      </div>
+      <div>
+        <div class="sum-col-label">AI & Integrations</div>
+        <div class="sum-items">
+          <div class="sum-item"><div class="sum-bullet" style="background:var(--p)"></div>Claude Sonnet 4.6 + prompt caching</div>
+          <div class="sum-item"><div class="sum-bullet" style="background:var(--p)"></div>Google Classroom API v1</div>
+          <div class="sum-item"><div class="sum-bullet" style="background:var(--p)"></div>Stripe Billing</div>
+          <div class="sum-item"><div class="sum-bullet" style="background:var(--p)"></div>Resend (email digest)</div>
+        </div>
+      </div>
+      <div>
+        <div class="sum-col-label">Infra & Timeline</div>
+        <div class="sum-items">
+          <div class="sum-item"><div class="sum-bullet" style="background:var(--a)"></div>Vercel (hosting + edge)</div>
+          <div class="sum-item"><div class="sum-bullet" style="background:var(--a)"></div>GitHub Actions (CI/CD)</div>
+          <div class="sum-item"><div class="sum-bullet" style="background:var(--a)"></div>7 tuần · 3 phases</div>
+          <div class="sum-item"><div class="sum-bullet" style="background:var(--a)"></div>13 tính năng · $9.99/tháng</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="ft">
+  <div class="wrap">
+    <div style="margin-bottom:8px;">
+      <a href="parent-learning-tracker.html" style="color:var(--cr5);text-decoration:none;">← ParentBridge Research</a>
+      &nbsp;·&nbsp;
+      <a href="market-report.html" style="color:var(--cr5);text-decoration:none;">Tất Cả Phân Khúc</a>
+    </div>
+    <div style="color:rgba(246,242,233,.2);">ParentBridge · MVP & Tech Stack · Nghiên Cứu Sản Phẩm 2026</div>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

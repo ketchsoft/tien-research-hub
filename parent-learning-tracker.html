@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>Phụ Huynh Quản Lý Học Tập — Phân Tích Chuyên Sâu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0a0a0a; --card:#111111; --card2:#161616;
+      --bd:rgba(246,242,233,.08); --bd2:rgba(246,242,233,.15);
+      --cr:#f6f2e9; --cr7:rgba(246,242,233,.7); --cr5:rgba(246,242,233,.5);
+      --cr3:rgba(246,242,233,.3); --cr1:rgba(246,242,233,.06);
+      --a:#fb923c; --a2:rgba(251,146,60,.2); --a1:rgba(251,146,60,.08);
+      --ab:rgba(251,146,60,.3);
+      --g:#4ade80; --b:#60a5fa; --o:#fb923c;
+      --p:#c084fc; --pk:#f472b6;
+      --y:#facc15; --r:#f87171; --t:#2dd4bf;
+      --serif:'Instrument Serif',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+    }
+    html { scroll-behavior:smooth }
+    body { background:var(--bg); color:var(--cr); font-family:var(--sans); font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden }
+
+    .bg-orbs { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden }
+    .orb { position:absolute; border-radius:50%; filter:blur(120px) }
+    .orb-1 { width:700px; height:700px; top:-200px; left:-200px; background:radial-gradient(circle,rgba(251,146,60,.07),transparent 70%) }
+    .orb-2 { width:500px; height:500px; top:50%; right:-200px; background:radial-gradient(circle,rgba(45,212,191,.05),transparent 70%) }
+    .orb-3 { width:400px; height:400px; bottom:0; left:25%; background:radial-gradient(circle,rgba(250,204,21,.04),transparent 70%) }
+
+    .wrap { position:relative; z-index:1; max-width:960px; margin:0 auto; padding:0 24px }
+
+    .hd { border-bottom:1px solid var(--bd); padding:15px 0; position:sticky; top:0; background:rgba(10,10,10,.9); backdrop-filter:blur(16px); z-index:200 }
+    .hd .wrap { display:flex; align-items:center; justify-content:space-between }
+    .hd-brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--cr); font-family:var(--serif); font-size:17px }
+    .hd-dot { width:8px; height:8px; border-radius:50%; background:var(--a); box-shadow:0 0 8px var(--a); animation:pulse 2s ease-in-out infinite }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.75)} }
+    .hd-meta { font-size:11px; color:var(--cr3); letter-spacing:.06em }
+    .hd-back { font-size:12px; color:var(--cr3); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .15s }
+    .hd-back:hover { color:var(--cr) }
+
+    .hero { padding:76px 0 56px; text-align:center }
+    .pill { display:inline-flex; align-items:center; gap:8px; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--a); border:1px solid rgba(251,146,60,.2); border-radius:100px; padding:5px 16px; margin-bottom:28px }
+    .hero-h1 { font-family:var(--serif); font-size:clamp(2rem,5.5vw,3.6rem); font-weight:400; line-height:1.12; margin-bottom:18px }
+    .hero-h1 em { font-style:italic; color:var(--cr5) }
+    .hero-sub { font-size:16px; color:var(--cr5); max-width:560px; margin:0 auto 40px; line-height:1.75 }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-bottom:64px }
+    .stat-card { background:var(--card); border:1px solid var(--bd); border-radius:16px; padding:20px; text-align:center }
+    .stat-val { font-family:var(--serif); font-size:2rem; line-height:1; margin-bottom:4px }
+    .stat-val.amber { color:var(--a) }
+    .stat-val.teal { color:var(--t) }
+    .stat-val.blue { color:var(--b) }
+    .stat-val.green { color:var(--g) }
+    .stat-label { font-size:11px; color:var(--cr3); letter-spacing:.04em }
+
+    hr.dv { border:none; border-top:1px solid var(--bd); margin:64px 0 }
+    .sec-eye { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--cr3); margin-bottom:10px }
+    .sec-h2 { font-family:var(--serif); font-size:clamp(1.5rem,4vw,2.2rem); font-weight:400; line-height:1.2; margin-bottom:8px }
+    .sec-h2 em { font-style:italic; color:var(--cr5) }
+    .sec-lead { font-size:14px; color:var(--cr5); max-width:600px; margin-bottom:32px; line-height:1.7 }
+
+    .profile-row { display:grid; grid-template-columns:auto 1fr auto; gap:24px; align-items:start; background:var(--card); border:1px solid var(--bd2); border-radius:20px; padding:28px; margin-bottom:12px }
+    @media(max-width:680px){ .profile-row { grid-template-columns:1fr } }
+    .profile-avatar { width:72px; height:72px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:32px; flex-shrink:0; border:1px solid var(--bd) }
+    .profile-name { font-family:var(--serif); font-size:1.4rem; margin-bottom:4px }
+    .profile-demo { font-size:12px; color:var(--cr3); margin-bottom:10px; letter-spacing:.02em }
+    .profile-tags { display:flex; flex-wrap:wrap; gap:6px }
+    .ptag { font-size:11px; padding:3px 10px; border-radius:100px; background:var(--cr1); border:1px solid var(--bd); color:var(--cr5) }
+    .ptag.am { background:rgba(251,146,60,.08); border-color:rgba(251,146,60,.2); color:var(--a) }
+    .profile-quote { font-family:var(--serif); font-style:italic; font-size:.95rem; color:var(--cr5); line-height:1.6; max-width:260px; border-left:2px solid var(--bd2); padding-left:14px }
+
+    .tools-label { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--cr3); margin-bottom:10px }
+    .tools-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px }
+    .tool-chip { display:flex; align-items:center; gap:6px; font-size:12px; padding:5px 12px; border-radius:100px; background:var(--card); border:1px solid var(--bd); color:var(--cr5); text-decoration:none; transition:border-color .15s,color .15s }
+    .tool-chip:hover { border-color:var(--bd2); color:var(--cr) }
+    .tool-chip-label { font-size:10px; color:var(--cr3); margin-left:2px }
+
+    .tree { display:flex; flex-direction:column; align-items:center; gap:0 }
+    .user-bubble { display:inline-flex; align-items:center; gap:12px; background:var(--card); border:1px solid rgba(251,146,60,.3); border-radius:100px; padding:12px 24px; font-family:var(--serif); font-size:1.05rem }
+    .tree-connector { display:flex; flex-direction:column; align-items:center }
+    .tc-line { width:2px; height:32px; background:linear-gradient(to bottom,var(--bd2),var(--bd)) }
+    .tc-label { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--cr3); background:var(--bg); padding:2px 8px; border-radius:4px; border:1px solid var(--bd) }
+
+    .pain-branches { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; width:100%; margin-bottom:0 }
+    .pain-node { background:var(--card2); border:1px solid rgba(248,113,113,.18); border-radius:14px; padding:18px; display:flex; flex-direction:column; gap:8px; position:relative }
+    .pain-num { position:absolute; top:-10px; left:16px; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; background:rgba(248,113,113,.15); color:var(--r); border:1px solid rgba(248,113,113,.25); border-radius:100px; padding:2px 10px }
+    .pain-title { font-weight:600; font-size:13px; margin-top:8px }
+    .pain-story { font-size:12px; color:var(--cr5); line-height:1.6 }
+    .pain-quote { font-size:11px; font-style:italic; color:var(--cr3); border-left:2px solid rgba(248,113,113,.3); padding-left:8px; margin-top:4px }
+
+    .gap-node { width:100%; background:rgba(251,146,60,.05); border:1px solid rgba(251,146,60,.2); border-radius:14px; padding:18px 22px; display:flex; align-items:flex-start; gap:14px }
+    .gap-icon { font-size:24px; flex-shrink:0; margin-top:2px }
+    .gap-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--a); margin-bottom:6px }
+    .gap-desc { font-size:13px; color:var(--cr5); line-height:1.65 }
+    .gap-desc strong { color:var(--cr) }
+
+    .product-match { width:100%; background:linear-gradient(135deg,rgba(251,146,60,.07) 0%,rgba(45,212,191,.04) 100%); border:1px solid rgba(251,146,60,.28); border-radius:16px; padding:24px; display:grid; grid-template-columns:1fr auto; gap:20px; align-items:center }
+    @media(max-width:580px){ .product-match { grid-template-columns:1fr } }
+    .pm-eyebrow { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--a); margin-bottom:8px }
+    .pm-name { font-family:var(--serif); font-size:1.4rem; margin-bottom:6px }
+    .pm-why { font-size:13px; color:var(--cr5); line-height:1.65; margin-bottom:14px }
+    .pm-why strong { color:var(--cr) }
+    .pm-details { display:flex; flex-wrap:wrap; gap:8px }
+    .pm-detail { font-size:11px; padding:4px 12px; border-radius:100px; background:var(--cr1); border:1px solid var(--bd); color:var(--cr5) }
+    .pm-detail.hi { background:rgba(251,146,60,.1); border-color:rgba(251,146,60,.25); color:var(--a) }
+    .pm-right { display:flex; flex-direction:column; align-items:flex-end; gap:6px }
+    .pm-mrr { font-family:var(--serif); font-size:1.6rem; color:var(--a); white-space:nowrap }
+    .pm-mrr-sub { font-size:11px; color:var(--cr3); text-align:right }
+
+    .feat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-bottom:48px }
+    .feat-card { background:var(--card); border:1px solid var(--bd); border-radius:16px; padding:20px }
+    .feat-card-header { display:flex; align-items:center; gap:12px; margin-bottom:12px }
+    .feat-icon { font-size:28px }
+    .feat-title-main { font-weight:600; font-size:14px }
+    .feat-subtitle { font-size:11px; color:var(--cr3); margin-top:1px }
+    .feat-bar-row { display:flex; flex-direction:column; gap:8px }
+    .feat-bar-item { display:grid; grid-template-columns:110px 1fr 36px; align-items:center; gap:8px }
+    .feat-bar-label { font-size:11px; color:var(--cr5) }
+    .feat-bar-track { height:5px; background:var(--cr1); border-radius:5px; overflow:hidden }
+    .feat-bar-fill { height:100%; border-radius:5px; transition:width 1.2s ease }
+    .feat-bar-pct { font-size:11px; color:var(--cr3); text-align:right; font-weight:500 }
+
+    .comp-wrap { background:var(--card); border:1px solid var(--bd); border-radius:16px; overflow-x:auto; margin-bottom:48px }
+    .ctable { width:100%; border-collapse:collapse; font-size:13px; min-width:620px }
+    .ctable th { text-align:left; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--cr3); padding:12px 16px; border-bottom:1px solid var(--bd); font-weight:500 }
+    .ctable td { padding:14px 16px; border-bottom:1px solid var(--bd); vertical-align:middle }
+    .ctable tr:last-child td { border-bottom:none }
+    .ctable tr.hl td { background:rgba(251,146,60,.03) }
+    .ctable tr:hover td { background:rgba(246,242,233,.02) }
+    .app-cell { display:flex; align-items:center; gap:10px }
+    .app-icon { font-size:20px }
+    .app-name { font-weight:600; font-size:13px }
+    .app-sub { font-size:11px; color:var(--cr3); margin-top:1px }
+    .tag { font-size:11px; padding:2px 8px; border-radius:100px; background:var(--cr1); color:var(--cr5) }
+    .tag-r { background:rgba(248,113,113,.12); color:var(--r) }
+    .tag-g { background:rgba(74,222,128,.1); color:var(--g) }
+    .tag-am { background:rgba(251,146,60,.1); color:var(--a) }
+    .tag-y { background:rgba(250,204,21,.1); color:var(--y) }
+    .tag-t { background:rgba(45,212,191,.1); color:var(--t) }
+    .price { font-size:12px; color:var(--o); font-weight:600 }
+    .rating { color:var(--y); font-weight:600; font-size:12px }
+
+    .opp-wrap { background:var(--card); border:1px solid rgba(251,146,60,.3); border-radius:24px; padding:40px; position:relative; overflow:hidden; margin-bottom:64px }
+    .opp-wrap::before { content:''; position:absolute; inset:0; border-radius:inherit; background:linear-gradient(135deg,rgba(251,146,60,.06) 0%,rgba(45,212,191,.03) 60%,transparent 100%); pointer-events:none }
+    .opp-crown-row { display:flex; align-items:center; gap:12px; margin-bottom:24px }
+    .opp-eyebrow { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--a); font-weight:600 }
+    .opp-title { font-family:var(--serif); font-size:clamp(1.6rem,4vw,2.4rem); margin-top:2px }
+    .opp-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:32px }
+    @media(max-width:700px){ .opp-grid { grid-template-columns:1fr } }
+
+    .feat-list { display:flex; flex-direction:column; gap:10px }
+    .feat-item { display:flex; align-items:flex-start; gap:12px; background:var(--card2); border:1px solid var(--bd); border-radius:12px; padding:14px }
+    .feat-ico { font-size:20px; flex-shrink:0 }
+    .feat-title { font-size:13px; font-weight:600; margin-bottom:3px }
+    .feat-desc { font-size:12px; color:var(--cr5); line-height:1.5 }
+    .feat-badge { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:100px; margin-top:6px }
+    .feat-badge.diff { background:rgba(251,146,60,.12); color:var(--a); border:1px solid rgba(251,146,60,.2) }
+    .feat-badge.tbl { background:rgba(74,222,128,.1); color:var(--g); border:1px solid rgba(74,222,128,.2) }
+
+    .rev-title { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--cr3); margin-bottom:16px }
+    .rev-row { display:grid; grid-template-columns:80px 1fr 72px; align-items:center; gap:12px; margin-bottom:10px }
+    .rev-label { font-size:11px; color:var(--cr3) }
+    .rev-track { height:6px; background:var(--cr1); border-radius:6px; overflow:hidden }
+    .rev-fill { height:100%; border-radius:6px; transition:width 1.2s ease }
+    .rev-val { font-size:12px; font-weight:600; text-align:right; color:var(--a) }
+
+    .price-compare { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:24px }
+    .price-box { background:var(--card2); border:1px solid var(--bd); border-radius:12px; padding:16px; text-align:center }
+    .price-box.ours { border-color:rgba(251,146,60,.3); background:rgba(251,146,60,.05) }
+    .price-box-label { font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--cr3); margin-bottom:8px }
+    .price-box-val { font-family:var(--serif); font-size:1.8rem; margin-bottom:4px }
+    .price-box.ours .price-box-val { color:var(--a) }
+    .price-box-sub { font-size:11px; color:var(--cr3) }
+
+    .journey-steps { display:flex; flex-direction:column; gap:0 }
+    .jstep { display:grid; grid-template-columns:48px 2px 1fr; gap:0 16px }
+    .jstep-day { font-size:11px; color:var(--cr3); text-align:right; padding-top:14px }
+    .jstep-spine { display:flex; flex-direction:column; align-items:center }
+    .jstep-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:16px }
+    .jstep-dot.pain { background:var(--r); box-shadow:0 0 8px rgba(248,113,113,.4) }
+    .jstep-dot.neutral { background:var(--cr3) }
+    .jstep-dot.wow { background:var(--a); box-shadow:0 0 8px rgba(251,146,60,.5) }
+    .jstep-dot.retain { background:var(--g); box-shadow:0 0 8px rgba(74,222,128,.4) }
+    .jstep-line { width:2px; flex:1; background:var(--bd); margin-top:4px }
+    .jstep:last-child .jstep-line { display:none }
+    .jstep-body { background:var(--card2); border:1px solid var(--bd); border-radius:12px; padding:14px 16px; margin:8px 0 }
+    .jstep-phase { font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px }
+    .jstep-title { font-family:var(--serif); font-size:1rem; margin-bottom:6px }
+    .jstep-desc { font-size:12px; color:var(--cr5); line-height:1.55 }
+
+    /* Dashboard mockup */
+    .dash-frame { background:#0d0d0d; border:1px solid rgba(246,242,233,.06); border-radius:16px; padding:20px; max-width:480px; margin:0 auto }
+    .dash-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px }
+    .dash-greeting { font-family:var(--serif); font-size:1.1rem; color:var(--cr7) }
+    .dash-date { font-size:12px; color:var(--cr3) }
+    .dash-child-row { display:flex; gap:8px; margin-bottom:16px }
+    .dash-child { display:flex; align-items:center; gap:8px; background:var(--card); border:1px solid var(--bd); border-radius:100px; padding:6px 14px; cursor:pointer; transition:border-color .15s }
+    .dash-child.active { border-color:rgba(251,146,60,.4); background:rgba(251,146,60,.06) }
+    .dash-child-dot { width:8px; height:8px; border-radius:50% }
+    .dash-child-name { font-size:12px; font-weight:500 }
+    .dash-section-label { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--cr3); margin-bottom:8px }
+    .schedule-row { display:flex; flex-direction:column; gap:6px; margin-bottom:16px }
+    .sched-item { display:grid; grid-template-columns:52px 1fr auto; align-items:center; gap:10px; background:var(--card2); border:1px solid var(--bd); border-radius:10px; padding:10px 12px }
+    .sched-time { font-size:11px; color:var(--cr3); font-weight:500 }
+    .sched-subject { font-size:13px; font-weight:600 }
+    .sched-detail { font-size:11px; color:var(--cr5); margin-top:1px }
+    .sched-badge { font-size:10px; padding:2px 8px; border-radius:100px; font-weight:600 }
+    .sched-badge.due { background:rgba(248,113,113,.15); color:var(--r); border:1px solid rgba(248,113,113,.2) }
+    .sched-badge.ok { background:rgba(74,222,128,.1); color:var(--g); border:1px solid rgba(74,222,128,.15) }
+    .sched-badge.test { background:rgba(250,204,21,.1); color:var(--y); border:1px solid rgba(250,204,21,.15) }
+    .chat-prompt { background:rgba(251,146,60,.06); border:1px solid rgba(251,146,60,.2); border-radius:12px; padding:14px 16px; margin-bottom:16px }
+    .chat-prompt-label { font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--a); margin-bottom:8px }
+    .chat-prompt-text { font-size:13px; color:var(--cr7); line-height:1.55; margin-bottom:10px }
+    .chat-prompt-chips { display:flex; flex-wrap:wrap; gap:6px }
+    .chat-chip { font-size:11px; padding:4px 10px; border-radius:100px; background:var(--cr1); border:1px solid var(--bd); color:var(--cr5); cursor:pointer; transition:all .15s }
+    .chat-chip:hover { background:rgba(251,146,60,.1); border-color:rgba(251,146,60,.25); color:var(--a) }
+    .roadmap-mini { background:var(--card2); border:1px solid var(--bd); border-radius:12px; padding:14px; margin-bottom:16px }
+    .rm-row { display:flex; align-items:center; gap:8px; margin-bottom:6px }
+    .rm-subject { font-size:12px; color:var(--cr5); width:72px; flex-shrink:0 }
+    .rm-track { flex:1; height:6px; background:var(--cr1); border-radius:6px; overflow:hidden }
+    .rm-fill { height:100%; border-radius:6px }
+    .rm-pct { font-size:11px; color:var(--cr3); width:28px; text-align:right }
+
+    .insight-box { display:flex; align-items:flex-start; gap:14px; background:rgba(45,212,191,.05); border:1px solid rgba(45,212,191,.2); border-radius:14px; padding:18px 20px; margin-bottom:32px }
+    .insight-ico { font-size:20px; flex-shrink:0; margin-top:2px }
+    .insight-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--t); margin-bottom:5px }
+    .insight-text { font-size:13px; color:var(--cr5); line-height:1.65 }
+    .insight-text strong { color:var(--cr) }
+
+    .reveal { opacity:0; transform:translateY(16px); transition:opacity .5s ease,transform .5s ease }
+    .reveal.visible { opacity:1; transform:none }
+    .ft { border-top:1px solid var(--bd); padding:28px 0 44px; text-align:center; font-size:12px; color:var(--cr3); margin-top:72px }
+    @media(max-width:640px){ .hero { padding:48px 0 36px } .profile-quote { display:none } .opp-wrap { padding:24px } }
+  </style>
+</head>
+<body>
+<div class="bg-orbs" aria-hidden="true">
+  <span class="orb orb-1"></span><span class="orb orb-2"></span><span class="orb orb-3"></span>
+</div>
+
+<header class="hd">
+  <div class="wrap">
+    <a class="hd-brand" href="#"><span class="hd-dot"></span>Nghiên Cứu Sản Phẩm 2026</a>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="hd-back" href="parentbridge-mvp.html">🛠️ MVP & Stack</a>
+      <a class="hd-back" href="market-report.html">← Tất Cả Phân Khúc</a>
+      <span class="hd-meta">🇺🇸 MỸ · PHÂN TÍCH SÂU</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <div class="hero reveal">
+    <div class="pill">🧡 Persona Mới · Phụ Huynh Học Tập</div>
+    <h1 class="hero-h1">Phụ Huynh<br/><em>Đồng Hành</em></h1>
+    <p class="hero-sub">Những bậc phụ huynh muốn đồng hành cùng việc học của con — nhưng đang phải dùng 4+ app trường học rời rạc, bỏ sót bài tập, và hoàn toàn không biết con học gì mỗi ngày.</p>
+  </div>
+
+  <div class="stats-row reveal">
+    <div class="stat-card"><div class="stat-val amber">55M</div><div class="stat-label">Học sinh K–12 tại Mỹ</div></div>
+    <div class="stat-card"><div class="stat-val teal">$43B</div><div class="stat-label">Quy mô thị trường EdTech 2025</div></div>
+    <div class="stat-card"><div class="stat-val blue">78%</div><div class="stat-label">Phụ huynh muốn biết con học gì mỗi ngày</div></div>
+    <div class="stat-card"><div class="stat-val green">$9–15/tháng</div><div class="stat-label">Sẵn sàng trả (gói gia đình)</div></div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Profile -->
+  <div class="reveal">
+    <p class="sec-eye">Hồ Sơ Người Dùng</p>
+    <h2 class="sec-h2">Ai là <em>Phụ Huynh Đồng Hành?</em></h2>
+    <p class="sec-lead">Không phải phụ huynh kiểm soát quá mức — mà là người thực sự quan tâm. Họ muốn hỗ trợ việc học của con mà không can thiệp từng bước, nhưng công cụ hiện tại hoặc cho quá ít thông tin, hoặc làm họ bội thực thông báo.</p>
+    <div class="profile-row">
+      <div class="profile-avatar" style="background:rgba(251,146,60,.08);border-color:rgba(251,146,60,.2);">🧡</div>
+      <div>
+        <div class="profile-name">Phụ Huynh Đồng Hành</div>
+        <div class="profile-demo">30–45 tuổi · Phụ huynh đi làm · 1–3 con đang đi học (6–16 tuổi) · Mỹ · iPhone / Android</div>
+        <div class="profile-tags">
+          <span class="ptag am">55M học sinh K–12 tiềm năng</span>
+          <span class="ptag">$43B thị trường EdTech</span>
+          <span class="ptag">Trung bình 3,4 app trường/người</span>
+          <span class="ptag">78% muốn insight hàng ngày</span>
+          <span class="ptag">Gia đình có 2 người đi làm</span>
+        </div>
+      </div>
+      <div class="profile-quote">"Tôi đăng nhập ClassDojo, Remind, Google Classroom, và portal nhà trường — mà vẫn không biết hôm nay con gái tôi học gì."</div>
+    </div>
+    <div class="tools-label">App đang phải dùng cùng lúc</div>
+    <div class="tools-row">
+      <span class="tool-chip">🎨 ClassDojo <span class="tool-chip-label">Miễn phí · Liên lạc giáo viên · 50M+ người dùng</span></span>
+      <span class="tool-chip">📚 Google Classroom <span class="tool-chip-label">Miễn phí · Theo dõi bài tập</span></span>
+      <span class="tool-chip">📢 Remind <span class="tool-chip-label">Miễn phí · Thông báo từ trường</span></span>
+      <span class="tool-chip">📍 Life360 <span class="tool-chip-label">$9.99/tháng · Theo dõi vị trí</span></span>
+      <span class="tool-chip">🛡️ Bark <span class="tool-chip-label">$14/tháng · Giám sát mạng xã hội</span></span>
+      <span class="tool-chip">🗓️ Apple Calendar <span class="tool-chip-label">Miễn phí · Nhập tay lịch học</span></span>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Pain Journey -->
+  <div class="reveal">
+    <p class="sec-eye">Hành Trình Nỗi Đau</p>
+    <h2 class="sec-h2">Họ bị mắc kẹt <em>ở đâu?</em></h2>
+    <p class="sec-lead">5 điểm đau cốt lõi khiến những phụ huynh tâm huyết nhất cũng cảm thấy bất lực — không phải vì thiếu cố gắng, mà vì công cụ chưa bao giờ được thiết kế cho họ.</p>
+    <div class="tree">
+      <div style="text-align:center;margin-bottom:0;"><div class="user-bubble"><span>🧡</span> Phụ Huynh Đồng Hành</div></div>
+      <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">gặp pain</div><div class="tc-line"></div></div>
+      <div class="pain-branches" style="margin-bottom:12px;">
+        <div class="pain-node">
+          <div class="pain-num">Pain #1</div>
+          <div class="pain-title">App phân mảnh — 4 app, không có màn hình tổng quan</div>
+          <div class="pain-story">ClassDojo theo dõi hành vi, Remind thông báo trường, Google Classroom bài tập, portal nhà trường điểm số. Cùng một phụ huynh, cùng một đứa con — bốn app hoàn toàn tách biệt, không liên kết.</div>
+          <div class="pain-quote">"Tôi có 6 app cho việc học của con và vẫn cảm thấy mình bỏ lỡ mọi thứ." — r/Parenting, 3,4K upvotes</div>
+        </div>
+        <div class="pain-node">
+          <div class="pain-num">Pain #2</div>
+          <div class="pain-title">Không biết hôm nay con thực sự học gì</div>
+          <div class="pain-story">Trường gửi điểm — nhưng không nói gì về chủ đề, lộ trình, hay chỗ con đang khó khăn. Phụ huynh chỉ biết con có vấn đề khi nhận học bạ — lúc đó đã quá muộn để can thiệp.</div>
+          <div class="pain-quote">"Con tôi trượt môn Toán và tôi không hề biết con đang vật lộn cho đến khi quá muộn." — Facebook Parenting Group</div>
+        </div>
+        <div class="pain-node">
+          <div class="pain-num">Pain #3</div>
+          <div class="pain-title">Không thể nói chuyện có chiều sâu về chuyện trường lớp</div>
+          <div class="pain-story">"Hôm nay ở trường thế nào?" → "Bình thường." → hết chuyện. Phụ huynh không biết tuần này con đang học gì. Không có chủ đề để bắt đầu một cuộc trò chuyện thật sự. Kết nối dần mất đi.</div>
+          <div class="pain-quote">"Tôi muốn nói chuyện với con về trường nhưng không bao giờ biết nên hỏi gì hay con đang làm gì." — bình luận ProductHunt</div>
+        </div>
+        <div class="pain-node">
+          <div class="pain-num">Pain #4</div>
+          <div class="pain-title">Không có lộ trình học — không biết đang đi đâu</div>
+          <div class="pain-story">Dù chăm chú đến đâu, phụ huynh cũng không thấy được bức tranh toàn cảnh chương trình học. Con có đang đúng tiến độ Đại số không? Mức đọc hiểu nghĩa là gì? Không app nào trả lời được.</div>
+          <div class="pain-quote">"Tôi không biết con đang học đúng trình độ hay đang tụt hậu cho đến kỳ thi." — App Store, Seesaw</div>
+        </div>
+        <div class="pain-node">
+          <div class="pain-num">Pain #5</div>
+          <div class="pain-title">Lịch loạn — hoạt động ngoại khoá vs. hạn nộp bài tập</div>
+          <div class="pain-story">Bóng đá thứ Ba, đàn piano thứ Năm, thi thứ Sáu, project nộp thứ Hai — tất cả nằm ở bốn app khác nhau. Không có một view. Phụ huynh bỏ lỡ deadline, con cảm thấy thiếu sự hỗ trợ.</div>
+          <div class="pain-quote">"Chúng tôi bỏ lỡ deadline project lớn vì nó bị chôn vùi trong đống thông báo Google Classroom." — thread phụ huynh Twitter/X</div>
+        </div>
+      </div>
+      <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">tạo ra khoảng trống</div><div class="tc-line"></div></div>
+      <div class="gap-node" style="margin-bottom:12px;">
+        <div class="gap-icon">🕳️</div>
+        <div>
+          <div class="gap-title">Khoảng Trống Thị Trường</div>
+          <div class="gap-desc">Không sản phẩm nào kết hợp: <strong>lịch học thống nhất + lộ trình học tập + gợi ý trò chuyện hàng ngày</strong> trong một giao diện lấy phụ huynh làm trung tâm. ClassDojo phục vụ giáo viên. Life360 phục vụ theo dõi vị trí. Chưa ai build companion dành riêng cho phụ huynh.</div>
+        </div>
+      </div>
+      <div class="tree-connector"><div class="tc-line"></div><div class="tc-label">khớp sản phẩm</div><div class="tc-line"></div></div>
+      <div class="product-match">
+        <div>
+          <div class="pm-eyebrow">Đề Xuất Sản Phẩm</div>
+          <div class="pm-name">ParentBridge — "Một màn hình. Toàn bộ tuần học của con."</div>
+          <div class="pm-why">Một <strong>companion dành riêng cho phụ huynh</strong> — thống nhất lịch học, theo dõi tiến độ, gợi ý <strong>câu hỏi AI mỗi ngày</strong> ("Hỏi Mia về quang hợp tối nay"), và cho thấy snapshot lộ trình học hàng tuần — mà không cần đăng nhập 4 app.</div>
+          <div class="pm-details">
+            <span class="pm-detail hi">Dashboard lịch học thống nhất</span>
+            <span class="pm-detail hi">Gợi ý trò chuyện AI mỗi ngày</span>
+            <span class="pm-detail hi">Lộ trình học theo từng môn</span>
+            <span class="pm-detail">Cảnh báo hạn nộp bài tập</span>
+            <span class="pm-detail">$9.99/tháng gói gia đình</span>
+            <span class="pm-detail">iOS + Android + Web</span>
+          </div>
+        </div>
+        <div class="pm-right">
+          <div class="pm-mrr">$12–20K</div>
+          <div class="pm-mrr-sub">MRR tiềm năng<br/>1.500 gia đình × $9.99</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Feature demand -->
+  <div class="reveal">
+    <p class="sec-eye">Nhu Cầu Tính Năng</p>
+    <h2 class="sec-h2">Phụ huynh thực sự muốn <em>tính năng gì?</em></h2>
+    <p class="sec-lead">Dựa trên review App Store, cộng đồng phụ huynh trên Reddit, và khảo sát phụ huynh tại các trường Mỹ — xếp hạng theo mức độ sẵn sàng trả tiền.</p>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-card-header"><div class="feat-icon">📅</div><div><div class="feat-title-main">Lịch Học Thống Nhất</div><div class="feat-subtitle">Tất cả môn học, deadline bài tập, hoạt động ngoại khoá · Một màn hình</div></div></div>
+        <div class="feat-bar-row">
+          <div class="feat-bar-item"><div class="feat-bar-label">Nhắc bài tập</div><div class="feat-bar-track"><div class="feat-bar-fill" style="width:91%;background:linear-gradient(90deg,#fb923c,rgba(251,146,60,.4))"></div></div><div class="feat-bar-pct">91%</div></div>
+          <div class="feat-bar-item"><div class="feat-bar-label">Nhắc lịch thi</div><div class="feat-bar-track"><div class="feat-bar-fill" style="width:86%;background:linear-gradient(90deg,#fb923c,rgba(251,146,60,.4))"></div></div><div class="feat-bar-pct">86%</div></div>
+          <div class="feat-bar-item"><div class="feat-bar-label">Lịch hoạt động</div><div class="feat-bar-track"><div class="feat-bar-fill" style="width:74%;background:linear-gradient(90deg,#fb923c,rgba(251,146,60,.4))"></div></div><div class="feat-bar-pct">74%</div></div>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-card-header"><div class="feat-icon">🗺️</div><div><div class="feat-title-main">Lộ Trình Học Tập</div><div class="feat-subtitle">Con đang ở đâu trong chương trình? · Chuẩn theo lớp</div></div></div>
+        <div class="feat-bar-row">
+          <div class="feat-bar-item"><div class="feat-bar-label">Tiến độ môn học</div><div class="feat-bar-track"><div class="feat-bar-fill" style="width:88%;background:linear-gradient(90deg,#2dd4bf,rgba(45,212,191,.4))"></div></div><div class="feat-bar-pct">88%</div></div>
+          <div class="feat-bar-item"><div class="feat-bar-label">Cảnh báo tụt hậu</div><div class="feat-bar-track"><div class="feat-bar-fill" style="width:82%;background:linear-gradient(90deg,#2dd4bf,rgba(45,212,191,.4))"></div></div><div class="feat-bar-pct">82%</div></div>
+          <div class="feat-bar-item"><div class="feat-bar-label">Chuẩn theo lớp</div><div class="feat-bar-track"><div class="feat-bar-fill" style="width:67%;background:linear-gradient(90deg,#2dd4bf,rgba(45,212,191,.4))"></div></div><div class="feat-bar-pct">67%</div></div>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-card-header"><div class="feat-icon">💬</div><div><div class="feat-title-main">Gợi Ý Trò Chuyện</div><div class="feat-subtitle">Prompt AI · "Hỏi Emma về X tối nay" · Tăng kết nối gia đình</div></div></div>
+        <div class="feat-bar-row">
+          <div class="feat-bar-item"><div class="feat-bar-label">Gợi ý hàng ngày</div><div class="feat-bar-track"><div class="feat-bar-fill" style="width:79%;background:linear-gradient(90deg,#facc15,rgba(250,204,21,.4))"></div></div><div class="feat-bar-pct">79%</div></div>
+          <div class="feat-bar-item"><div class="feat-bar-label">Ngữ cảnh chủ đề</div><div class="feat-bar-track"><div class="feat-bar-fill" style="width:71%;background:linear-gradient(90deg,#facc15,rgba(250,204,21,.4))"></div></div><div class="feat-bar-pct">71%</div></div>
+          <div class="feat-bar-item"><div class="feat-bar-label">Gợi ý câu hỏi</div><div class="feat-bar-track"><div class="feat-bar-fill" style="width:58%;background:linear-gradient(90deg,#facc15,rgba(250,204,21,.4))"></div></div><div class="feat-bar-pct">58%</div></div>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-card-header"><div class="feat-icon">📊</div><div><div class="feat-title-main">Phân Tích Tiến Độ</div><div class="feat-subtitle">Xu hướng · Theo tuần · Hệ thống cảnh báo sớm</div></div></div>
+        <div class="feat-bar-row">
+          <div class="feat-bar-item"><div class="feat-bar-label">Báo cáo tuần</div><div class="feat-bar-track"><div class="feat-bar-fill" style="width:85%;background:linear-gradient(90deg,#60a5fa,rgba(96,165,250,.4))"></div></div><div class="feat-bar-pct">85%</div></div>
+          <div class="feat-bar-item"><div class="feat-bar-label">Cảnh báo sớm</div><div class="feat-bar-track"><div class="feat-bar-fill" style="width:89%;background:linear-gradient(90deg,#60a5fa,rgba(96,165,250,.4))"></div></div><div class="feat-bar-pct">89%</div></div>
+          <div class="feat-bar-item"><div class="feat-bar-label">So sánh chuẩn lớp</div><div class="feat-bar-track"><div class="feat-bar-fill" style="width:51%;background:linear-gradient(90deg,#60a5fa,rgba(96,165,250,.4))"></div></div><div class="feat-bar-pct">51%</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-ico">💡</div>
+      <div>
+        <div class="insight-title">Insight Chính — Ưu Tiên MVP</div>
+        <div class="insight-text">Nỗi đau #1 phụ huynh <strong>sẵn sàng trả tiền để giải quyết</strong>: <strong>Phát hiện tụt hậu sớm trước khi nhận học bạ</strong> (89%) và <strong>lịch bài tập + thi thống nhất</strong> (91%). Gợi ý trò chuyện là <strong>differentiator độc nhất</strong> — không đối thủ nào làm. Build lịch học + lộ trình trước, mở khoá trò chuyện AI làm wow moment.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Competitors -->
+  <div class="reveal">
+    <p class="sec-eye">Bức Tranh Cạnh Tranh</p>
+    <h2 class="sec-h2">Ai đang <em>chiếm thị trường này?</em></h2>
+    <p class="sec-lead">Mỗi đối thủ giải quyết được một mảnh. Chưa ai build companion thống nhất lấy phụ huynh làm trọng tâm. Đây là khoảng trắng.</p>
+    <div class="comp-wrap">
+      <table class="ctable">
+        <thead><tr><th>App</th><th>Giá</th><th>Đánh giá</th><th>Mạnh nhất</th><th>Thiếu</th><th>Phụ huynh-first?</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="app-cell"><div class="app-icon">🎨</div><div><div class="app-name">ClassDojo</div><div class="app-sub">Nền tảng liên lạc nhà trường</div></div></div></td>
+            <td><span class="price">Miễn phí</span></td>
+            <td><span class="rating">4.7 ★</span><div style="font-size:10px;color:var(--cr3)">620K đánh giá</div></td>
+            <td><span class="tag tag-g">Giáo viên → phụ huynh</span></td>
+            <td><span class="tag tag-r">Không có lộ trình học</span></td>
+            <td><span class="tag tag-r">Giáo viên-first</span></td>
+          </tr>
+          <tr>
+            <td><div class="app-cell"><div class="app-icon">📓</div><div><div class="app-name">Seesaw</div><div class="app-sub">Portfolio học sinh & liên lạc</div></div></div></td>
+            <td><span class="price">Miễn phí / Gói trường</span></td>
+            <td><span class="rating">4.6 ★</span><div style="font-size:10px;color:var(--cr3)">98K đánh giá</div></td>
+            <td><span class="tag tag-g">Portfolio + ảnh</span></td>
+            <td><span class="tag tag-r">Không có lịch, không có gợi ý chat</span></td>
+            <td><span class="tag tag-r">Giáo viên-first</span></td>
+          </tr>
+          <tr>
+            <td><div class="app-cell"><div class="app-icon">📍</div><div><div class="app-name">Life360</div><div class="app-sub">An toàn gia đình & theo dõi vị trí</div></div></div></td>
+            <td><span class="price">$9.99/tháng</span></td>
+            <td><span class="rating">4.5 ★</span><div style="font-size:10px;color:var(--cr3)">490K đánh giá</div></td>
+            <td><span class="tag tag-g">An toàn vị trí</span></td>
+            <td><span class="tag tag-r">Không có tính năng học tập</span></td>
+            <td><span class="tag tag-y">Phụ huynh-first (an toàn)</span></td>
+          </tr>
+          <tr>
+            <td><div class="app-cell"><div class="app-icon">🛡️</div><div><div class="app-name">Bark</div><div class="app-sub">Giám sát mạng xã hội & nội dung</div></div></div></td>
+            <td><span class="price">$14/tháng</span></td>
+            <td><span class="rating">4.4 ★</span><div style="font-size:10px;color:var(--cr3)">18K đánh giá</div></td>
+            <td><span class="tag tag-g">Cảnh báo an toàn online</span></td>
+            <td><span class="tag tag-r">Không có tính năng học tập</span></td>
+            <td><span class="tag tag-y">Phụ huynh-first (an toàn)</span></td>
+          </tr>
+          <tr>
+            <td><div class="app-cell"><div class="app-icon">🏫</div><div><div class="app-name">Qustodio</div><div class="app-sub">Kiểm soát phụ huynh + thời gian học</div></div></div></td>
+            <td><span class="price">$54.95/năm</span></td>
+            <td><span class="rating">4.3 ★</span><div style="font-size:10px;color:var(--cr3)">22K đánh giá</div></td>
+            <td><span class="tag tag-g">Kiểm soát thời gian màn hình</span></td>
+            <td><span class="tag tag-r">Không có lộ trình hay gợi ý chat</span></td>
+            <td><span class="tag tag-y">Phụ huynh-first (kiểm soát)</span></td>
+          </tr>
+          <tr class="hl">
+            <td><div class="app-cell"><div class="app-icon">🧡</div><div><div class="app-name">ParentBridge</div><div class="app-sub" style="color:var(--a)">Sản phẩm của chúng ta</div></div></div></td>
+            <td><span class="price" style="color:var(--a)">$9.99/tháng</span></td>
+            <td><span style="font-size:11px;color:var(--cr3)">Đang xây dựng</span></td>
+            <td><span class="tag tag-am">Lịch + Lộ trình + Chat AI</span></td>
+            <td><span class="tag">Giai đoạn sớm</span></td>
+            <td><span class="tag tag-g">100% Phụ huynh-first</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Dashboard Mockup -->
+  <div class="reveal">
+    <p class="sec-eye">Tầm Nhìn Sản Phẩm</p>
+    <h2 class="sec-h2">ParentBridge trông <em>như thế nào</em></h2>
+    <p class="sec-lead">Một lần nhìn vào buổi sáng — biết tất cả những gì quan trọng trong tuần học của con. Không cần đăng nhập, không cần chuyển tab.</p>
+    <div style="background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:24px;margin-bottom:48px;">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:20px;">Mockup tương tác — Dashboard phụ huynh</div>
+      <div class="dash-frame">
+        <div class="dash-top">
+          <div class="dash-greeting">Chào buổi sáng, Lan 👋</div>
+          <div class="dash-date">Chủ nhật, 17/05</div>
+        </div>
+        <div class="dash-section-label">Con của bạn</div>
+        <div class="dash-child-row">
+          <div class="dash-child active"><div class="dash-child-dot" style="background:#fb923c;"></div><div class="dash-child-name">Minh · Lớp 4</div></div>
+          <div class="dash-child"><div class="dash-child-dot" style="background:#60a5fa;"></div><div class="dash-child-name">Hùng · Lớp 7</div></div>
+        </div>
+
+        <div class="dash-section-label">Lịch tuần này — Minh</div>
+        <div class="schedule-row">
+          <div class="sched-item">
+            <div class="sched-time">Thứ 2 3PM</div>
+            <div><div class="sched-subject">Toán · Phân số</div><div class="sched-detail">Bài tập chương 7 — nộp hôm nay</div></div>
+            <span class="sched-badge due">Nộp bài</span>
+          </div>
+          <div class="sched-item">
+            <div class="sched-time">Thứ 4 4PM</div>
+            <div><div class="sched-subject">Khoa học · Hệ sinh thái</div><div class="sched-detail">Kiểm tra — môi trường sống &amp; chuỗi thức ăn</div></div>
+            <span class="sched-badge test">Kiểm tra</span>
+          </div>
+          <div class="sched-item">
+            <div class="sched-time">Thứ 5 3:30</div>
+            <div><div class="sched-subject">Tập bóng đá</div><div class="sched-detail">Công viên Thống Nhất · đón lúc 5:30PM</div></div>
+            <span class="sched-badge ok">Hoạt động</span>
+          </div>
+          <div class="sched-item">
+            <div class="sched-time">Thứ 6 3PM</div>
+            <div><div class="sched-subject">Đọc · Dế Mèn Phiêu Lưu Ký</div><div class="sched-detail">Ch. 9–11 + nhật ký đọc sách — nộp hôm nay</div></div>
+            <span class="sched-badge due">Nộp bài</span>
+          </div>
+        </div>
+
+        <div class="dash-section-label">Gợi ý trò chuyện hôm nay</div>
+        <div class="chat-prompt">
+          <div class="chat-prompt-label">🤖 AI tạo ra · dựa trên chủ đề tuần này</div>
+          <div class="chat-prompt-text">Minh đang học về <strong style="color:var(--cr)">chuỗi thức ăn và hệ sinh thái</strong> tuần này. Con có kiểm tra vào thứ Tư — tối nay là thời điểm tốt để nói chuyện về điều đó!</div>
+          <div class="chat-prompt-chips">
+            <div class="chat-chip">"Nhà sản xuất và người tiêu thụ khác nhau thế nào?"</div>
+            <div class="chat-chip">"Dưới ao con gì ăn con gì?"</div>
+            <div class="chat-chip">"Vẽ cho bố/mẹ xem chuỗi thức ăn của con đi?"</div>
+          </div>
+        </div>
+
+        <div class="dash-section-label">Lộ trình học · Tiến độ học kỳ</div>
+        <div class="roadmap-mini">
+          <div class="rm-row"><div class="rm-subject">Toán</div><div class="rm-track"><div class="rm-fill" style="width:68%;background:linear-gradient(90deg,#fb923c,rgba(251,146,60,.4))"></div></div><div class="rm-pct">68%</div></div>
+          <div class="rm-row"><div class="rm-subject">Khoa học</div><div class="rm-track"><div class="rm-fill" style="width:54%;background:linear-gradient(90deg,#2dd4bf,rgba(45,212,191,.4))"></div></div><div class="rm-pct">54%</div></div>
+          <div class="rm-row"><div class="rm-subject">Đọc hiểu</div><div class="rm-track"><div class="rm-fill" style="width:81%;background:linear-gradient(90deg,#60a5fa,rgba(96,165,250,.4))"></div></div><div class="rm-pct">81%</div></div>
+          <div class="rm-row"><div class="rm-subject">Viết</div><div class="rm-track"><div class="rm-fill" style="width:43%;background:linear-gradient(90deg,#facc15,rgba(250,204,21,.4))"></div></div><div class="rm-pct">43%</div></div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--bd);display:flex;align-items:center;gap:8px;">
+            <span style="font-size:11px;color:var(--r);">⚠️</span>
+            <span style="font-size:12px;color:var(--cr5);">Kỹ năng viết dưới mức trung bình lớp — thử luyện nhật ký 10 phút mỗi ngày</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- User journey -->
+  <div class="reveal">
+    <p class="sec-eye">Chiến Lược Giữ Chân</p>
+    <h2 class="sec-h2">Hành trình người dùng — <em>từ cài app đến trả phí</em></h2>
+    <div style="margin-bottom:64px;">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:20px;">Lộ trình kích hoạt &amp; chuyển đổi 30 ngày</div>
+      <div class="journey-steps">
+        <div class="jstep">
+          <div class="jstep-day">Ngày 1</div>
+          <div class="jstep-spine"><div class="jstep-dot pain"></div><div class="jstep-line"></div></div>
+          <div class="jstep-body"><div class="jstep-phase" style="color:var(--r)">Trigger</div><div class="jstep-title">Con trượt kiểm tra → "Tôi không hề hay biết"</div><div class="jstep-desc">Phụ huynh tìm kiếm "cách theo dõi việc học của con". Cài ParentBridge. Kết nối Google Classroom trong 2 phút. Lần đầu tiên thấy một lịch học thống nhất.</div></div>
+        </div>
+        <div class="jstep">
+          <div class="jstep-day">Ngày 2–5</div>
+          <div class="jstep-spine"><div class="jstep-dot neutral"></div><div class="jstep-line"></div></div>
+          <div class="jstep-body"><div class="jstep-phase" style="color:var(--b)">Xây dựng thói quen</div><div class="jstep-title">Check-in buổi sáng trở thành thói quen</div><div class="jstep-desc">Thông báo 8AM: "Minh có kiểm tra thứ Năm. Chủ đề tối nay: hệ sinh thái. Nhấn để xem gợi ý trò chuyện." Mất 30 giây. Phụ huynh lần đầu cảm thấy mình thực sự biết chuyện.</div></div>
+        </div>
+        <div class="jstep">
+          <div class="jstep-day">Ngày 7</div>
+          <div class="jstep-spine"><div class="jstep-dot wow"></div><div class="jstep-line"></div></div>
+          <div class="jstep-body"><div class="jstep-phase wow">Khoảnh khắc WOW</div><div class="jstep-title">Cuộc trò chuyện thật sự đầu tiên với con</div><div class="jstep-desc">Dùng gợi ý AI trong bữa tối. Con hào hứng kể về hệ sinh thái. Bố/mẹ cảm thấy kết nối, con cảm thấy được lắng nghe. Khoảnh khắc này là lý do NPS tăng vọt.</div></div>
+        </div>
+        <div class="jstep">
+          <div class="jstep-day">Ngày 14</div>
+          <div class="jstep-spine"><div class="jstep-dot neutral"></div><div class="jstep-line"></div></div>
+          <div class="jstep-body"><div class="jstep-phase" style="color:var(--o)">Paywall</div><div class="jstep-title">Lộ trình + thêm con thứ 2 → gợi ý nâng cấp</div><div class="jstep-desc">Muốn thêm Hùng (lớp 7) và xem toàn bộ lộ trình học. Chạm giới hạn 1 con / 4 tuần. Đã tin tưởng sản phẩm. $9.99/tháng cho gói gia đình là quyết định dễ dàng.</div></div>
+        </div>
+        <div class="jstep">
+          <div class="jstep-day">Tháng 2+</div>
+          <div class="jstep-spine"><div class="jstep-dot retain"></div><div class="jstep-line"></div></div>
+          <div class="jstep-body"><div class="jstep-phase retain">Giữ lại</div><div class="jstep-title">Gắn với năm học + lan truyền miệng</div><div class="jstep-desc">Switching cost cao — 6 tháng dữ liệu lịch học, lộ trình đồng bộ với năm học. Churn theo mùa (hè). Vòng lặp referral: một phụ huynh nói với nhóm PTA → 5–10 lượt cài thêm.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="dv" />
+
+  <!-- Opportunity -->
+  <div class="opp-wrap reveal">
+    <div style="position:relative;z-index:1;">
+      <div class="opp-crown-row">
+        <div style="font-size:28px;">🧡</div>
+        <div><div class="opp-eyebrow">Cơ Hội Sản Phẩm</div><div class="opp-title">ParentBridge — Đồng hành cùng con, <em>giờ đây dễ dàng hơn bao giờ hết</em></div></div>
+      </div>
+      <div style="font-size:14px;color:var(--cr5);max-width:640px;line-height:1.75;margin-bottom:32px;">
+        Đừng build thêm một ClassDojo clone nữa. Hãy build app mà ClassDojo <em>không thể</em> build — vì họ phục vụ giáo viên. ParentBridge phục vụ <strong style="color:var(--cr)">phụ huynh: một màn hình, một lần nhìn buổi sáng, tất cả những gì quan trọng.</strong>
+      </div>
+      <div class="opp-grid">
+        <div>
+          <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cr3);margin-bottom:16px;">Tính năng cốt lõi · MVP</div>
+          <div class="feat-list">
+            <div class="feat-item"><div class="feat-ico">📅</div><div><div class="feat-title">Hub lịch học thống nhất</div><div class="feat-desc">Tất cả bài tập, kiểm tra, hoạt động — một timeline. Đồng bộ từ Google Classroom, ClassDojo, Apple Calendar. Nhập tay làm fallback.</div><div class="feat-badge tbl">Cần có</div></div></div>
+            <div class="feat-item"><div class="feat-ico">💬</div><div><div class="feat-title">Gợi ý trò chuyện AI hàng ngày</div><div class="feat-desc">Dựa trên chủ đề học tuần này, gợi ý 3 câu hỏi hỏi con trong bữa tối. Xây dựng kết nối bố/mẹ — con. Không đối thủ nào làm điều này.</div><div class="feat-badge diff">Khác biệt</div></div></div>
+            <div class="feat-item"><div class="feat-ico">🗺️</div><div><div class="feat-title">Lộ trình học theo từng môn</div><div class="feat-desc">Tiến độ chương trình dạng trực quan. Cảnh báo tụt hậu 2–3 tuần trước khi thành điểm kém. Có thể hành động ngay, không chỉ thông tin.</div><div class="feat-badge diff">Khác biệt</div></div></div>
+            <div class="feat-item"><div class="feat-ico">📊</div><div><div class="feat-title">Tóm tắt tuần cho phụ huynh</div><div class="feat-desc">Chủ nhật 8AM: tuần này có gì, tuần tới cần làm gì, một hành động được khuyến nghị. Đọc 2 phút. Tỷ lệ mở cao.</div><div class="feat-badge tbl">Cần có</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="rev-title">Kịch bản doanh thu · Tháng 6</div>
+          <div class="rev-row"><div class="rev-label">Thận trọng</div><div class="rev-track"><div class="rev-fill" style="width:30%;background:linear-gradient(90deg,#fb923c,rgba(251,146,60,.3))"></div></div><div class="rev-val">$5,9K</div></div>
+          <div class="rev-row"><div class="rev-label">Cơ sở</div><div class="rev-track"><div class="rev-fill" style="width:55%;background:linear-gradient(90deg,#fb923c,rgba(251,146,60,.3))"></div></div><div class="rev-val">$12,4K</div></div>
+          <div class="rev-row"><div class="rev-label">Lạc quan</div><div class="rev-track"><div class="rev-fill" style="width:82%;background:linear-gradient(90deg,#fb923c,rgba(251,146,60,.3))"></div></div><div class="rev-val">$20,1K</div></div>
+          <div style="font-size:11px;color:var(--cr3);margin-top:4px;margin-bottom:20px;">Cơ sở: 1.240 gói gia đình × $9.99/tháng</div>
+          <div class="price-compare">
+            <div class="price-box"><div class="price-box-label">Bark / Life360</div><div class="price-box-val">$12</div><div class="price-box-sub">chỉ an toàn</div></div>
+            <div class="price-box ours"><div class="price-box-label">ParentBridge</div><div class="price-box-val">$9.99</div><div class="price-box-sub">học tập + kết nối</div></div>
+          </div>
+          <div style="margin-top:20px;background:var(--card2);border:1px solid var(--bd);border-radius:12px;padding:16px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--cr3);margin-bottom:10px;">Timeline build</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:var(--cr5)">MVP (lịch + cảnh báo)</span><span style="color:var(--g);font-weight:600;">3 tuần</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:var(--cr5)">Gợi ý trò chuyện AI</span><span style="color:var(--b);font-weight:600;">+2 tuần</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:var(--cr5)">Lộ trình học</span><span style="color:var(--o);font-weight:600;">+2 tuần</span></div>
+              <div style="height:1px;background:var(--bd);margin:4px 0;"></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:var(--cr7);font-weight:600;">Sẵn sàng ra mắt</span><span style="color:var(--a);font-weight:700;">7 tuần tổng</span></div>
+            </div>
+          </div>
+          <div style="margin-top:16px;background:rgba(45,212,191,.05);border:1px solid rgba(45,212,191,.2);border-radius:12px;padding:14px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t);margin-bottom:8px;">Lợi thế go-to-market</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--cr5);">
+              <div>🏫 <strong style="color:var(--cr)">Timing năm học</strong> — launch tháng 8/9 đầu năm học mới</div>
+              <div>👥 <strong style="color:var(--cr)">Vòng lặp PTA</strong> — một phụ huynh nói với hội phụ huynh → 5–10 lượt cài</div>
+              <div>📍 <strong style="color:var(--cr)">SEO moat</strong> — "theo dõi lịch học của con" hoàn toàn chưa được phục vụ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="ft">
+  <div class="wrap">
+    <div style="margin-bottom:8px;">Nghiên Cứu Sản Phẩm 2026 · Thị Trường Mỹ · <a href="market-report.html" style="color:var(--cr5);text-decoration:none;">← Về tất cả phân khúc</a></div>
+    <div style="color:rgba(246,242,233,.2);">Phụ Huynh Đồng Hành · Concept ParentBridge · Phân Tích Chuyên Sâu</div>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  document.querySelectorAll('.dash-child').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.dash-child').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.chat-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      chip.style.background = 'rgba(251,146,60,.15)';
+      chip.style.borderColor = 'rgba(251,146,60,.35)';
+      chip.style.color = 'var(--a)';
+    });
+  });
+
+  const barObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.feat-bar-fill, .rev-fill, .rm-fill').forEach(f => {
+          const w = f.style.width; f.style.width = '0';
+          setTimeout(() => { f.style.width = w; }, 100);
+        });
+        barObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.feat-grid, .opp-wrap, .roadmap-mini').forEach(el => barObs.observe(el));
+</script>
+</body>
+</html>
