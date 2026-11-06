@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thư viện</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<div class="r-stage">
+  <div class="r-phone" data-frame>
+    <header class="r-top">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <div style="width: 52px; height: 40px" data-rewi="happy"></div>
+        <div style="display: flex; flex-direction: column">
+          <span class="r-small" style="font-weight: 600">Chào Hạnh</span>
+          <h1 class="r-h2">Thư viện</h1>
+        </div>
+      </div>
+      <span class="r-chip r-chip--pink"><i data-ico="flame" data-size="18"></i>6 ngày học</span>
+    </header>
+
+    <main class="r-body" style="gap: 22px">
+      <a href="08-on-tap.html" class="r-card r-card--sun r-card--pad" style="position: relative; display: flex; flex-direction: column; gap: 14px; text-decoration: none; transform: rotate(-1deg)">
+        <div style="display: flex; align-items: center; justify-content: space-between">
+          <span style="font-weight: 800">Ôn tập hôm nay</span>
+          <span class="r-chip" style="min-height: 28px; font-size: 13px; background: #FFF7EA; color: #1C1B29; border-color: #1C1B29">Khoảng 4 phút</span>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 8px">
+          <span class="r-num" style="font-size: 60px; line-height: 64px">12</span>
+          <span style="font-size: 18px; font-weight: 700">thẻ đến hạn</span>
+        </div>
+        <div class="r-seg" aria-hidden="true"><span class="is-on"></span><span class="is-on"></span><span></span><span></span><span></span></div>
+        <span class="r-btn r-btn--ink r-btn--block">Ôn ngay<i data-ico="chevron" data-size="18"></i></span>
+      </a>
+
+      <div class="r-paste">
+        <i data-ico="link"></i>
+        <input type="url" id="paste" aria-label="Dán link video" placeholder="Dán link video">
+        <a class="r-btn r-btn--primary r-btn--sm" href="04-dan-link.html">Thêm</a>
+      </div>
+
+      <section style="display: flex; flex-direction: column; gap: 12px" aria-labelledby="h-learning">
+        <div style="display: flex; align-items: baseline; justify-content: space-between">
+          <h2 class="r-h2" id="h-learning">Đang học</h2>
+          <span class="r-small" style="font-weight: 600">3 video</span>
+        </div>
+        <div class="r-list">
+          <a class="r-row" href="05-xem-video.html">
+            <span class="r-thumb r-thumb--sky"><span class="r-thumb__art" data-art="a"></span><span class="r-thumb__play"><i data-ico="play" data-size="16"></i></span><span class="r-thumb__dur">12:40</span></span>
+            <span class="r-row__main"><span class="r-row__title">How to order coffee like a local</span><span class="r-row__meta">English with Mai · 8 từ</span></span>
+          </a>
+          <a class="r-row" href="07-reels.html">
+            <span class="r-thumb r-thumb--pink"><span class="r-thumb__art" data-art="c"></span><span class="r-thumb__src r-src">Reels</span><span class="r-thumb__play"><i data-ico="play" data-size="16"></i></span><span class="r-thumb__dur">0:48</span></span>
+            <span class="r-row__main"><span class="r-row__title">3 cách từ chối thật lịch sự</span><span class="r-row__meta">@daily.english.bites · 2 từ</span></span>
+          </a>
+          <a class="r-row" href="05-xem-video.html">
+            <span class="r-thumb r-thumb--mint"><span class="r-thumb__art" data-art="b"></span><span class="r-thumb__play"><i data-ico="play" data-size="16"></i></span><span class="r-thumb__dur">15:05</span></span>
+            <span class="r-row__main"><span class="r-row__title">Small talk at a job interview</span><span class="r-row__meta">Daily Talk Lab · 5 từ</span></span>
+          </a>
+        </div>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 12px" aria-labelledby="h-pick">
+        <h2 class="r-h2" id="h-pick">Gợi ý cho B1</h2>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap">
+          <a href="05-xem-video.html" class="r-chip r-chip--mint" style="min-height: 44px; padding: 0 16px; text-decoration: none; transform: rotate(-2deg)">Công việc</a>
+          <a href="05-xem-video.html" class="r-chip" style="min-height: 44px; padding: 0 16px; text-decoration: none; background: var(--sky); color: #1C1B29; transform: rotate(1.5deg)">Du lịch</a>
+          <a href="05-xem-video.html" class="r-chip r-chip--sun" style="min-height: 44px; padding: 0 16px; text-decoration: none; transform: rotate(-1deg)">Đời sống</a>
+        </div>
+      </section>
+    </main>
+
+    <nav class="r-tabbar" aria-label="Điều hướng chính">
+      <a class="r-tab" href="03-thu-vien.html" aria-current="page"><span class="r-tab__icon"><i data-ico="library"></i></span>Thư viện</a>
+      <a class="r-tab" href="08-on-tap.html"><span class="r-tab__icon"><i data-ico="card"></i></span>Ôn tập</a>
+      <a class="r-tab" href="09-toi.html"><span class="r-tab__icon"><i data-ico="user"></i></span>Tôi</a>
+    </nav>
+  </div>
+</div>
+<script src="art.js"></script>
+</body>
+</html>

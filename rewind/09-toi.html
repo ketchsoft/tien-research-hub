@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tôi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+<style>
+.p-stat { display: flex; flex-direction: column; gap: 2px; padding: 12px; border: 2.5px solid var(--line); border-radius: 18px; box-shadow: 3px 3px 0 var(--line); color: #1C1B29; }
+.p-week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); align-items: end; gap: 8px; height: 96px; }
+.p-week span { border: 2px solid var(--line); border-radius: 8px 8px 4px 4px; background: var(--sky); }
+.p-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; text-align: center; font-size: 12px; font-weight: 700; color: var(--ink-2); }
+.p-badge { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; font-size: 13px; line-height: 17px; font-weight: 700; }
+.p-badge__ico { width: 64px; height: 64px; border: 2.5px solid var(--line); border-radius: 50%; display: grid; place-items: center; box-shadow: 3px 3px 0 var(--line); color: #1C1B29; }
+.p-badge--locked .p-badge__ico { background: var(--paper-2); color: var(--ink-2); border-style: dashed; box-shadow: none; }
+</style>
+</head>
+<body>
+<div class="r-stage">
+  <div class="r-phone" data-frame>
+    <header class="r-top">
+      <h1 class="r-h2">Tôi</h1>
+      <a class="r-icon-btn" href="10-cai-dat.html" aria-label="Cài đặt"><i data-ico="gear"></i></a>
+    </header>
+    <main class="r-body" style="gap: 22px">
+      <div style="display: flex; align-items: center; gap: 14px">
+        <span style="width: 72px; height: 72px; flex: none; border: 2.5px solid var(--line); border-radius: 50%; background: var(--lilac); display: grid; place-items: center; font-family: var(--display); font-size: 28px; font-weight: 800; color: #1C1B29; box-shadow: 3px 3px 0 var(--line)">H</span>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <span class="r-h2">Hạnh</span>
+          <span style="display: flex; gap: 8px"><span class="r-chip r-chip--sun">Trình độ B1</span><span class="r-chip">Gói miễn phí</span></span>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+        <div class="p-stat" style="background: var(--sun)"><span class="r-num" style="font-size: 28px; line-height: 32px">128</span><span style="font-size: 13px; font-weight: 700">từ đã lưu</span></div>
+        <div class="p-stat" style="background: var(--mint)"><span class="r-num" style="font-size: 28px; line-height: 32px">86%</span><span style="font-size: 13px; font-weight: 700">nhớ đúng</span></div>
+        <div class="p-stat" style="background: var(--pink)"><span class="r-num" style="font-size: 28px; line-height: 32px">6</span><span style="font-size: 13px; font-weight: 700">ngày học</span></div>
+      </div>
+
+      <section class="r-card r-card--pad" style="display: flex; flex-direction: column; gap: 10px" aria-labelledby="h-week">
+        <div style="display: flex; align-items: baseline; justify-content: space-between">
+          <h2 class="r-h3" id="h-week">Thẻ đã ôn tuần này</h2>
+          <span class="r-num" style="font-size: 18px">94</span>
+        </div>
+        <div class="p-week" role="img" aria-label="Số thẻ đã ôn mỗi ngày: thứ 2 là 12, thứ 3 là 18, thứ 4 là 8, thứ 5 là 20, thứ 6 là 16, thứ 7 là 20, chủ nhật chưa ôn">
+          <span style="height: 55%"></span><span style="height: 85%"></span><span style="height: 38%"></span><span style="height: 95%"></span><span style="height: 75%"></span><span style="height: 95%; background: var(--tomato)"></span><span style="height: 6%; background: var(--paper-2)"></span>
+        </div>
+        <div class="p-days" aria-hidden="true"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 12px" aria-labelledby="h-badge">
+        <h2 class="r-h2" id="h-badge">Huy hiệu</h2>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+          <div class="p-badge"><span class="p-badge__ico" style="background: var(--sun)"><i data-ico="bookmark" data-size="26"></i></span>100 từ đầu tiên</div>
+          <div class="p-badge"><span class="p-badge__ico" style="background: var(--mint)"><i data-ico="card" data-size="26"></i></span>Ôn đủ 7 ngày</div>
+          <div class="p-badge p-badge--locked"><span class="p-badge__ico"><i data-ico="library" data-size="26"></i></span>Học 10 video<span class="r-small" style="font-weight: 600">còn 7</span></div>
+        </div>
+      </section>
+
+      <a class="r-card r-card--lilac r-card--pad" href="11-plus.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none">
+        <span class="r-set-ico" style="width: 44px; height: 44px; background: #FFF7EA"><i data-ico="star"></i></span>
+        <span class="r-row__main"><span class="r-row__title">Rewind Plus</span><span style="font-size: 14px">Ôn không giới hạn, chấm phát âm</span></span>
+        <i data-ico="chevron"></i>
+      </a>
+    </main>
+
+    <nav class="r-tabbar" aria-label="Điều hướng chính">
+      <a class="r-tab" href="03-thu-vien.html"><span class="r-tab__icon"><i data-ico="library"></i></span>Thư viện</a>
+      <a class="r-tab" href="08-on-tap.html"><span class="r-tab__icon"><i data-ico="card"></i></span>Ôn tập</a>
+      <a class="r-tab" href="09-toi.html" aria-current="page"><span class="r-tab__icon"><i data-ico="user"></i></span>Tôi</a>
+    </nav>
+  </div>
+</div>
+<script src="art.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chọn trình độ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<div class="r-stage">
+  <div class="r-phone" data-frame>
+    <header class="r-top r-top--back">
+      <a class="r-back" href="01-chao.html"><i data-ico="back"></i>Quay lại</a>
+    </header>
+    <main class="r-body">
+
+      <div style="display: flex; align-items: flex-end; gap: 12px">
+        <h1 class="r-h1" style="flex: 1">Bạn nghe tiếng Anh tới đâu?</h1>
+        <div style="width: 84px; height: 66px; flex: none" data-rewi="wow"></div>
+      </div>
+
+      <div role="radiogroup" aria-label="Trình độ" style="display: flex; flex-direction: column; gap: 12px">
+        <button class="r-option" type="button" role="radio" aria-checked="false">
+          <span class="r-badge-ico" style="background: var(--mint)">A2</span>
+          <span class="r-row__main"><span class="r-row__title">Bắt được vài câu ngắn</span><span class="r-row__meta">Cần phụ đề để theo kịp</span></span>
+        </button>
+        <button class="r-option" type="button" role="radio" aria-checked="true">
+          <span class="r-badge-ico" style="background: var(--sun)">B1</span>
+          <span class="r-row__main"><span class="r-row__title">Hiểu hội thoại đời thường</span><span class="r-row__meta">Hay lỡ cụm nói nhanh</span></span>
+          <i data-ico="check"></i>
+        </button>
+        <button class="r-option" type="button" role="radio" aria-checked="false">
+          <span class="r-badge-ico" style="background: var(--sky)">B2</span>
+          <span class="r-row__main"><span class="r-row__title">Xem video không cần phụ đề Việt</span><span class="r-row__meta">Muốn nói tự nhiên hơn</span></span>
+        </button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <h2 class="r-h3">Mỗi ngày ôn bao nhiêu thẻ</h2>
+        <div class="r-seg-ctl" role="group" aria-label="Số thẻ mỗi ngày">
+          <button type="button" aria-pressed="false">10 thẻ</button>
+          <button type="button" aria-pressed="true">20 thẻ</button>
+          <button type="button" aria-pressed="false">30 thẻ</button>
+        </div>
+        <p class="r-small">Khoảng 6 phút mỗi ngày</p>
+      </div>
+
+      <a class="r-btn r-btn--primary r-btn--lg r-btn--block" href="03-thu-vien.html" style="margin-top: auto">Tiếp tục</a>
+    </main>
+  </div>
+</div>
+<script src="art.js"></script>
+</body>
+</html>

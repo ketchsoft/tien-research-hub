@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chào mừng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+<style>
+.w-hero { position: relative; height: 380px; margin: 0 -20px; display: grid; place-items: center; }
+.w-blob { position: absolute; width: 300px; height: 280px; border: 2.5px solid var(--line); border-radius: 46% 54% 50% 50% / 55% 45% 55% 45%; background: var(--sky); box-shadow: 6px 6px 0 var(--line); }
+.w-rewi { position: relative; width: 190px; height: 150px; }
+.w-bubble { position: absolute; top: 44px; right: 26px; padding: 8px 14px; border: 2.5px solid var(--line); border-radius: 18px 18px 18px 4px; background: var(--card); font-family: var(--display); font-weight: 800; font-size: 18px; box-shadow: 3px 3px 0 var(--line); transform: rotate(4deg); }
+.w-bubble--2 { top: auto; right: auto; bottom: 58px; left: 28px; border-radius: 18px 18px 4px 18px; background: var(--sun); color: #1C1B29; transform: rotate(-5deg); }
+.w-doodle { position: absolute; }
+</style>
+</head>
+<body>
+<div class="r-stage">
+  <div class="r-phone" data-frame>
+    <main class="r-body" style="padding-top: 8px">
+      <div class="w-hero" aria-hidden="true">
+        <span class="w-blob"></span>
+        <svg class="w-doodle" style="top: 34px; left: 40px" width="34" height="34" viewBox="0 0 24 24"><path d="M12 2l2.6 6.4 6.9.5-5.3 4.4 1.7 6.7L12 16.3 6.1 20l1.7-6.7L2.5 8.9l6.9-.5z" fill="#FFC94D" stroke="#1C1B29" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        <svg class="w-doodle" style="bottom: 30px; right: 36px" width="70" height="26" viewBox="0 0 70 26"><path d="M3 13q8-10 16 0t16 0 16 0 16 0" fill="none" stroke="#FF7A5C" stroke-width="5" stroke-linecap="round"/></svg>
+        <span class="w-bubble">How are you?</span>
+        <span class="w-bubble w-bubble--2">Lưu lại nè</span>
+        <div class="w-rewi r-wiggle" data-rewi="wave"></div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <h1 class="r-h1">Học tiếng Anh từ <span class="r-mark">video bạn thích</span></h1>
+        <p class="r-sub">Dán link YouTube hoặc Reels, lưu từ vừa nghe, ôn lại đúng lúc sắp quên</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: auto">
+        <a class="r-btn r-btn--primary r-btn--lg r-btn--block" href="02-trinh-do.html"><i data-ico="user"></i>Tiếp tục với Google</a>
+        <a class="r-btn r-btn--block" href="02-trinh-do.html"><i data-ico="key"></i>Tiếp tục với Apple</a>
+        <a class="r-btn r-btn--block" href="02-trinh-do.html"><i data-ico="mail"></i>Dùng email</a>
+        <p class="r-small r-center">Tiếp tục nghĩa là bạn đồng ý <a href="10-cai-dat.html">Điều khoản</a> và <a href="10-cai-dat.html">Chính sách riêng tư</a></p>
+      </div>
+    </main>
+  </div>
+</div>
+<script src="art.js"></script>
+</body>
+</html>

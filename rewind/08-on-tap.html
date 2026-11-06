@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ôn tập</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+<style>
+.f-stack { position: relative; margin: 6px 6px 0 0; }
+.f-back { position: absolute; inset: 0; border: 2.5px solid var(--line); border-radius: 26px; }
+.f-back--1 { background: var(--mint); transform: rotate(4deg) translate(6px, 4px); }
+.f-back--2 { background: var(--lilac); transform: rotate(-3deg) translate(-4px, 6px); }
+.f-card { position: relative; display: flex; flex-direction: column; gap: 18px; padding: 20px 18px; background: var(--card); border: 2.5px solid var(--line); border-radius: 26px; box-shadow: 4px 4px 0 var(--line); }
+.f-rate { white-space: nowrap; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; min-height: 68px; border: 2.5px solid var(--line); border-radius: 18px; box-shadow: 3px 3px 0 var(--line); color: #1C1B29; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="r-stage">
+  <div class="r-phone" data-frame>
+    <header class="r-top">
+      <h1 class="r-h2">Ôn tập</h1>
+      <span class="r-num" style="font-size: 20px">5<span style="font-family: var(--body); font-size: 15px; font-weight: 600; color: var(--ink-2)"> / 12 thẻ</span></span>
+    </header>
+    <main class="r-body" style="gap: 22px">
+      <div class="r-bar" role="progressbar" aria-valuemin="0" aria-valuemax="12" aria-valuenow="5" aria-label="Đã ôn 5 trên 12 thẻ"><div class="r-bar__fill" style="width: 42%"></div></div>
+
+      <div class="f-stack">
+        <span class="f-back f-back--1" aria-hidden="true"></span>
+        <span class="f-back f-back--2" aria-hidden="true"></span>
+        <section class="f-card" aria-label="Thẻ đang ôn">
+          <div style="display: flex; align-items: center; gap: 10px">
+            <span class="r-thumb r-thumb--sky" style="width: 52px; height: 36px; border-width: 2px; border-radius: 9px"><span class="r-thumb__art" data-art="a"></span></span>
+            <span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">How to order coffee like a local</span><span class="r-small">Lưu ở 02:14</span></span>
+          </div>
+          <p class="r-num" style="font-size: 36px; line-height: 44px"><span class="r-mark">take a rain check</span></p>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+            <a class="r-btn r-btn--sm" href="05-xem-video.html"><i data-ico="rewind" data-size="18"></i>Nghe lại</a>
+            <button class="r-btn r-btn--sm" type="button"><i data-ico="mic" data-size="18"></i>Luyện nói</button>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; padding-top: 16px; border-top: 2.5px dashed var(--dot)">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+              <span class="r-h2">Hẹn dịp khác</span>
+              <button class="r-icon-btn" type="button" aria-label="Nghe phát âm" style="background: var(--mint); color: #1C1B29"><i data-ico="speaker" data-size="20"></i></button>
+            </div>
+            <span class="r-small" style="font-size: 14px">/teɪk ə reɪn tʃek/</span>
+            <p style="font-size: 15px; line-height: 22px">I'll take a rain check on dinner tonight.</p>
+          </div>
+        </section>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <p class="r-small r-center" style="font-weight: 700; font-size: 14px">Bạn nhớ cụm này tới đâu</p>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+          <button class="f-rate" type="button" style="background: var(--tomato-soft); color: var(--ink)"><span style="font-weight: 800">Quên</span><span class="r-small">Sau 1 phút</span></button>
+          <button class="f-rate" type="button" style="background: var(--sun-soft); color: var(--ink)"><span style="font-weight: 800">Mang máng</span><span class="r-small">Sau 1 ngày</span></button>
+          <button class="f-rate" type="button" style="background: var(--mint-soft); color: var(--ink)"><span style="font-weight: 800">Nhớ</span><span class="r-small">Sau 4 ngày</span></button>
+        </div>
+      </div>
+    </main>
+
+    <nav class="r-tabbar" aria-label="Điều hướng chính">
+      <a class="r-tab" href="03-thu-vien.html"><span class="r-tab__icon"><i data-ico="library"></i></span>Thư viện</a>
+      <a class="r-tab" href="08-on-tap.html" aria-current="page"><span class="r-tab__icon"><i data-ico="card"></i></span>Ôn tập</a>
+      <a class="r-tab" href="09-toi.html"><span class="r-tab__icon"><i data-ico="user"></i></span>Tôi</a>
+    </nav>
+  </div>
+</div>
+<script src="art.js"></script>
+</body>
+</html>
